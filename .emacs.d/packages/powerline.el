@@ -36,7 +36,7 @@
   (create-image
    (format "/* XPM */
 static char * arrow_left[] = {
-\"12 18 2 1\",
+\"12 19 2 1\",
 \". c %s\",
 \"  c %s\",
 \".           \",
@@ -56,7 +56,8 @@ static char * arrow_left[] = {
 \"....        \",
 \"...         \",
 \"..          \",
-\".           \"};"
+\".           \"
+\"            \"};"
            (if color1 color1 "None")
            (if color2 color2 "None"))
    'xpm t :ascent 'center))
@@ -67,7 +68,7 @@ static char * arrow_left[] = {
   (create-image
    (format "/* XPM */
 static char * arrow_right[] = {
-\"12 18 2 1\",
+\"12 19 2 1\",
 \". c %s\",
 \"  c %s\",
 \"           .\",
@@ -87,7 +88,8 @@ static char * arrow_right[] = {
 \"        ....\",
 \"         ...\",
 \"          ..\",
-\"           .\"};"
+\"           .\"
+\"            \"};"
            (if color2 color2 "None")
            (if color1 color1 "None"))
    'xpm t :ascent 'center))
