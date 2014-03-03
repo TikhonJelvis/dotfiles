@@ -341,6 +341,9 @@ prompt to name>."
              (get-buffer-process (current-buffer)) nil)))
 
                                         ; HASKELL
+;; (add-to-list 'load-path "~/Documents/programming/emacs/haskell-mode/")
+;; (require 'haskell-mode-autoloads)
+
 ;; Load Haskell mode:
 (defun haskell-save-and-format ()
   "Formats the import statements using haskell-stylish and saves
@@ -361,7 +364,6 @@ the current file."
 (setq inferior-haskell-run-command "main")
 
 (defun my-haskell-mode-hook ()
-  (local-set-key (kbd "C-x C-s") 'haskell-mode-save-buffer)
   (local-set-key (kbd "C-c C-s") 'haskell-save-and-format)
   (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run))
 
@@ -373,7 +375,6 @@ the current file."
 
 (require 'haskell-project-mode)
 
-(load "haskell-site-file")
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 (add-hook 'haskell-mode-hook 'font-lock-mode)
 (add-hook 'haskell-mode-hook 'haskell-project-mode)
@@ -399,20 +400,23 @@ the current file."
 (require 'hpaste)
 
                                         ; OCAML
-(add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . typerex-mode))
-(add-to-list 'interpreter-mode-alist '("ocamlrun" . typerex-mode))
-(add-to-list 'interpreter-mode-alist '("ocaml" . typerex-mode))
-(autoload 'typerex-mode "typerex" "Major mode for editing Caml code" t)
+;; (add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . typerex-mode))
+;; (add-to-list 'interpreter-mode-alist '("ocamlrun" . typerex-mode))
+;; (add-to-list 'interpreter-mode-alist '("ocaml" . typerex-mode))
+;; (autoload 'typerex-mode "typerex" "Major mode for editing Caml code" t)
 
-(setq ocp-server-command "/home/tikhon/local/bin/ocp-wizard")
-(setq ocp-auto-complete t)
-(setq ocp-theme "tuareg")
-(setq ocp-prefix-key (kbd "C-;"))
-(setq typerex-font-lock-symbols 't)
-(setq typerex-use-abbrev-mode nil)
+;; (setq ocp-server-command "/home/tikhon/local/bin/ocp-wizard")
+;; (setq ocp-auto-complete t)
+;; (setq ocp-theme "tuareg")
+;; (setq ocp-prefix-key (kbd "C-;"))
+;; (setq typerex-font-lock-symbols 't)
+;; (setq typerex-use-abbrev-mode nil)
 
 ;; (setq ocp-flymake-available 't)
 ;; (add-hook 'typerex-mode-hook '(lambda () (flymake-mode) (flymake-cursor-mode)))
+
+                                        ; ARDUINO
+(add-to-list 'auto-mode-alist '("\\.pde" . java-mode))
 
                                         ; SKETCH
 (require 'sketch-mode)
@@ -424,7 +428,7 @@ the current file."
     :submode java-mode
     :front   "\\[sketch|\n?"
     :back    "|\\]")))
-(mmm-add-mode-ext-class 'haskell-mode "\\.hs" 'haskell-sketch)
+(mmm-add-mode-ext-class nil nil 'haskell-sketch)
 
 
                                         ; RACKET
