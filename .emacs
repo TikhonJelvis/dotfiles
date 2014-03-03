@@ -9,6 +9,10 @@
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
+                                        ; SECRETS
+;; Load my secrets file that contains passwords, keys and so on.
+(load "~/secrets.el")
+
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
   "Lets me navigate without using the control key. This only
@@ -246,18 +250,14 @@ interface and inserts it at point."
 
 ;; Set up jabber.el to interface nicely with Google talk:
 (setq jabber-account-list
-      '(("tikhonjelvis@gmail.com/emacs" 
+      `(("tikhonjelvis@gmail.com/emacs" 
          (:network-server . "talk.google.com")
          (:connection-type . ssl)
-         (:password . "***PASSWORD***"))
-        ("tikhon@mixrank.com/emacs" 
-         (:network-server . "talk.google.com")
-         (:connection-type . ssl)
-         (:password . "***PASSWORD***"))
+         (:password . ,gmail-jabber-password))
         ("tikhon@jelv.is/emacs" 
          (:network-server . "talk.google.com")
          (:connection-type . ssl)
-         (:password . "***PASSWORD***"))))
+         (:password . ,jelvis-jabber-password))))
 (add-hook 'jabber-roster-mode-hook 'easy-move)
 (defvar jabber-blue "#6699FF")
 (defvar jabber-red "#FF9966")
