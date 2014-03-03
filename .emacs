@@ -84,12 +84,15 @@ into a TODO."
     (unless (equal (current-word) "TODO") (insert "TODO: "))))
 (global-set-key (kbd "C-c t") 'todo-comment)
 
-(defun file-name-at-point ()
+(defun file-name-at-point (add-to-kill-ring)
   "Prompts the user for a file path using the standard C-x C-f
 interface and inserts it at point."
-  (interactive)
-  (if ido-mode (insert (ido-read-file-name "file path: "))
-    (insert (read-file-name "file path: "))))
+  (interactive "P")
+  (let ((action (if add-to-kill-ring 'kill-new 'insert))
+        (path (if ido-mode
+                  (ido-read-file-name "file path: ")
+                  (read-file-name "file path: "))))
+    (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
                                         ; GENERAL STUFF
