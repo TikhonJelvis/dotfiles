@@ -1,4 +1,4 @@
-                                        ; PACKAGE INITIALIZATION
+                                         ; PACKAGE INITIALIZATION
 (add-to-list 'load-path "~/.emacs.d/packages")
 
 ;; Configure package management:
@@ -49,12 +49,30 @@ vice-versa."
 (global-set-key (kbd "C-c C-b") 'flip-bool-at-point)
 (global-set-key (kbd "C-c b") 'flip-bool-at-point)
 
-(defun duplicate-line ()
-  "Duplicates the current line."
+;; Take screenshots with a keystroke. You need the window ID, which
+;; can be found via `xwininfo -display :0'.
+;; 
+;; You can preview the animation with `animate -delay 35 *.png' and
+;; actually create it with `convert -delay 35 *.png out.gif'.
+(defun screenshot-frame ()
+  "Take a screenshot of 400x200 pixels of the Emacs frame."
   (interactive)
-  (save-excursion
-    (move-beginning-of-line nil)))
-(global-set-key (kbd "C-c C-d") 'duplicate-line)
+  (shell-command-to-string
+   "sleep 1;import -window 0x5e000c3 +repage /home/tikhon/Documents/tmp/frames/`date +%s`.png"))
+(global-set-key (kbd "<f8>") 'screenshot-frame)
+
+(defun my-screenshot-hook ()
+  (screenshot-frame))
+
+(defun start-screenshots ()
+  "Start taking screenshots after every single command."
+  (interactive)
+  (add-hook 'post-command-hook 'my-screenshot-hook))
+
+(defun start-screenshots ()
+  "Stop taking screenshots after every single command."
+  (interactive)
+  (remove-hook 'post-command-hook 'my-screenshot-hook))
 
 ;; Insert TODO comments programmatically:
 (defun todo-comment ()
