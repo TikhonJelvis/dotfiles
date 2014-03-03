@@ -231,6 +231,11 @@ interface and inserts it at point."
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
 
+(defun my-org-mode-hook ()
+  (local-set-key (kbd "M-{") 'outline-previous-visible-heading)
+  (local-set-key (kbd "M-}") 'outline-next-visible-heading))
+(add-hook 'org-mode-hook 'my-org-mode-hook)
+
 (require 'org-html5presentation)
 
                                         ; JABBER
