@@ -341,8 +341,7 @@ prompt to name>."
              (get-buffer-process (current-buffer)) nil)))
 
                                         ; HASKELL
-;; (add-to-list 'load-path "~/Documents/programming/emacs/haskell-mode/")
-;; (require 'haskell-mode-autoloads)
+(require 'haskell-mode-autoloads)
 
 ;; Load Haskell mode:
 (defun haskell-save-and-format ()
@@ -428,7 +427,7 @@ the current file."
     :submode java-mode
     :front   "\\[sketch|\n?"
     :back    "|\\]")))
-(mmm-add-mode-ext-class nil nil 'haskell-sketch)
+;; (mmm-add-mode-ext-class nil nil 'haskell-sketch)
 
 
                                         ; RACKET
