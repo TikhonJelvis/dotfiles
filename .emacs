@@ -191,6 +191,12 @@ interface and inserts it at point."
                     :box nil)
 (setq powerline-arrow-shape 'arrow)
 
+;; Unique buffer names:
+(require 'uniquify)
+(setq
+ uniquify-buffer-name-style 'post-forward
+ uniquify-separator " • ")
+
 ;; Rainbow parentheses
 (defun rainbow-delimiters-colors ()
   (set-face-foreground 'rainbow-delimiters-depth-1-face "dark red")
