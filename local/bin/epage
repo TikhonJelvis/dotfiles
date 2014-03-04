@@ -1,0 +1,30 @@
+#! /usr/bin/env runhaskell
+{-# LANGUAGE ScopedTypeVariables #-}
+
+import           Data.Functor       ((<$))
+
+import           System.Directory   (removeFile)
+import           System.Environment (getArgs)
+import           System.Process     (runCommand)
+
+import           Text.Printf        (printf)
+
+main :: IO ()
+main = do args <- getArgs
+          let buffer   = arg "-b" "*STDIN*"        args
+          let filename = arg "-f" "emacsStdin.stdout" args 
+          let mode     = arg "-m" "stdout-mode"    args
+          getContents >>= writeFile filename
+          () <$ runCommand (emacsBuffer filename buffer mode)
+  
+emacsBuffer :: String -> String -> String -> String
+emacsBuffer file buffer mode = printf "emacsclient --alternate-editor %s --eval '%s'" alternative elisp
+  where alternative      = "/usr/bin/false"
+        letVals :: String = printf "(b (create-file-buffer \"%s\")) " buffer
+        startFn :: String = printf "(switch-to-buffer b) (insert-file-contents \"%s\") (%s)" file mode
+        elisp   :: String = printf "(let (%s) %s (delete-file \"%s\"))" letVals startFn file
+
+arg :: String -> String -> [String] -> String
+arg name def args = case take 2 $ dropWhile (/= name) args of
+  [_, value] -> value
+  _          -> def
