@@ -8,8 +8,6 @@
 ;; Homepage: http://orgmode.org
 ;; Version: 7.5
 ;;
-;; This file is part of GNU Emacs.
-;;
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
@@ -28,7 +26,8 @@
 
 ;; About HTML5 presentation, see http://www.html5rocks.com/
 
-;; Modifications: Takumi KINJO (takumi.kinjo@gmail.com)
+;; Modifications: Takumi KINJO <takumi.kinjo@gmail.com>,
+;;                Tikhon Jelvis <tikhon@jelv.is>
 
 ;; Before requiring this, please make sure that your org-mode
 ;; version is 7.5(M-x org-version).
