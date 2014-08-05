@@ -1,0 +1,14 @@
+[user]
+	email = tikhon@jelv.is
+        name = Tikhon Jelvis
+[color]
+	ui = always
+[core]
+	pager = epage
+[alias]
+        start = !git clone /home/tikhon/Documents/programming/template
+[merge]
+        tool = ediff
+[mergetool "ediff"]
+        cmd = /home/tikhon/local/bin/ediff $LOCAL $REMOTE $MERGED $BASE
+        trustExitCode = true
