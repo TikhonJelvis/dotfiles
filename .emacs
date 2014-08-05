@@ -106,11 +106,16 @@ interface and inserts it at point."
 (ac-config-default)
 (ac-flyspell-workaround)
 
+(global-set-key (kbd "M-TAB") 'auto-complete)
+
 ;; Have compile scroll to the end by default.
 (setq-default compilation-scroll-output 'foo-bar)
 
 ;; Flymake stuff
 (setq flymake-cursor-error-display-delay 0.1)
+
+;; Emerge settings (I still sometimes use emerge with git mergetool)
+(setq emerge-diff-options "--ignore-all-space")
 
 ;; Flyspell stuff
 (add-hook 'flyspell-mode-hook '(lambda ()
@@ -182,6 +187,9 @@ interface and inserts it at point."
 (scroll-bar-mode -1) 
 (menu-bar-mode -1)
 (fringe-mode 0)
+
+;; Fill to 80 characters by default:
+(setq fill-column 80)
 
 ;; Now make it prettier:
 (require 'powerline)
@@ -405,6 +413,9 @@ the current file."
 (require 'hpaste)
 
                                         ; OCAML
+
+(setq tuareg-font-lock-symbols t)
+
 ;; (add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . typerex-mode))
 ;; (add-to-list 'interpreter-mode-alist '("ocamlrun" . typerex-mode))
 ;; (add-to-list 'interpreter-mode-alist '("ocaml" . typerex-mode))
@@ -419,6 +430,52 @@ the current file."
 
 ;; (setq ocp-flymake-available 't)
 ;; (add-hook 'typerex-mode-hook '(lambda () (flymake-mode) (flymake-cursor-mode)))
+
+                                        ; JAVA
+;; use tabs (I guess that's what Eclipse does by default?)
+(defun my-java-indent-tabs-hook ()
+  (setq c-basic-offset 2
+        tab-width 2
+        indent-tabs-mode nil))
+(add-hook 'java-mode-hook 'my-java-indent-tabs-hook)
+
+;; ignore warnings in *compilation* buffer:
+(setq compilation-skip-threshold 2)
+
+;; eclim setup
+(require 'eclim)
+(global-eclim-mode)
+
+(require 'eclimd)
+
+(setq eclim-eclipse-dirs '("~/Documents/tmp/adt-bundle-linux-x86_64-20140702/eclipse"))
+(setq eclim-executable "~/Documents/tmp/adt-bundle-linux-x86_64-20140702/eclipse/eclim")
+
+;;; display errors and warnings at point
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+
+;;; autocomplete with eclim
+(require 'ac-emacs-eclim-source)
+(ac-emacs-eclim-config)
+
+;;; autocomplete styling for eclim
+(set-face-attribute 'ac-emacs-eclim-candidate-face nil
+                    :inherit 'ac-candidate-face
+                    :background "lightgray")
+(set-face-attribute 'ac-emacs-eclim-selection-face nil
+                    :inherit 'ac-selection-face
+                    :foreground "white"
+                    :background "steelblue")
+
+(global-set-key (kbd "M-?") 'auto-complete)
+
+                                        ; XML
+(defun my-nxml-hook ()
+  (local-unset-key (kbd "M-{"))
+  (local-unset-key (kbd "M-}")))
+(add-hook 'nxml-mode-hook 'my-nxml-hook)
 
                                         ; ARDUINO
 (add-to-list 'auto-mode-alist '("\\.pde" . java-mode))
@@ -575,8 +632,9 @@ the current file."
       browse-url-browser-function 'browse-url-generic)
 
 ;; Make JS-2 mode the default:
-(add-to-list 'auto-mode-alist '("\\.js" . js2-mode))
+;; (add-to-list 'auto-mode-alist '("\\.js" . js-mode))
 (setq js2-basic-offset 2)
+(setq js-indent-level 2)
 
 ;; Edit .less files with css mode:
 (add-to-list 'auto-mode-alist '("\\.less$" . css-mode))
@@ -606,13 +664,18 @@ the current file."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(send-mail-function (quote sendmail-send-it)))
+ '(column-number-mode t)
+ '(send-mail-function (quote sendmail-send-it))
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 113 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(flycheck-error ((t (:underline "red"))))
+ '(flycheck-warning ((t (:underline "darkorange"))))
  '(flymake-errline ((t (:background "#00000000" :underline "red"))))
  '(flymake-warnline ((t (:background "#00000000" :underline "dark orange"))))
  '(sgml-namespace ((t (:inherit font-lock-builtin-face)))))
