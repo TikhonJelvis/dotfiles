@@ -1,0 +1,3 @@
+xrandr --output eDP1 --pos 0x1100 --output HDMI1 --pos 1100x0
+
+feh  --bg-fill '/home/tikhon/Pictures/background.png' '/home/tikhon/Pictures/haskell-background-pink.png' 
