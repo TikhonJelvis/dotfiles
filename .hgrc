@@ -1,0 +1,13 @@
+[ui]
+username = Tikhon Jelvis <tikhon@jelv.is>
+
+[extensions]
+hgext.extdiff =
+pager =
+
+[extdiff]
+cmd.ediff = sh
+opts.ediff = -c 'if [ -d $0 ]; then emacsclient --alternate-editor %s --eval "(ediff-directories \"$0\" \"$1\" \"\")"; else emacsclient --alternate-editor %s --eval "(ediff-files \"$0\" \"$1\")"; fi'
+
+[pager]
+pager = epage
