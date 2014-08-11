@@ -232,6 +232,13 @@ interface and inserts it at point."
 ;; make text-mode the default major mode
 (setq default-major-mode 'text-mode)
 
+                                        ; DIRED
+(require 'dired-x)
+
+;; Automatically omit "uninteresting" files from the listing. (Toggled with M-o.)
+(add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
+(global-unset-key (kbd "C-x C-j"))
+
                                         ; MMM-MODE
 (require 'mmm-mode)
 
@@ -257,6 +264,8 @@ interface and inserts it at point."
 (require 'org-html5presentation)
 
                                         ; JABBER
+(require 'jabber)
+
 ;; Spellcheck my jabber conversations.
 (add-hook 'jabber-chat-mode-hook 'flyspell-mode)
 
