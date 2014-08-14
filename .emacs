@@ -387,7 +387,8 @@ the current file."
 
 (defun my-haskell-mode-hook ()
   (local-set-key (kbd "C-c C-s") 'haskell-save-and-format)
-  (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run))
+  (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run)
+  (inf-haskell-mode))
 
 (defun my-inferior-haskell-mode-hook ()
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
