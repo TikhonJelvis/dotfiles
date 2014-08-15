@@ -14,4 +14,4 @@
         trustExitCode = true
 [filter "localhost"]
 	smudge = "sed 's|https://app.esper.com|http://app.esper.com:8017|'"
-	clean = "sed 's|http://app.esper.com:8017|http://app.esper.com|'"
+	clean = "sed 's|http://app.esper.com:8017|https://app.esper.com|'"
