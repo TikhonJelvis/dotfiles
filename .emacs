@@ -426,6 +426,8 @@ the current file."
 
 (setq tuareg-font-lock-symbols t)
 
+(add-to-list 'auto-mode-alist '("\\.atd" . tuareg-mode))
+
 ;; (add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . typerex-mode))
 ;; (add-to-list 'interpreter-mode-alist '("ocamlrun" . typerex-mode))
 ;; (add-to-list 'interpreter-mode-alist '("ocaml" . typerex-mode))
