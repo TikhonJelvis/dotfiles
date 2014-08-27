@@ -644,7 +644,7 @@ the current file."
       browse-url-browser-function 'browse-url-generic)
 
 ;; Make JS-2 mode the default:
-;; (add-to-list 'auto-mode-alist '("\\.js" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.js" . javascript-mode))
 (setq js2-basic-offset 2)
 (setq js-indent-level 2)
 
