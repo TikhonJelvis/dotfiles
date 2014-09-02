@@ -99,6 +99,18 @@ interface and inserts it at point."
     (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
+(defcustom git-grep-command "git --no-pager grep --no-color --line-number <C> <R>"
+  "The command to run with M-x git-grep.")
+(defun git-grep (regexp)
+  "Search for the given regexp using `git grep' in the current directory."
+  (interactive "sRegexp: ")
+  (unless (boundp 'grep-find-template) (grep-compute-defaults))
+  (let ((old-command grep-find-template))
+    (grep-apply-setting 'grep-find-template git-grep-command)
+    (rgrep regexp "*" "")
+    (sleep-for 0 100)
+    (grep-apply-setting 'grep-find-template old-command)))
+
                                         ; GENERAL STUFF
 ;; Auto-complete stuff
 (require 'auto-complete)
