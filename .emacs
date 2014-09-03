@@ -108,7 +108,6 @@ interface and inserts it at point."
   (let ((old-command grep-find-template))
     (grep-apply-setting 'grep-find-template git-grep-command)
     (rgrep regexp "*" "")
-    (sleep-for 0 100)
     (grep-apply-setting 'grep-find-template old-command)))
 
                                         ; GENERAL STUFF
