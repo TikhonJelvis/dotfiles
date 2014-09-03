@@ -662,6 +662,13 @@ the current file."
 ;; Edit .less files with css mode:
 (add-to-list 'auto-mode-alist '("\\.less$" . css-mode))
 
+;; Typescript
+(require 'typescript)
+
+(add-to-list 'auto-mode-alist '("\\.ts" . typescript-mode))
+(add-to-list 'ac-modes 'typescript-mode)
+(setq typescript-indent-level 2)
+
 ;; ;; ∀ x ∈ gosu-program-profiles: buffer ≡ 〈*,x,*〉 → (gosu-program-mode buffer)
 ;; (defun my-program-mode-profile-hook ()
 ;;   (let ((name (buffer-name))
