@@ -675,6 +675,8 @@ the current file."
 ;; Edit .less files with css mode:
 (add-to-list 'auto-mode-alist '("\\.less$" . css-mode))
 
+(setq css-indent-offset 2)
+
 ;; Typescript
 (require 'typescript)
 
