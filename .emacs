@@ -188,6 +188,19 @@ interface and inserts it at point."
 ;; I don't like tabs very much:
 (setq-default indent-tabs-mode nil)
 
+;; Auto indent pasted code in some modes:
+(defvar indent-paste-modes '(emacs-lisp-mode lisp-mode clojure-mode scheme-mode
+                             haskell-mode ruby-mode rspec-mode python-mode c-mode
+                             c++-mode objc-mode latex-mode plain-tex-mode
+                             css-mode less-css-mode))
+
+(dolist (command '(yank yank-pop))
+  (eval `(defadvice ,command (after indent-region activate)
+           (and (not current-prefix-arg)
+                (member major-mode indent-paste-modes)
+                (let ((mark-even-if-inactive transient-mark-mode))
+                  (indent-region (region-beginning) (region-end) nil))))))
+
 ;; For enabling color themes:
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (setq custom-safe-themes t)
