@@ -94,6 +94,104 @@ static char * arrow_right[] = {
            (if color1 color1 "None"))
    'xpm t :ascent 'center))
 
+(defun diagonal-right-xpm
+  (color2 color1)
+  "Return an XPM left diagonal string representing."
+  (create-image
+   (format "/* XPM */
+static char * diagonal_left[] = {
+\"19 19 2 1\",
+\". c %s\",
+\"  c %s\",
+\"................... \",
+\"..................  \",
+\".................   \",
+\"................    \",
+\"...............     \",
+\"..............      \",
+\".............       \",
+\"............        \",
+\"...........         \",
+\"..........          \",
+\".........           \",
+\"........            \",
+\".......             \",
+\"......              \",
+\".....               \",
+\"....                \",
+\"...                 \",
+\"..                  \",
+\".                   \",
+\"                    \"};"
+           (if color1 color1 "None")
+           (if color2 color2 "None"))
+   'xpm t :ascent 'center))
+
+(defun diagonal-left-xpm
+  (color2 color1)
+  "Return an XPM right diagonal string representing."
+  (create-image
+   (format "/* XPM */
+static char * diagonal_right[] = {
+\"19 19 2 1\",
+\". c %s\",
+\"  c %s\",
+\".                   \",
+\"..                  \",
+\"...                 \",
+\"....                \",
+\".....               \",
+\"......              \",
+\".......             \",
+\"........            \",
+\".........           \",
+\"..........          \",
+\"...........         \",
+\"............        \",
+\".............       \",
+\"..............      \",
+\"...............     \",
+\"................    \",
+\".................   \",
+\"..................  \",
+\"................... \",
+\"                    \"};"
+           (if color1 color1 "None")
+           (if color2 color2 "None"))
+   'xpm t :ascent 'center))
+
+(defun arrow-right-xpm
+  (color1 color2)
+  "Return an XPM right arrow string representing."
+  (create-image
+   (format "/* XPM */
+static char * arrow_right[] = {
+\"12 19 2 1\",
+\". c %s\",
+\"  c %s\",
+\"           .\",
+\"          ..\",
+\"         ...\",
+\"        ....\",
+\"       .....\",
+\"      ......\",
+\"     .......\",
+\"    ........\",
+\"   .........\",
+\"   .........\",
+\"    ........\",
+\"     .......\",
+\"      ......\",
+\"       .....\",
+\"        ....\",
+\"         ...\",
+\"          ..\",
+\"           .\"
+\"            \"};"
+           (if color2 color2 "None")
+           (if color1 color1 "None"))
+   'xpm t :ascent 'center))
+
 (defun arrow14-left-xpm
   (color1 color2)
   "Return an XPM left arrow string representing."
@@ -154,7 +252,7 @@ static char * arrow_right[] = {
   (create-image
    (format "/* XPM */
 static char * curve_right[] = {
-\"12 18 2 1\",
+\"12 19 2 1\",
 \". c %s\",
 \"  c %s\",
 \"           .\",
@@ -174,7 +272,8 @@ static char * curve_right[] = {
 \"       .....\",
 \"         ...\",
 \"         ...\",
-\"           .\"};"
+\"           .\",
+\"            \"};"
            (if color2 color2 "None")
            (if color1 color1 "None"))
    'xpm t :ascent 'center))
@@ -185,7 +284,7 @@ static char * curve_right[] = {
   (create-image
    (format "/* XPM */
 static char * curve_left[] = {
-\"12 18 2 1\",
+\"12 19 2 1\",
 \". c %s\",
 \"  c %s\",
 \".           \",
@@ -205,7 +304,8 @@ static char * curve_left[] = {
 \".....       \",
 \"...         \",
 \"...         \",
-\".           \"};"
+\".           \",
+\"            \"};"
            (if color1 color1 "None")
            (if color2 color2 "None"))
    'xpm t :ascent 'center))
@@ -296,6 +396,8 @@ install the memoized function over the original function."
 
 (memoize 'arrow-left-xpm)
 (memoize 'arrow-right-xpm)
+(memoize 'diagonal-left-xpm)
+(memoize 'diagonal-right-xpm)
 (memoize 'arrow14-left-xpm)
 (memoize 'arrow14-right-xpm)
 (memoize 'curve-left-xpm)
@@ -357,6 +459,8 @@ install the memoized function over the original function."
                             (curve-left-xpm color1 color2))
                            ((eq powerline-arrow-shape 'half)
                             (half-xpm color2 color1))
+                           ((eq powerline-arrow-shape 'diagonal)
+                            (diagonal-left-xpm color2 color1))
                            (t
                             (arrow-left-xpm color1 color2)))
                      'local-map (make-mode-line-mouse-map
@@ -385,6 +489,8 @@ install the memoized function over the original function."
                           (curve-right-xpm color1 color2))
                          ((eq powerline-arrow-shape 'half)
                           (half-xpm color2 color1))
+                         ((eq powerline-arrow-shape 'diagonal)
+                          (diagonal-right-xpm color2 color1))
                          (t
                           (arrow-right-xpm color1 color2)))
                    'local-map (make-mode-line-mouse-map

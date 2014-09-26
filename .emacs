@@ -221,7 +221,7 @@ interface and inserts it at point."
                     :foreground "Black"
                     :background "DarkOrange"
                     :box nil)
-(setq powerline-arrow-shape 'arrow)
+(setq powerline-arrow-shape 'diagonal)
 (setq-default mode-line-format '("%e"
   (:eval
    (concat
