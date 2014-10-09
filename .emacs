@@ -311,14 +311,22 @@ interface and inserts it at point."
 
 ;; Set up jabber.el to interface nicely with Google talk:
 (setq jabber-account-list
-      `(("tikhonjelvis@gmail.com/emacs" 
+      `(("tikhon@jelv.is/emacs" 
          (:network-server . "talk.google.com")
          (:connection-type . ssl)
-         (:password . ,gmail-jabber-password))
-        ("tikhon@jelv.is/emacs" 
-         (:network-server . "talk.google.com")
+         (:password . ,jelvis-jabber-password))
+        ("123747_1003864@chat.hipchat.com/emacs" 
+         (:network-server . "chat.hipchat.com")
          (:connection-type . ssl)
-         (:password . ,jelvis-jabber-password))))
+         (:password . ,hipchat-password))))
+
+;; I don't want to log into this automatically, but I still want the
+;; settings around, just in case...
+(defvar old-gmail-jabber-account
+  `("tikhonjelvis@gmail.com/emacs" 
+    (:network-server . "talk.google.com")
+    (:connection-type . ssl)
+    (:password . ,gmail-jabber-password)))
 (add-hook 'jabber-roster-mode-hook 'easy-move)
 (defvar jabber-blue "#6699FF")
 (defvar jabber-red "#FF9966")
