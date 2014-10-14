@@ -15,6 +15,7 @@
 
 (make-variable-buffer-local 'gosu-test-command)
 (make-variable-buffer-local 'gosu-program-command)
+(make-variable-buffer-local 'gosu-interrupt)
 
 (define-key gosu-program-mode-map (kbd "C-c C-j") 'gosu-run-program)
 (define-key gosu-program-mode-map (kbd "C-c C-l") 'gosu-reset-and-clear)
@@ -26,9 +27,19 @@
 (defun gosu-add-profile (name profile)
   "Adds the given profile with the given name to the list of gosu
   program profiles. If a profile with the given name already
-  exists, this does nothing and returns nil."
-  (unless (assoc name profile)
-    (setq gosu-program-profiles (cons (cons name profile) gosu-program-profiles))))
+  exists, this adds the new version to the front of the list,
+  which should shadow the old one.
+
+  A profile is an association list with the following possible keys:
+    - test-command: the command to run with `gosu-run-tests'
+    - run-command: the command to run with `gosu-run-program'
+    - quit-action: an elisp function for interrupting the current command 
+
+  By default, the quit action just sends an interrupt signal (ie
+  ), but this is insufficient for some programs like REPLs that
+  require a special command or an EOF (). For the latter case,
+  just set it to `comint-send-eof'."
+  (add-to-list 'gosu-program-profiles (cons name profile)))
 
 ;; An example profile for a Ronin server:
 (gosu-add-profile "server" '((test-command . "vark test")
@@ -45,7 +56,8 @@
 (defun gosu-program-load-profile (profile)
   (if profile
       (progn (setq gosu-program-command (cdr (assoc 'run-command profile)))
-             (setq gosu-test-command (cdr (assoc 'test-command profile))))
+             (setq gosu-test-command (cdr (assoc 'test-command profile)))
+             (setq gosu-interrupt (or (cdr (assoc 'interrupt-action profile)) 'comint-interrupt-subjob)))
     (message "Error! Specified profile does not exist.")))
 (defun gosu-program-profile ()
   (interactive)
@@ -56,15 +68,15 @@
 (defun gosu-program-profile-by-name (name)
   (gosu-program-load-profile (assoc name gosu-program-profiles)))
   
-(defun gosu-interrupt-and-clear ()
+(defun gosu-interrupt-and-clear (interrupt)
   (interactive)
-  (comint-interrupt-subjob)
+  (funcall interrupt)
   (sleep-for 0 100)
   (delete-region (point-min) (point-max)))
 
 (defun gosu-reset-and-clear ()
   (interactive)
-  (gosu-interrupt-and-clear)
+  (gosu-interrupt-and-clear gosu-interrupt)
   (sleep-for 0 100)
   (comint-send-input)
   (save-excursion
@@ -72,19 +84,20 @@
     (delete-blank-lines)
     (delete-blank-lines)))
 
-(defun gosu-run-cmd (cmd msg)
+(defun gosu-run-cmd (cmd msg &optional interrupt)
   (interactive)
-  (gosu-interrupt-and-clear)
-  (comint-simple-send (get-buffer-process (current-buffer)) 
-                      (concat "echo '" msg " Command: " cmd "'"))
-  (sleep-for 0 50)
-  (save-excursion
-    (backward-char)
-    (beginning-of-line)
-    (kill-line))
-  (end-of-buffer)
-  (message "Sending %s to %s." cmd (get-buffer-process (current-buffer)))
-  (comint-simple-send (get-buffer-process (current-buffer)) cmd))
+  (let ((interrupt (or interrupt 'comint-interrupt-subjob)))
+    (gosu-interrupt-and-clear interrupt)
+    (comint-simple-send (get-buffer-process (current-buffer)) 
+                        (concat "echo '" msg " Command: " cmd "'"))
+    (sleep-for 0 50)
+    (save-excursion
+      (backward-char)
+      (beginning-of-line)
+      (kill-line))
+    (end-of-buffer)
+    (message "Sending %s to %s." cmd (get-buffer-process (current-buffer)))
+    (comint-simple-send (get-buffer-process (current-buffer)) cmd)))
 
 (defun gosu-run-tests ()
   (interactive)
