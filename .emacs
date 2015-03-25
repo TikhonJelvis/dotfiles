@@ -212,6 +212,12 @@ interface and inserts it at point."
 (menu-bar-mode -1)
 (fringe-mode 0)
 
+;; No $ displayed for truncated lines
+(set-display-table-slot standard-display-table 0 ?\ ) 
+
+;; For some reason, I need to set the cursor color explicitly.
+(add-to-list 'default-frame-alist '(cursor-color . "#AEAEAE"))
+
 ;; Fill to 80 characters by default:
 (setq fill-column 80)
 
@@ -270,6 +276,29 @@ interface and inserts it at point."
 ;; make text-mode the default major mode
 (setq default-major-mode 'text-mode)
 
+                                        ; KEY REBINDINGS
+;; Do nothing on C-x C-c:
+(global-unset-key (kbd "C-x C-c"))
+;; I'm phasing C-x o out:
+(global-set-key (kbd "C-x o") 'other-frame)
+
+;; Make complete tag not be alt-tab!
+(global-set-key (kbd "M-<return>") 'complete-tag)
+
+;; Some nice keyboard shortcuts:
+(global-set-key (kbd "C-x 5 3") 'make-frame-command)
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-c C-j") 'compile)
+(global-set-key (kbd "C-c a") 'align-regexp)
+(global-set-key (kbd "M-#") 'ispell-complete-word)
+
+;; C-w remap:
+(global-set-key (kbd "C-w") 'backward-kill-word)
+(global-set-key (kbd "C-x C-k") 'kill-region)
+
+;; Get rid of column editing which I trigger by accident and find incredibly annoying:
+(global-unset-key (kbd "<f2>"))
+
                                         ; DIRED
 (require 'dired-x)
 
@@ -309,25 +338,24 @@ interface and inserts it at point."
 
 (setq jabber-alert-presence-message-function 'nil)
 
+(setq jabber-history-enabled t)
+(setq jabber-backlog-number 50)
+(setq jabber-backlog-days 50)
+
 ;; Set up jabber.el to interface nicely with Google talk:
 (setq jabber-account-list
       `(("tikhon@jelv.is/emacs" 
          (:network-server . "talk.google.com")
          (:connection-type . ssl)
          (:password . ,jelvis-jabber-password))
-        ("123747_1003864@chat.hipchat.com/emacs" 
-         (:network-server . "chat.hipchat.com")
-         (:connection-type . ssl)
-         (:password . ,hipchat-password))))
+        ("tikhon@espertech.xmpp.slack.com" 
+         (:password . "espertech.TaqxMkB9hEBOHjtvuJdk"))))
 
 ;; I don't want to log into this automatically, but I still want the
 ;; settings around, just in case...
-(defvar old-gmail-jabber-account
-  `("tikhonjelvis@gmail.com/emacs" 
-    (:network-server . "talk.google.com")
-    (:connection-type . ssl)
-    (:password . ,gmail-jabber-password)))
 (add-hook 'jabber-roster-mode-hook 'easy-move)
+
+;; Nicer colors. 
 (defvar jabber-blue "#6699FF")
 (defvar jabber-red "#FF9966")
 (defun jabber-color-hook ()
@@ -338,24 +366,9 @@ interface and inserts it at point."
   (setq jabber-presence-default-message nil))
 (add-hook 'jabber-roster-mode-hook 'jabber-color-hook)
 
-;; Do nothing on C-x C-c:
-(global-unset-key (kbd "C-x C-c"))
-;; I'm phasing C-x o out:
-(global-set-key (kbd "C-x o") 'other-frame)
-
-;; Make complete tag not be alt-tab!
-(global-set-key (kbd "M-<return>") 'complete-tag)
-
-;; Some nice keyboard shortcuts:
-(global-set-key (kbd "C-x 5 3") 'make-frame-command)
-(global-set-key (kbd "M-/") 'hippie-expand)
-(global-set-key (kbd "C-c C-j") 'compile)
-(global-set-key (kbd "C-c a") 'align-regexp)
-(global-set-key (kbd "M-#") 'ispell-complete-word)
-
-;; C-w remap:
-(global-set-key (kbd "C-w") 'backward-kill-word)
-(global-set-key (kbd "C-x C-k") 'kill-region)
+(defun jabber-misc-hook ()
+  (visual-line-mode))
+(add-hook 'jabber-chat-mode-hook 'jabber-misc-hook)
 
                                         ; SHELL BUFFERS
 ;; I want an easy command for opening new shells:
@@ -381,33 +394,34 @@ prompt to name>."
 (require 'stdout-mode)
 
                                         ; ELISP
+(require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
                                         ; COQ
-(load-file "/home/tikhon/Documents/cs/263/coq/ProofGeneral/generic/proof-site.el")
-(setq coq-prog-name "/usr/bin/coqtop")
-(require 'proof-site)
+;; (load-file "/home/tikhon/Documents/cs/263/coq/ProofGeneral/generic/proof-site.el")
+;; (setq coq-prog-name "/usr/bin/coqtop")
+;; (require 'proof-site)
 
-(setq proof-three-window-enable nil)
-(setq proof-splash-enable nil)
-(setq proof-shrink-windows-tofit t)
-(add-hook 'proof-mode-hook (lambda () (set-input-method "TeX") ))
-(add-hook 'proof-mode-hook (lambda ()
-  (proof-electric-terminator-toggle t)
-  (set (make-local-variable 'overlay-arrow-string) nil)
-  (setq proof-strict-read-only t)
-  (setq PA-one-command-per-line nil)
-  (define-key proof-mode-map "\C-c\C-a" 'proof-retract-until-point-interactive)
-  (define-key proof-mode-map "\C-c\C-e" 'proof-assert-until-point-interactive)
-  (define-key proof-mode-map "\C-\\" 'proof-display-some-buffers)
-  ;; hack for pre-release
-  (defun proof-script-next-commmand-advance ())
-  ))
-(defun proof-script-next-commmand-advance ())
-(add-hook 'proof-shell-mode-hook
-          (lambda ()
-            (set-process-query-on-exit-flag
-             (get-buffer-process (current-buffer)) nil)))
+;; (setq proof-three-window-enable nil)
+;; (setq proof-splash-enable nil)
+;; (setq proof-shrink-windows-tofit t)
+;; (add-hook 'proof-mode-hook (lambda () (set-input-method "TeX") ))
+;; (add-hook 'proof-mode-hook (lambda ()
+;;   (proof-electric-terminator-toggle t)
+;;   (set (make-local-variable 'overlay-arrow-string) nil)
+;;   (setq proof-strict-read-only t)
+;;   (setq PA-one-command-per-line nil)
+;;   (define-key proof-mode-map "\C-c\C-a" 'proof-retract-until-point-interactive)
+;;   (define-key proof-mode-map "\C-c\C-e" 'proof-assert-until-point-interactive)
+;;   (define-key proof-mode-map "\C-\\" 'proof-display-some-buffers)
+;;   ;; hack for pre-release
+;;   (defun proof-script-next-commmand-advance ())
+;;   ))
+;; (defun proof-script-next-commmand-advance ())
+;; (add-hook 'proof-shell-mode-hook
+;;           (lambda ()
+;;             (set-process-query-on-exit-flag
+;;              (get-buffer-process (current-buffer)) nil)))
 
                                         ; HASKELL
 (require 'haskell-mode-autoloads)
@@ -622,9 +636,10 @@ the current file."
                                         ; MARKDOWN
 (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
 (defun my-markdown-hook ()
+  (message "My Markdown hook!")
   (pandoc-mode)
   (flyspell-mode)
-  (longlines-mode)
+  (visual-line-mode 1)
   (flyspell-buffer)
   (local-unset-key (kbd "C-M-b"))
   (local-unset-key (kbd "C-M-f"))  )
@@ -707,19 +722,19 @@ the current file."
 (setq typescript-indent-level 2)
 
 ;; ∀ x ∈ gosu-program-profiles: buffer ≡ 〈*,x,*〉 → (gosu-program-mode buffer)
-(require 'gosu-program-mode)
-(defun my-program-mode-profile-hook ()
-  (let ((name (buffer-name))
-        (mode (if (string-match-p "\\*.*\\*" name)
-                  (substring name 1 -1) name)))
-    (when ((assoc mode gosu-program-profiles))
-      (gosu-program-mode)
-      (gosu-program-profile-by-name mode))))
-(add-hook 'shell-mode-hook 'my-program-mode-profile-hook)
+;; (require 'gosu-program-mode)
+;; (defun my-program-mode-profile-hook ()
+;;   (let ((name (buffer-name))
+;;         (mode (if (string-match-p "\\*.*\\*" name)
+;;                   (substring name 1 -1) name)))
+;;     (when ((assoc mode gosu-program-profiles))
+;;       (gosu-program-mode)
+;;       (gosu-program-profile-by-name mode))))
+;; (add-hook 'shell-mode-hook 'my-program-mode-profile-hook)
 
-(gosu-add-profile "ocaml-inbox" '((test-command . "")
-                                  (run-command . "omake && utop -I inbox/ -I types/")
-                                  (interrupt-action . comint-send-eof)))
+;; (gosu-add-profile "ocaml-inbox" '((test-command . "")
+;;                                   (run-command . "omake && utop -I inbox/ -I types/")
+;;                                   (interrupt-action . comint-send-eof)))
 
 ;; If I'm at work, make sure python-indent is set to 4:
 (defun my-python-work-settings-hook ()

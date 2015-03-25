@@ -2,7 +2,7 @@
 	email = tikhon@jelv.is
         name = Tikhon Jelvis
 [color]
-	ui = auto
+	ui = always
 [core]
 	pager = epage
 [alias]

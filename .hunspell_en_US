@@ -42,3 +42,6 @@ nondeterministic
 runtime
 prolog
 dsl
+unintuitive
+untyped
+reifying

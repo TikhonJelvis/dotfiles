@@ -33,6 +33,7 @@ export PATH=$HOME/local/z3/bin:$PATH
 export PATH=$HOME/local/s3cmd:$PATH
 export PATH=$HOME/.cabal/bin:$PATH
 export PATH=$HOME/node_modules/.bin:$PATH
+export PATH=$HOME/.opam/system/bin:$PATH
 
 export TPL_PATH=$HOME/Documents/programming/haskell/TPL/src
 

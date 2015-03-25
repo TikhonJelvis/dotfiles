@@ -1,3 +1,5 @@
-xrandr --output eDP1 --pos 0x1100 --output HDMI1 --pos 1100x0 --auto
+xrandr --output HDMI-1 --scale 1.3x1.3 --left-of eDP-0
 
-feh  --bg-fill '/home/tikhon/Pictures/background.png' '/home/tikhon/Pictures/haskell-background-pink.png' 
+xinput set-prop "ELAN Touchscreen" --type=float "Coordinate Transformation Matrix" 0.5063291139240507 0 0 0 1 0.004 0 0 1
+
+# feh  --bg-fill '/home/tikhon/Pictures/background.png' '/home/tikhon/Pictures/haskell-background-pink.png' 
