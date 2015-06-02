@@ -347,9 +347,7 @@ interface and inserts it at point."
       `(("tikhon@jelv.is/emacs" 
          (:network-server . "talk.google.com")
          (:connection-type . ssl)
-         (:password . ,jelvis-jabber-password))
-        ("tikhon@espertech.xmpp.slack.com" 
-         (:password . "espertech.TaqxMkB9hEBOHjtvuJdk"))))
+         (:password . ,jelvis-jabber-password))))
 
 ;; I don't want to log into this automatically, but I still want the
 ;; settings around, just in case...
