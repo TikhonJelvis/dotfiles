@@ -510,21 +510,6 @@ the current file."
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
 
-;;; autocomplete with eclim
-(require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
-
-;;; autocomplete styling for eclim
-(set-face-attribute 'ac-emacs-eclim-candidate-face nil
-                    :inherit 'ac-candidate-face
-                    :background "lightgray")
-(set-face-attribute 'ac-emacs-eclim-selection-face nil
-                    :inherit 'ac-selection-face
-                    :foreground "white"
-                    :background "steelblue")
-
-(global-set-key (kbd "M-?") 'auto-complete)
-
                                         ; XML
 (defun my-nxml-hook ()
   (local-unset-key (kbd "M-{"))
