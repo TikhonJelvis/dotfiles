@@ -505,15 +505,6 @@ the current file."
 ;; ignore warnings in *compilation* buffer:
 (setq compilation-skip-threshold 2)
 
-;; eclim setup
-(require 'eclim)
-(global-eclim-mode)
-
-(require 'eclimd)
-
-(setq eclim-eclipse-dirs '("~/Documents/tmp/adt-bundle-linux-x86_64-20140702/eclipse"))
-(setq eclim-executable "~/Documents/tmp/adt-bundle-linux-x86_64-20140702/eclipse/eclim")
-
 ;;; display errors and warnings at point
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
