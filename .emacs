@@ -312,12 +312,6 @@ interface and inserts it at point."
 (setq mmm-global-mode 'maybe)           ; Load mmm-mode when appropriate
 (set-face-background 'mmm-default-submode-face "#2C3041")
 
-                                        ; MULTIPLE CURSORS
-(require 'multiple-cursors)
-(global-set-key (kbd "M-A M-A") 'mc/edit-lines)
-(global-set-key (kbd "M-A M-S") 'mc/mark-all-like-this)
-(global-set-key (kbd "M-D") 'mc/mark-next-like-this)
-
                                         ; ORG-MODE
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
