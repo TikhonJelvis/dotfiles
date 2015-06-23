@@ -416,7 +416,6 @@ prompt to name>."
 ;;              (get-buffer-process (current-buffer)) nil)))
 
                                         ; HASKELL
-(require 'haskell-mode-autoloads)
 
 ;; Load Haskell mode:
 (defun haskell-save-and-format ()
