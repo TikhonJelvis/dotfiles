@@ -125,6 +125,9 @@ interface and inserts it at point."
 ;; Flymake stuff
 (setq flymake-cursor-error-display-delay 0.1)
 
+;; Flyspell stuff
+(setq ispell-program-name "/run/current-system/sw/bin/aspell")
+
 ;; Emerge settings (I still sometimes use emerge with git mergetool)
 (setq emerge-diff-options "--ignore-all-space")
 
@@ -328,7 +331,7 @@ interface and inserts it at point."
   (local-set-key (kbd "M-}") 'outline-next-visible-heading))
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 
-(require 'org-html5presentation)
+;; (require 'org-html5presentation)
 
                                         ; JABBER
 (require 'jabber)
