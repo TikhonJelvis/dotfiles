@@ -367,8 +367,9 @@ key.setEditKey('C-M-y', function (ev) {
     if (!command.kill.ring.length) {
         return;
     }
-    let (ct = command.getClipboardText()) (!command.kill.ring.length || ct != command.kill.ring[0]) &&
-        command.pushKillRing(ct);
+    ct = command.getClipboardText()
+    (!command.kill.ring.length || ct != command.kill.ring[0]) &&
+      command.pushKillRing(ct);
     prompt.selector({message: "Paste:", collection: command.kill.ring, callback: function (i) {if (i >= 0) {key.insertText(command.kill.ring[i]);}}});
 }, 'Show kill-ring and select text to paste', true);
 
