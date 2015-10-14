@@ -315,12 +315,6 @@ interface and inserts it at point."
 (setq mmm-global-mode 'maybe)           ; Load mmm-mode when appropriate
 (set-face-background 'mmm-default-submode-face "#2C3041")
 
-                                        ; MULTIPLE CURSORS
-(require 'multiple-cursors)
-(global-set-key (kbd "M-A M-A") 'mc/edit-lines)
-(global-set-key (kbd "M-A M-S") 'mc/mark-all-like-this)
-(global-set-key (kbd "M-D") 'mc/mark-next-like-this)
-
                                         ; ORG-MODE
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -425,7 +419,6 @@ prompt to name>."
 ;;              (get-buffer-process (current-buffer)) nil)))
 
                                         ; HASKELL
-(require 'haskell-mode-autoloads)
 
 ;; Load Haskell mode:
 (defun haskell-save-and-format ()
@@ -515,34 +508,10 @@ the current file."
 ;; ignore warnings in *compilation* buffer:
 (setq compilation-skip-threshold 2)
 
-;; eclim setup
-(require 'eclim)
-(global-eclim-mode)
-
-(require 'eclimd)
-
-(setq eclim-eclipse-dirs '("~/Documents/tmp/adt-bundle-linux-x86_64-20140702/eclipse"))
-(setq eclim-executable "~/Documents/tmp/adt-bundle-linux-x86_64-20140702/eclipse/eclim")
-
 ;;; display errors and warnings at point
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
-
-;;; autocomplete with eclim
-(require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
-
-;;; autocomplete styling for eclim
-(set-face-attribute 'ac-emacs-eclim-candidate-face nil
-                    :inherit 'ac-candidate-face
-                    :background "lightgray")
-(set-face-attribute 'ac-emacs-eclim-selection-face nil
-                    :inherit 'ac-selection-face
-                    :foreground "white"
-                    :background "steelblue")
-
-(global-set-key (kbd "M-?") 'auto-complete)
 
                                         ; XML
 (defun my-nxml-hook ()

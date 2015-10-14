@@ -74,7 +74,6 @@
 
 ;;; Code:
 
-(require 'org-exp)
 (require 'format-spec)
 
 (eval-when-compile (require 'cl))
