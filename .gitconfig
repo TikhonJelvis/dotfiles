@@ -5,6 +5,7 @@
 	ui = always
 [core]
 	pager = epage
+	fileMode = false
 [alias]
         start = !git clone ~/template
 [merge]
