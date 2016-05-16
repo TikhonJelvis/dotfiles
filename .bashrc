@@ -12,7 +12,7 @@
 
 # Some applications read the EDITOR variable to determine your favourite text
 # editor. So uncomment the line below and enter the editor of your choice :-)
-export EDITOR=emacsclient
+export EDITOR=emacsc
 
 # For some news readers it makes sense to specify the NEWSSERVER variable here
 #export NEWSSERVER=your.news.server

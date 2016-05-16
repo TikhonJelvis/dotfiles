@@ -23,6 +23,8 @@
   # networking.wireless.enable = true;  # Enables wireless.
   networking.networkmanager.enable = true;
 
+  hardware.pulseaudio.enable = true;
+
   # Select internationalisation properties.
   # i18n = {
   #   consoleFont = "lat9w-16";
@@ -36,10 +38,11 @@
     wget
 
     firefox
+    calibre
 
     gitAndTools.gitFull
 
-    ghc
+    cabal2nix
 
     aspell
     aspellDicts.en
@@ -59,7 +62,10 @@
     emacs24PackagesNg.popup
     emacs24PackagesNg.structured-haskell-mode
     emacs24PackagesNg.undo-tree
-    
+
+    ghc
+    cabal-install
+
     kde4.plasma-nm
     kde4.kdemultimedia
     kde4.kdegraphics
@@ -71,8 +77,6 @@
     kde4.kde_baseapps
     kde4.kactivities
     kde4.kdeadmin
-    kde4.kdeartwork
-    kde4.kde_base_artwork
     kde4.kdenetwork
     kde4.kdeplasma_addons
     kde4.kdetoys
@@ -92,7 +96,7 @@
 
   # NTP (time server) settings:
   services.ntp.enable = true;
-  
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.layout = "us";
@@ -121,16 +125,20 @@
     extraGroups = ["wheel" "networkmanager"];
   };
 
-  # Start Emacs daemon automatically
+  # Add a systemd emacs daemon server
   systemd.user.services.emacs = {
-    description = "Emacs Daemon";
-    environment.GTK_DATA_PREFIX = config.system.path;
-    environment.SSH_AUTH = "%t/ssh-agent";
-    environment.GTK_PATH = "${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0";
-    environment.NIX_PROFILES = "${pkgs.lib.concatStringsSep ":" config.environment.profiles}";
+    description = "emacs daemon";
+    environment = {
+      GTK_DATA_PREFIX = config.system.path;
+      SSH_AUTH_SOCK = "%t/ssh-agent";
+      GTK_PATH = "${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0";
+      NIX_PROFILES = "${pkgs.lib.concatStringsSep " " config.environment.profiles}";
+      TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
+      ASPELL_CONF = "dict-dir /run/current-system/sw/lib/aspell";
+    };
     serviceConfig = {
       Type = "forking";
-      ExecStart = "${pkgs.emacs}/bin/emacs --daemon";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'source ${config.system.build.setEnvironment}; exec emacs --daemon'";
       ExecStop = "${pkgs.emacs}/bin/emacsclient --eval (kill-emacs)";
       Restart = "always";
     };

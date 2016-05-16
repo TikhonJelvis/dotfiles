@@ -19,7 +19,7 @@ main = do args <- getArgs
   
 emacsBuffer :: String -> String -> String -> String
 emacsBuffer file buffer mode = printf "emacsclient --alternate-editor %s --eval '%s'" alternative elisp
-  where alternative      = "/usr/bin/false"
+  where alternative       = "'/usr/bin/env false'"
         letVals :: String = printf "(b (create-file-buffer \"%s\")) " buffer
         startFn :: String = printf "(switch-to-buffer b) (insert-file-contents \"%s\") (%s)" file mode
         elisp   :: String = printf "(let (%s) %s (delete-file \"%s\"))" letVals startFn file
