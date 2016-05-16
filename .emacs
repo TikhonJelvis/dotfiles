@@ -193,7 +193,7 @@ interface and inserts it at point."
 
 ;; Auto indent pasted code in some modes:
 (defvar indent-paste-modes '(emacs-lisp-mode lisp-mode clojure-mode scheme-mode
-                             haskell-mode ruby-mode rspec-mode python-mode c-mode
+                             ruby-mode rspec-mode python-mode c-mode
                              c++-mode objc-mode latex-mode plain-tex-mode
                              css-mode less-css-mode))
 
@@ -421,6 +421,9 @@ prompt to name>."
                                         ; HASKELL
 
 ;; Load Haskell mode:
+(require 'haskell)
+(require 'haskell-indentation)
+
 (defun haskell-save-and-format ()
   "Formats the import statements using haskell-stylish and saves
 the current file."
@@ -441,8 +444,7 @@ the current file."
 
 (defun my-haskell-mode-hook ()
   (local-set-key (kbd "C-c C-s") 'haskell-save-and-format)
-  (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run)
-  (inf-haskell-mode))
+  (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run))
 
 (defun my-inferior-haskell-mode-hook ()
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
@@ -450,11 +452,9 @@ the current file."
 ;;; More custom font lock symbols:
 ;; (add-to-list 'haskell-font-lock-symbols-alist '("Nat" . ?ℕ))
 
-(require 'haskell-project-mode)
-
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+(add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (add-hook 'haskell-mode-hook 'font-lock-mode)
-(add-hook 'haskell-mode-hook 'haskell-project-mode)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
 (add-hook 'inferior-haskell-mode-hook 'my-inferior-haskell-mode-hook)
 (setq haskell-font-lock-symbols t)
