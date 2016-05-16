@@ -671,7 +671,7 @@ the current file."
 
                                         ; WEB DEVELOPMENT
 ;; Make the default browser googly chrome:
-(setq browse-url-generic-program "google-chrome"
+(setq browse-url-generic-program "firefox"
       browse-url-browser-function 'browse-url-generic)
 
 ;; Make JS-2 mode the default:
