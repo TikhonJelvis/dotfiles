@@ -1,15 +1,25 @@
-# .bash_profile
+#!/usr/bin/env bash
 
-# Get the aliases and functions
-if [ -f ~/.bashrc ]; then
-	. ~/.bashrc
-fi
+# Set variables for using the proxy on a Target network.
+function proxyon {
+    export http_proxy=http://proxy-mdha.target.com:8080
+    export HTTP_PROXY=http://proxy-mdha.target.com:8080
+    export https_proxy=http://proxy-mdha.target.com:8080
+    export HTTPS_PROXY=http://proxy-mdha.target.com:8080
+}
 
-# User specific environment and startup programs
+# Unset variables for use on a non-Target network.
+function proxyoff {
+    unset http_proxy
+    unset HTTP_PROXY
+    unset https_proxy
+    unset HTTPS_PROXY
+}
 
-PATH=$PATH:$HOME/bin:$HOME/local/bin:$HOME/local/racket/bin
+# load Target's SSL certificates
+source ~/.target_certs.sh
 
-export PATH
+# Custom scripts and stuff:
+export PATH=$PATH:~/local/bin/
 
-# OPAM configuration
-. $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+if [ -e /Users/z0028sn/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/z0028sn/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
