@@ -1,1 +1,1 @@
-:set prompt "λ> "
+:set -fdefer-type-errors
