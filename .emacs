@@ -195,6 +195,11 @@ interface and inserts it at point."
 ;; I'm phasing C-x o out:
 (global-set-key (kbd "C-x o") 'other-frame)
 
+;; Set C-x C-b to switching buffer—for some reason, I always hit by
+;; accident. It's annoying!
+(global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+(global-set-key (kbd "C-S-b") 'list-buffers)
+
 ;; Make complete tag not be alt-tab!
 (global-set-key (kbd "M-<return>") 'complete-tag)
 
