@@ -16,6 +16,14 @@ function proxyoff {
     unset HTTPS_PROXY
 }
 
+function kill_alwayson {
+    launchctl unload /Library/LaunchAgents/net.juniper.pulsetray.plist
+}
+
+function start_alwayson {
+    launchctl load /Library/LaunchAgents/net.juniper.pulsetray.plist
+}
+
 # load Target's SSL certificates
 source ~/.target_certs.sh
 
