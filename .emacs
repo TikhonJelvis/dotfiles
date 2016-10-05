@@ -263,6 +263,11 @@ interface and inserts it at point."
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
 
+;; Allow markup in the middle of words.
+;; (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
+;; (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
+;; (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
 (defun my-org-mode-hook ()
   (local-set-key (kbd "M-{") 'outline-previous-visible-heading)
   (local-set-key (kbd "M-}") 'outline-next-visible-heading))
