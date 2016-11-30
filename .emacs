@@ -9,6 +9,17 @@
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
+                                        ; TERRIBLE MAC HACKS
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier nil)
+(require 'exec-path-from-shell)
+(let ((nix-vars '("NIX_LINK"
+                  "NIX_PATH"
+                  "SSL_CERT_FILE")))
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
+    (mapcar 'exec-path-from-shell-copy-env nix-vars)))
+
                                         ; SECRETS
 ;; Load my secrets file that contains passwords, keys and so on.
 ;; (load "~/secrets.el")
@@ -121,7 +132,7 @@ interface and inserts it at point."
 (setq ido-default-buffer-method 'selected-window)
 
 ;; Some minor preferences:
-(setq visible-bell t)
+(setq visible-bell 'nil)
 (show-paren-mode 1)
 (column-number-mode t)
 (transient-mark-mode -1)
@@ -310,6 +321,17 @@ prompt to name>."
 
 ;; Don't use stack for running Haskell projects:
 (setq haskell-process-type 'cabal-repl)
+
+;; Wrap haskell-mode's comamnds in a nix-shell by default:
+(setq haskell-process-wrapper-function
+      (lambda (argv)
+        (append (list "nix-shell" "-I" "." "--command" )
+                (list (mapconcat 'identity argv " ")))))
+
+(add-to-list 'safe-local-variable-values
+             '(haskell-process-wrapper-function . (lambda (argv)
+                                                    (append (list "nix-shell" "-I" "." "--command" )
+                                                            (list (mapconcat 'identity argv " "))))))
 
 (defun haskell-save-and-format ()
   "Formats the import statements using haskell-stylish and saves
