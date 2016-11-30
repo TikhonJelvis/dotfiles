@@ -20,10 +20,6 @@
     (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
     (mapcar 'exec-path-from-shell-copy-env nix-vars)))
 
-                                        ; SECRETS
-;; Load my secrets file that contains passwords, keys and so on.
-;; (load "~/secrets.el")
-
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
   "Lets me navigate without using the control key. This only
@@ -228,46 +224,12 @@ interface and inserts it at point."
 ;; Get rid of column editing which I trigger by accident and find incredibly annoying:
 (global-unset-key (kbd "<f2>"))
 
-                                        ; SECRETS
-(load "~/secrets.el")
-
 					; DIRED
 ;; Has to be above JABBER settings because it has a conflicting keybinding :(.
 (require 'dired-x)
 
 ;; Automatically omit "uninteresting" files from the listing. (Toggled with M-o.)
 (add-hook 'dired-mode-hook 'dired-omit-mode)
-
-
-                                        ; JABBER
-(require 'jabber)
-
-(add-hook 'jabber-chat-mode-hook 'flyspell-mode)
-
-(setq jabber-alert-presence-message-function nil)
-
-(setq jabber-history-enabled t)
-(setq jabber-backlog-number 500)
-(setq jabber-backlog-days 50)
-
-(setq jabber-account-list
-      `(("171096_4162644@chat.hipchat.com/emacs"
-         (:network-server . "chat.hipchat.com")
-         (:connection-type . starttls)
-         (:port . 5222)
-         (:password . ,target-jabber-password))))
-
-;;; Don't display presence updates (gets really noisy):
-(defadvice jabber-muc-process-presence
-    (after jabber-muc-process-presence-clear-notices)
-  "Remove all muc notices."
-  (let* ((from (jabber-xml-get-attribute presence 'from))
-	 (group (jabber-jid-user from))
-         (buffer (get-buffer (jabber-muc-get-buffer group))))
-    (if buffer
-        (with-current-buffer buffer
-          (ewoc-filter jabber-chat-ewoc (lambda (elt) (not (eq (car elt) :muc-notice))))))))
-
 
                                         ; ORG-MODE
 ;; Spellcheck my org mode files.
@@ -370,19 +332,6 @@ the current file."
 (setq delete-selection-mode nil)
 
 (setq inferior-haskell-find-project-root nil)
-
-                                        ; MARKDOWN
-(add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
-(defun my-markdown-hook ()
-  (message "My Markdown hook!")
-  (pandoc-mode)
-  (flyspell-mode)
-  (visual-line-mode 1)
-  (flyspell-buffer)
-  (local-unset-key (kbd "C-M-b"))
-  (local-unset-key (kbd "C-M-f"))  )
-(add-hook 'markdown-mode-hook 'my-markdown-hook)
-(setq markdown-enable-math t)
 
                                         ; MARKDOWN
 (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
