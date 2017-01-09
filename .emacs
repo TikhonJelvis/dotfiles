@@ -247,6 +247,9 @@ interface and inserts it at point."
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 
                                         ; SHELL BUFFERS
+;; Stop Emacs from expanding things like !! in history
+(setq comint-input-autoexpand 'nil)
+
 ;; I want an easy command for opening new shells:
 (defun new-shell (name)
   "Opens a new shell buffer with the given name in
