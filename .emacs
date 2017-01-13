@@ -157,25 +157,18 @@ interface and inserts it at point."
 
 ;; Now make it prettier:
 (require 'powerline)
+(powerline-default-theme)
+
+(setq powerline-default-separator 'box)
+(setq powerline-utf-8-separator-left #x25E3)
+(setq powerline-utf-8-separator-right #x25E2)
+(setq powerline-height 17)
+(setq powerline-gui-use-vcs-glyph 'nil)
+
 (set-face-attribute 'mode-line nil
                     :foreground "Black"
                     :background "DarkOrange"
                     :box nil)
-(setq powerline-arrow-shape 'diagonal)
-(setq-default mode-line-format '("%e"
-  (:eval
-   (concat
-    (powerline-rmw 'left nil)
-    (powerline-buffer-id 'left nil powerline-color1)
-    (powerline-minor-modes 'left powerline-color1)
-    (powerline-narrow 'left powerline-color1 powerline-color2)
-    (powerline-vc 'center powerline-color2)
-    (powerline-make-fill powerline-color2)
-    (powerline-row 'right powerline-color1 powerline-color2)
-    (powerline-make-text ":" powerline-color1)
-    (powerline-column 'right powerline-color1)
-    (powerline-percent 'right nil powerline-color1)
-    (powerline-make-text "  " nil)))))
 
 ;; Unique buffer names:
 (require 'uniquify)
