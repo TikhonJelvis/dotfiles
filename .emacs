@@ -372,6 +372,9 @@ the current file."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(package-selected-packages
+   (quote
+    (powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber haskell-mode exec-path-from-shell elm-mode bash-completion)))
  '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t)
  '(tool-bar-mode nil)
