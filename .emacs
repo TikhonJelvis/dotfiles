@@ -385,6 +385,8 @@ the current file."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 141 :width normal :foundry "nil" :family "DejaVu Sans Mono"))))
+ '(erc-input-face ((t (:foreground "cornflower blue"))))
+ '(erc-my-nick-face ((t (:foreground "CornflowerBlue" :weight bold))))
  '(flycheck-error ((t (:underline "red"))))
  '(flycheck-warning ((t (:underline "darkorange"))))
  '(flymake-errline ((t (:background "#00000000" :underline "red"))))
