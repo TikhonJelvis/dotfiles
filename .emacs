@@ -9,9 +9,17 @@
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
-                                        ; SECRETS
-;; Load my secrets file that contains passwords, keys and so on.
-(load "~/secrets.el")
+                                        ; TERRIBLE MAC HACKS
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier nil)
+  (require 'exec-path-from-shell)
+  (let ((nix-vars '("NIX_LINK"
+                    "NIX_PATH"
+                    "SSL_CERT_FILE")))
+    (when (memq window-system '(mac ns))
+      (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
+      (mapcar 'exec-path-from-shell-copy-env nix-vars))))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -53,26 +61,6 @@ vice-versa."
 (global-set-key (kbd "C-c C-b") 'flip-bool-at-point)
 (global-set-key (kbd "C-c b") 'flip-bool-at-point)
 
-;; Take screenshots with a keystroke. You need the window ID, which
-;; can be found via `xwininfo -display :0'.
-;; 
-;; You can preview the animation with `animate -delay 35 *.png' and
-;; actually create it with `convert -delay 35 *.png out.gif'.
-(defun screenshot-frame ()
-  "Take a screenshot of 400x200 pixels of the Emacs frame."
-  (interactive)
-  (shell-command-to-string
-   "sleep 1;import -window 0x5e000c3 +repage /home/tikhon/Documents/tmp/frames/`date +%s`.png"))
-(global-set-key (kbd "<f8>") 'screenshot-frame)
-
-(defun my-screenshot-hook ()
-  (screenshot-frame))
-
-(defun start-screenshots ()
-  "Start taking screenshots after every single command."
-  (interactive)
-  (add-hook 'post-command-hook 'my-screenshot-hook))
-
 ;; Insert TODO comments programmatically:
 (defun todo-comment ()
   "Inserts an empty TODO comment or makes an existing comment
@@ -94,39 +82,12 @@ interface and inserts it at point."
     (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
-(defcustom git-grep-command "git --no-pager grep --no-color --line-number <C> <R>"
-  "The command to run with M-x git-grep.")
-(defun git-grep (regexp)
-  "Search for the given regexp using `git grep' in the current directory."
-  (interactive "sRegexp: ")
-  (unless (boundp 'grep-find-template) (grep-compute-defaults))
-  (let ((old-command grep-find-template))
-    (grep-apply-setting 'grep-find-template git-grep-command)
-    (rgrep regexp "*" "")
-    (grep-apply-setting 'grep-find-template old-command)))
-
-                                        ; GENERAL STUFF
-;; Auto-complete stuff
-(require 'auto-complete)
-(require 'auto-complete-config)
-(ac-config-default)
-(ac-flyspell-workaround)
-
-(global-set-key (kbd "M-TAB") 'auto-complete)
-
+					; GENERAL STUFF
 ;; Have compile scroll to the end by default.
 (setq-default compilation-scroll-output 'foo-bar)
 
-;; Flymake stuff
-(setq flymake-cursor-error-display-delay 0.1)
-
 ;; Flyspell stuff
-(setq ispell-program-name "/run/current-system/sw/bin/aspell")
-
-;; Emerge settings (I still sometimes use emerge with git mergetool)
-(setq emerge-diff-options "--ignore-all-space")
-
-;; Flyspell stuff
+(setq ispell-program-name "/Users/z0028sn/.nix-profile/bin/aspell")
 (add-hook 'flyspell-mode-hook '(lambda ()
 				(set-face-attribute 'flyspell-duplicate nil
 						    :foreground nil
@@ -168,36 +129,15 @@ interface and inserts it at point."
 (setq ido-default-buffer-method 'selected-window)
 
 ;; Some minor preferences:
-(setq visible-bell t)
+(setq visible-bell 'nil)
 (show-paren-mode 1)
 (column-number-mode t)
 (transient-mark-mode -1)
 (setq mark-even-if-inactive t)
 (setq-default truncate-lines t)
 
-;; Auto-indenting on RET:
-(add-hook 'c-mode-common-hook '(lambda ()
-                                 (local-set-key (kbd "RET") 
-                                                'newline-and-indent)))
-(add-hook 'python-mode-hook '(lambda ()
-			       (local-set-key (kbd "RET") 
-					      'newline-and-indent)))
-
 ;; I don't like tabs very much:
 (setq-default indent-tabs-mode nil)
-
-;; Auto indent pasted code in some modes:
-(defvar indent-paste-modes '(emacs-lisp-mode lisp-mode clojure-mode scheme-mode
-                             ruby-mode rspec-mode python-mode c-mode
-                             c++-mode objc-mode latex-mode plain-tex-mode
-                             css-mode less-css-mode))
-
-(dolist (command '(yank yank-pop))
-  (eval `(defadvice ,command (after indent-region activate)
-           (and (not current-prefix-arg)
-                (member major-mode indent-paste-modes)
-                (let ((mark-even-if-inactive transient-mark-mode))
-                  (indent-region (region-beginning) (region-end) nil))))))
 
 ;; For enabling color themes:
 (setq custom-theme-directory "~/.emacs.d/themes/")
@@ -207,14 +147,14 @@ interface and inserts it at point."
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1) 
-(menu-bar-mode -1)
+;; mac-specific: menu-bar-mode needed for fullscreen, for some reason?
+(if (eq system-type 'darwin)
+  (menu-bar-mode 1)
+  (menu-bar-mode -1))
 (fringe-mode 0)
 
 ;; No $ displayed for truncated lines
-(set-display-table-slot standard-display-table 0 ?\ ) 
-
-;; For some reason, I need to set the cursor color explicitly.
-(add-to-list 'default-frame-alist '(cursor-color . "#AEAEAE"))
+(set-display-table-slot standard-display-table 0 ?\ )
 
 ;; Fill to 80 characters by default:
 (setq fill-column 80)
@@ -266,6 +206,11 @@ interface and inserts it at point."
 ;; I'm phasing C-x o out:
 (global-set-key (kbd "C-x o") 'other-frame)
 
+;; Set C-x C-b to switching buffer—for some reason, I always hit by
+;; accident. It's annoying!
+(global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+(global-set-key (kbd "C-S-b") 'list-buffers)
+
 ;; Make complete tag not be alt-tab!
 (global-set-key (kbd "M-<return>") 'complete-tag)
 
@@ -284,18 +229,12 @@ interface and inserts it at point."
 ;; incredibly annoying:
 (global-unset-key (kbd "<f2>"))
 
-                                        ; DIRED
+					; DIRED
+;; Has to be above JABBER settings because it has a conflicting keybinding :(.
 (require 'dired-x)
 
 ;; Automatically omit "uninteresting" files from the listing. (Toggled with M-o.)
-(add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
-(global-unset-key (kbd "C-x C-j"))
-
-                                        ; MMM-MODE
-(require 'mmm-mode)
-
-(setq mmm-global-mode 'maybe)           ; Load mmm-mode when appropriate
-(set-face-background 'mmm-default-submode-face "#2C3041")
+(add-hook 'dired-mode-hook 'dired-omit-mode)
 
                                         ; ORG-MODE
 ;; Spellcheck my org mode files.
@@ -313,19 +252,24 @@ interface and inserts it at point."
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 
                                         ; SHELL BUFFERS
+;; Stop Emacs from expanding things like !! in history
+(setq comint-input-autoexpand 'nil)
+
 ;; I want an easy command for opening new shells:
 (defun new-shell (name)
   "Opens a new shell buffer with the given name in
 asterisks (*name*) in the current directory with and changes the
 prompt to name>."
   (interactive "sName: ")
-  (pop-to-buffer (concat "*" name "*"))
+  (when (equal name "")
+    (setq name (file-name-base (directory-file-name default-directory))))
+  (pop-to-buffer (concat "<*" name "*>"))
   (unless (eq major-mode 'shell-mode)
     (shell (current-buffer))
     (sleep-for 0 200)
     (delete-region (point-min) (point-max))
     (comint-simple-send (get-buffer-process (current-buffer)) 
-                        (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))))
+                      (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))))
 (global-set-key (kbd "C-c s") 'new-shell)
 
 ;; ANSI colors in shell mode would be nice by default:
@@ -343,6 +287,20 @@ prompt to name>."
 ;; Load Haskell mode:
 (require 'haskell)
 (require 'haskell-indentation)
+
+;; Don't use stack for running Haskell projects:
+(setq haskell-process-type 'cabal-repl)
+
+;; Wrap haskell-mode's comamnds in a nix-shell by default:
+(setq haskell-process-wrapper-function
+      (lambda (argv)
+        (append (list "nix-shell" "-I" "." "--command" )
+                (list (mapconcat 'identity argv " ")))))
+
+(add-to-list 'safe-local-variable-values
+             '(haskell-process-wrapper-function . (lambda (argv)
+                                                    (append (list "nix-shell" "-I" "." "--command" )
+                                                            (list (mapconcat 'identity argv " "))))))
 
 (defun haskell-save-and-format ()
   "Formats the import statements using haskell-stylish and saves
@@ -377,7 +335,7 @@ the current file."
 (add-hook 'haskell-mode-hook 'font-lock-mode)
 (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
 (add-hook 'inferior-haskell-mode-hook 'my-inferior-haskell-mode-hook)
-(setq haskell-font-lock-symbols t)
+(setq haskell-font-lock-symbols nil)
 (setq delete-selection-mode nil)
 
 (setq inferior-haskell-find-project-root nil)
@@ -454,7 +412,6 @@ the current file."
 (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
 (defun my-markdown-hook ()
   (message "My Markdown hook!")
-  (pandoc-mode)
   (flyspell-mode)
   (visual-line-mode 1)
   (flyspell-buffer)
@@ -529,13 +486,14 @@ the current file."
     (nix-mode typescript-mode paredit mmm-mode haskell-mode auto-complete)))
  '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t)
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(transient-mark-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 112 :width normal :foundry "unknown" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 122 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
  '(flycheck-error ((t (:underline "red"))))
  '(flycheck-warning ((t (:underline "darkorange"))))
  '(flymake-errline ((t (:background "#00000000" :underline "red"))))

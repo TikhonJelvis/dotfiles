@@ -1,5 +1,4 @@
-# Sample .bashrc for SuSE Linux
-# Copyright (c) SuSE GmbH Nuernberg
+source ~/.bash_profile
 
 # There are 3 different types of shells in bash: the login shell, normal shell
 # and interactive shell. Login shells read ~/.profile and interactive shells
@@ -12,7 +11,7 @@
 
 # Some applications read the EDITOR variable to determine your favourite text
 # editor. So uncomment the line below and enter the editor of your choice :-)
-# export EDITOR=emacsc
+export EDITOR=emacsclient
 
 test -s ~/.alias && . ~/.alias || true
 
