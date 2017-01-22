@@ -12,38 +12,18 @@
 
 # Some applications read the EDITOR variable to determine your favourite text
 # editor. So uncomment the line below and enter the editor of your choice :-)
-export EDITOR=emacsc
-
-# For some news readers it makes sense to specify the NEWSSERVER variable here
-#export NEWSSERVER=your.news.server
+# export EDITOR=emacsc
 
 test -s ~/.alias && . ~/.alias || true
-
-alias enode="env NODE_NO_READLINE=1 node"
 
 export TEXINPUTS=.:$HOME/Documents/LaTeX:..:
 
 export PATH=$HOME/local:$PATH
 export PATH=$HOME/local/bin:$PATH
-export PATH=$HOME/local/spring:$PATH
-export PATH=$HOME/local/node/bin:$PATH
-export PATH=$HOME/local/doctorjs/bin:$PATH
-export PATH=$HOME/local/racket/bin:$PATH
-export PATH=$HOME/local/z3/bin:$PATH
-export PATH=$HOME/local/s3cmd:$PATH
-export PATH=$HOME/.cabal/bin:$PATH
-export PATH=$HOME/node_modules/.bin:$PATH
-export PATH=$HOME/.opam/system/bin:$PATH
 
 export TPL_PATH=$HOME/Documents/programming/haskell/TPL/src
-
-# export PATH=$HOME/Documents/work/ve/penv/bin:$PATH
-alias empy='~/Documents/work/EatMetrics/penv/bin/python'
-export VE_PATH=$HOME/Documents/work/EatMetrics/penv
 
 export PS1='λ x → \W>'
 
 export GOROOT=$HOME/local/go
 export PATH=$PATH:$GOROOT/bin
-
-eval $(cat ~/.fehbg)
