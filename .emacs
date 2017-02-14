@@ -225,6 +225,14 @@ interface and inserts it at point."
 ;; Automatically omit "uninteresting" files from the listing. (Toggled with M-o.)
 (add-hook 'dired-mode-hook 'dired-omit-mode)
 
+                                        ; JSON
+;; Set the indent level to 4 for JSON files, making it buffer local to not
+;; change .js files.
+(defun json-indent-hook ()
+  (make-local-variable 'js-indent-level)
+  (setq js-indent-level 4))
+(add-hook 'json-mode-hook 'json-indent-hook)
+
                                         ; ORG-MODE
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -373,9 +381,10 @@ the current file."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(default-input-method "TeX")
  '(package-selected-packages
    (quote
-    (powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber haskell-mode exec-path-from-shell elm-mode bash-completion)))
+    (json-mode powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber haskell-mode exec-path-from-shell elm-mode bash-completion)))
  '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t)
  '(tool-bar-mode nil)
