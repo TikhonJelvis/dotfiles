@@ -128,7 +128,8 @@ interface and inserts it at point."
 (setq ido-default-buffer-method 'selected-window)
 
 ;; Some minor preferences:
-(setq visible-bell 'nil)
+;; (setq visible-bell 'nil)
+(setq ring-bell-function 'ignore)
 (show-paren-mode 1)
 (column-number-mode t)
 (transient-mark-mode -1)
