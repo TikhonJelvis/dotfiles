@@ -1,1 +1,4 @@
 :set -fdefer-type-errors
+:set -Wno-unused-imports
+
+:set prompt "λ> "
