@@ -234,6 +234,8 @@ interface and inserts it at point."
 (add-hook 'json-mode-hook 'json-indent-hook)
 
                                         ; ORG-MODE
+(require 'org)
+
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
