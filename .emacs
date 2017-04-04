@@ -297,10 +297,7 @@ prompt to name>."
         (append (list "nix-shell" "-I" "." "--command" )
                 (list (mapconcat 'identity argv " ")))))
 
-(add-to-list 'safe-local-variable-values
-             '(haskell-process-wrapper-function . (lambda (argv)
-                                                    (append (list "nix-shell" "-I" "." "--command" )
-                                                            (list (mapconcat 'identity argv " "))))))
+(put 'haskell-process-wrapper-function 'safe-local-variable 'functionp)
 
 (defun haskell-save-and-format ()
   "Formats the import statements using haskell-stylish and saves
