@@ -187,9 +187,6 @@ interface and inserts it at point."
 (setq recentf-max-saved-items 100000)
 (global-set-key (kbd "C-x C-a") 'recentf-open-files) ;; Open recent files easily
 
-;; make text-mode the default major mode
-(setq default-major-mode 'text-mode)
-
                                         ; KEY REBINDINGS
 ;; Do nothing on C-x C-c:
 (global-unset-key (kbd "C-x C-c"))
@@ -284,6 +281,10 @@ prompt to name>."
 
                                         ; HASKELL
 
+(add-to-list 'load-path "~/programming/haskell-mode/")
+(require 'haskell-mode-autoloads)
+(add-to-list 'Info-default-directory-list "~/programming/haskell-mode/")
+
 ;; Load Haskell mode:
 (require 'haskell)
 (require 'haskell-indentation)
@@ -292,12 +293,13 @@ prompt to name>."
 (setq haskell-process-type 'cabal-repl)
 
 ;; Wrap haskell-mode's comamnds in a nix-shell by default:
-(setq haskell-process-wrapper-function
-      (lambda (argv)
-        (append (list "nix-shell" "-I" "." "--command" )
-                (list (mapconcat 'identity argv " ")))))
+;; (setq haskell-process-wrapper-function
+;;       (lambda (argv)
+;;         (append (list "nix-shell" "-I" "." "--command" )
+;;                 (list (mapconcat 'identity argv " ")))))
 
 (put 'haskell-process-wrapper-function 'safe-local-variable 'functionp)
+(put 'haskell-process-args-cabal-repl 'safe-local-variable 'listp)
 
 (defun haskell-save-and-format ()
   "Formats the import statements using haskell-stylish and saves
@@ -383,7 +385,8 @@ the current file."
  '(default-input-method "TeX")
  '(package-selected-packages
    (quote
-    (json-mode powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber haskell-mode exec-path-from-shell elm-mode bash-completion)))
+    (magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion)))
+ '(safe-local-variable-values (quote ((haskell-process-target . "hmach"))))
  '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t)
  '(tool-bar-mode nil)
