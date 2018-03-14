@@ -3,7 +3,7 @@
 
 ;; Configure package management:
 (require 'package)
-(add-to-list 'package-archives 
+(add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
@@ -43,7 +43,7 @@ makes sense in read-only buffers, obviously."
 ;; A list of opposite boolean pairs.
 (defvar bools '(("true" . "false") ("True" . "False") ("#t" . "#f")
                 ("yes" . "no") ("Yes" . "No")))
-      
+
 (defun flip-bool-at-point ()
   "Flips the boolean literal at point, changing true to false and
 vice-versa."
@@ -146,7 +146,7 @@ interface and inserts it at point."
 
 ;;Make the window simpler:
 (tool-bar-mode -1)
-(scroll-bar-mode -1) 
+(scroll-bar-mode -1)
 (menu-bar-mode 1) ;; mac-specific: menu-bar-mode needed for fullscreen, for some reason?
 (fringe-mode 0)
 
@@ -264,7 +264,7 @@ prompt to name>."
     (shell (current-buffer))
     (sleep-for 0 200)
     (delete-region (point-min) (point-max))
-    (comint-simple-send (get-buffer-process (current-buffer)) 
+    (comint-simple-send (get-buffer-process (current-buffer))
                       (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))))
 (global-set-key (kbd "C-c s") 'new-shell)
 
@@ -278,6 +278,11 @@ prompt to name>."
                                         ; ELISP
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
+                                        ; PYTHON
+(setq enable-local-eval t)
+(put 'python-shell-interpreter 'safe-local-variable t)
+(put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
 
                                         ; HASKELL
 
