@@ -86,7 +86,7 @@ interface and inserts it at point."
 (setq-default compilation-scroll-output 'foo-bar)
 
 ;; Flyspell stuff
-(setq ispell-program-name "/Users/z0028sn/.nix-profile/bin/aspell")
+(setq ispell-program-name "/Users/z0028sn/.nix-profile/bin/aspell")`
 (add-hook 'flyspell-mode-hook '(lambda ()
 				(set-face-attribute 'flyspell-duplicate nil
 						    :foreground nil
@@ -160,7 +160,7 @@ interface and inserts it at point."
 (require 'powerline)
 (powerline-default-theme)
 
-(setq powerline-default-separator 'box)
+(setq powerline-default-separator 'arrow)
 (setq powerline-utf-8-separator-left #x25E3)
 (setq powerline-utf-8-separator-right #x25E2)
 (setq powerline-height 17)
@@ -199,7 +199,7 @@ interface and inserts it at point."
 (global-set-key (kbd "C-S-b") 'list-buffers)
 
 ;; Make complete tag not be alt-tab!
-(global-set-key (kbd "M-<return>") 'complete-tag)
+(global-set-key (kbd "M-s-<return>") 'complete-tag)
 
 ;; Some nice keyboard shortcuts:
 (global-set-key (kbd "C-x 5 3") 'make-frame-command)
@@ -242,9 +242,16 @@ interface and inserts it at point."
 (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
 (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
 
+;; Configuring title page formatting with #+OPTION is too fiddly, so
+;; we want to override the elisp variable instead
+(put 'org-reveal-title-slide 'safe-local-variable 'stringp)
+
+
 (defun my-org-mode-hook ()
   (local-set-key (kbd "M-{") 'outline-previous-visible-heading)
-  (local-set-key (kbd "M-}") 'outline-next-visible-heading))
+  (local-set-key (kbd "M-}") 'outline-next-visible-heading)
+  (local-set-key (kbd "C-c C-,") 'org-promote-subtree)
+  (local-set-key (kbd "C-c C-.") 'org-demote-subtree))
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 
                                         ; SHELL BUFFERS
@@ -294,14 +301,14 @@ prompt to name>."
 (require 'haskell)
 (require 'haskell-indentation)
 
-;; Don't use stack for running Haskell projects:
-(setq haskell-process-type 'cabal-repl)
+(setq haskell-process-type 'cabal-new-repl)
+(setq haskell-process-args-cabal-new-repl '("--ghc-option=-ferror-spans"))
 
 ;; Wrap haskell-mode's comamnds in a nix-shell by default:
-;; (setq haskell-process-wrapper-function
-;;       (lambda (argv)
-;;         (append (list "nix-shell" "-I" "." "--command" )
-;;                 (list (mapconcat 'identity argv " ")))))
+(setq haskell-process-wrapper-function
+      (lambda (argv)
+        (append (list "nix-shell" "-I" "." "--command")
+                (list (mapconcat 'identity argv " ")))))
 
 (put 'haskell-process-wrapper-function 'safe-local-variable 'functionp)
 (put 'haskell-process-args-cabal-repl 'safe-local-variable 'listp)
@@ -388,6 +395,9 @@ the current file."
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(default-input-method "TeX")
+ '(describe-char-unidata-list
+   (quote
+    (name old-name general-category decomposition uppercase lowercase titlecase)))
  '(package-selected-packages
    (quote
     (magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion)))
