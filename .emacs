@@ -171,6 +171,22 @@ interface and inserts it at point."
                     :background "DarkOrange"
                     :box nil)
 
+(setq powerline-arrow-shape 'half)
+(setq-default mode-line-format '("%e"
+  (:eval
+   (concat
+    (powerline-rmw 'left nil)
+    (powerline-buffer-id 'left nil powerline-color1)
+    (powerline-minor-modes 'left powerline-color1)
+    (powerline-narrow 'left powerline-color1 powerline-color2)
+    (powerline-vc 'center powerline-color2)
+    (powerline-make-fill powerline-color2)
+    (powerline-row 'right powerline-color1 powerline-color2)
+    (powerline-make-text ":" powerline-color1)
+    (powerline-column 'right powerline-color1)
+    (powerline-percent 'right nil powerline-color1)
+    (powerline-make-text "  " nil)))))
+
 ;; Unique buffer names:
 (require 'uniquify)
 (setq
@@ -298,7 +314,7 @@ prompt to name>."
 (add-to-list 'Info-default-directory-list "~/programming/haskell-mode/")
 
 ;; Load Haskell mode:
-(require 'haskell)
+(require 'haskell-mode)
 (require 'haskell-indentation)
 
 (setq haskell-process-type 'cabal-new-repl)
@@ -411,7 +427,7 @@ the current file."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 141 :width normal :foundry "nil" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 142 :width normal :foundry "nil" :family "DejaVu Sans Mono"))))
  '(erc-input-face ((t (:foreground "cornflower blue"))))
  '(erc-my-nick-face ((t (:foreground "CornflowerBlue" :weight bold))))
  '(flycheck-error ((t (:underline "red"))))
