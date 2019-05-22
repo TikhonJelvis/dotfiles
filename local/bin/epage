@@ -14,8 +14,14 @@ main = do args <- getArgs
           let buffer   = arg "-b" "*STDIN*"        args
           let filename = arg "-f" "emacsStdin.stdout" args 
           let mode     = arg "-m" "stdout-mode"    args
-          getContents >>= writeFile filename
-          () <$ runCommand (emacsBuffer filename buffer mode)
+
+          input <- getContents
+          if length (lines input) > 30
+            then do
+              writeFile filename input
+              () <$ runCommand (emacsBuffer filename buffer mode)
+            else do
+              putStr input
   
 emacsBuffer :: String -> String -> String -> String
 emacsBuffer file buffer mode = printf "emacsclient --alternate-editor %s --eval '%s'" alternative elisp

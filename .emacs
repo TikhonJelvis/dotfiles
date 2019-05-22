@@ -287,10 +287,6 @@ prompt to name>."
 
                                         ; HASKELL
 
-;; (add-to-list 'load-path "~/programming/haskell-mode/")
-;; (require 'haskell-mode-autoloads)
-;; (add-to-list 'Info-default-directory-list "~/programming/haskell-mode/")
-
 ;; Load Haskell mode:
 (require 'haskell-mode)
 (require 'haskell-indentation)
@@ -333,7 +329,7 @@ the current file."
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
 
 ;;; More custom font lock symbols:
-;; (add-to-list 'haskell-font-lock-symbols-alist '("Nat" . ?ℕ))
+(add-to-list 'haskell-font-lock-symbols-alist '("Nat" . ?ℕ))
 
 (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
