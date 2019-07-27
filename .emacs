@@ -86,7 +86,7 @@ interface and inserts it at point."
 (setq-default compilation-scroll-output 'foo-bar)
 
 ;; Flyspell stuff
-(setq ispell-program-name "/Users/z0028sn/.nix-profile/bin/aspell")`
+(setq ispell-program-name "/Users/z0028sn/.nix-profile/bin/aspell")
 (add-hook 'flyspell-mode-hook '(lambda ()
 				(set-face-attribute 'flyspell-duplicate nil
 						    :foreground nil
@@ -276,6 +276,18 @@ prompt to name>."
 ;; A mode to handle buffers gotten from stdout:
 (require 'stdout-mode)
 
+                                        ; DIRENV
+
+;; Our nix environment is quite large so the summary messages that direnv-mode
+;; provides can be a bit annoying. You may add these lines to suppress the
+;; message once you confirmed that everything works.
+(setq direnv-show-paths-in-summary nil)
+(setq direnv-always-show-summary nil)
+
+;; A global minor mode that automatically updates the Emacs environment whenever
+;; you switch to a new buffer. Because of direnv caching this is fast.
+(direnv-mode)
+
                                         ; ELISP
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -326,10 +338,8 @@ the current file."
   (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run))
 
 (defun my-inferior-haskell-mode-hook ()
+  (local-set-key (kbd "C-a") 'haskell-interactive-mode-beginning)
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
-
-;;; More custom font lock symbols:
-(add-to-list 'haskell-font-lock-symbols-alist '("Nat" . ?ℕ))
 
 (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -390,8 +400,11 @@ the current file."
     (name old-name general-category decomposition uppercase lowercase titlecase)))
  '(package-selected-packages
    (quote
-    (magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion)))
- '(safe-local-variable-values (quote ((haskell-process-target . "hmach"))))
+    (0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion)))
+ '(safe-local-variable-values
+   (quote
+    ((dante-target . "ipc-simulation:test:tests")
+     (haskell-process-target . "hmach"))))
  '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t)
  '(tool-bar-mode nil)
@@ -406,8 +419,8 @@ the current file."
  '(erc-my-nick-face ((t (:foreground "CornflowerBlue" :weight bold))))
  '(flycheck-error ((t (:underline "red"))))
  '(flycheck-warning ((t (:underline "darkorange"))))
- '(flymake-errline ((t (:background "#00000000" :underline "red"))))
- '(flymake-warnline ((t (:background "#00000000" :underline "dark orange"))))
+ '(flymake-error ((t (:background "#00000000" :underline "red"))))
+ '(flymake-warning ((t (:background "#00000000" :underline "dark orange"))))
  '(sgml-namespace ((t (:inherit font-lock-builtin-face)))))
 
                                         ; COMMANDS
