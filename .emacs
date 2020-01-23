@@ -199,7 +199,7 @@ interface and inserts it at point."
 (global-set-key (kbd "C-x 5 3") 'make-frame-command)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c C-j") 'compile)
-(global-set-key (kbd "C-c a") 'align-regexp)
+(global-set-key (kbd "C-c C-a") 'align-regexp)
 (global-set-key (kbd "M-#") 'ispell-complete-word)
 
 ;; C-w remap:
@@ -226,6 +226,18 @@ interface and inserts it at point."
 
                                         ; ORG-MODE
 (require 'org)
+
+;; Globally accessible org commands
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(defun unset-agenda-binding () (local-unset-key (kbd "C-c C-a")))
+(add-hook 'comint-mode-hook 'unset-agenda-binding)
+
+;; Agenda configuration
+(setq org-agenda-window-setup 'other-window)
+(setq org-agenda-restore-windows-after-quit t)
 
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
@@ -284,10 +296,6 @@ prompt to name>."
 (setq direnv-show-paths-in-summary nil)
 (setq direnv-always-show-summary nil)
 
-;; A global minor mode that automatically updates the Emacs environment whenever
-;; you switch to a new buffer. Because of direnv caching this is fast.
-(direnv-mode)
-
                                         ; ELISP
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -296,6 +304,10 @@ prompt to name>."
 (setq enable-local-eval t)
 (put 'python-shell-interpreter 'safe-local-variable t)
 (put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
+
+                                        ; THETA
+;; (require 'theta-mode)
+;; (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
 
                                         ; HASKELL
 
@@ -400,10 +412,14 @@ the current file."
     (name old-name general-category decomposition uppercase lowercase titlecase)))
  '(package-selected-packages
    (quote
-    (0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit ox-reveal nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion)))
+    (ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion)))
  '(safe-local-variable-values
    (quote
-    ((dante-target . "ipc-simulation:test:tests")
+    ((dante-target . "tgt-api")
+     (dante-target . "tgt-base")
+     (dante-target . "discrete-distribution")
+     (haskell-process-type . cabal-new-repl)
+     (dante-target . "ipc-simulation:test:tests")
      (haskell-process-target . "hmach"))))
  '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t)
