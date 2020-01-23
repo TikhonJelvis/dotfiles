@@ -216,6 +216,9 @@ interface and inserts it at point."
 ;; Automatically omit "uninteresting" files from the listing. (Toggled with M-o.)
 (add-hook 'dired-mode-hook 'dired-omit-mode)
 
+;; Automatically update dired buffers when the directory changes:
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+
                                         ; JSON
 ;; Set the indent level to 4 for JSON files, making it buffer local to not
 ;; change .js files.
