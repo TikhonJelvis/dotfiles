@@ -26,3 +26,4 @@ export PS1='λ x → \W>'
 
 export GOROOT=$HOME/local/go
 export PATH=$PATH:$GOROOT/bin
+

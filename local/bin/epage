@@ -23,18 +23,19 @@ main = do args <- getArgs
           -- https://github.com/NixOS/nixpkgs/issues/64603 for
           -- details)
           setLocaleEncoding utf8
-          getStdinUtf8 >>= writeFile filename
-          () <$ runCommand (emacsBuffer filename buffer mode)
+
+          input <- getStdinUtf8
+          if length (lines input) > 30
+            then do
+              writeFile filename input
+              () <$ runCommand (emacsBuffer filename buffer mode)
+            else do
+              putStr input
   where -- helper functions to force UTF-8
         getStdinUtf8 = do
           hSetEncoding stdin utf8
           hGetContents stdin
-        writeFileUtf8 file contents = withFile file WriteMode $ \ handle -> do
-          hSetEncoding handle utf8
-          hPutStr handle contents
-          
-        
-  
+
 emacsBuffer :: String -> String -> String -> String
 emacsBuffer file buffer mode = printf "emacsclient --alternate-editor %s --eval '%s'" alternative elisp
   where alternative       = "'/usr/bin/env false'"

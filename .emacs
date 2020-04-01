@@ -3,7 +3,7 @@
 
 ;; Configure package management:
 (require 'package)
-(add-to-list 'package-archives 
+(add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
@@ -44,7 +44,7 @@ makes sense in read-only buffers, obviously."
 ;; A list of opposite boolean pairs.
 (defvar bools '(("true" . "false") ("True" . "False") ("#t" . "#f")
                 ("yes" . "no") ("Yes" . "No")))
-      
+
 (defun flip-bool-at-point ()
   "Flips the boolean literal at point, changing true to false and
 vice-versa."
@@ -129,7 +129,8 @@ interface and inserts it at point."
 (setq ido-default-buffer-method 'selected-window)
 
 ;; Some minor preferences:
-(setq visible-bell 'nil)
+;; (setq visible-bell 'nil)
+(setq ring-bell-function 'ignore)
 (show-paren-mode 1)
 (column-number-mode t)
 (transient-mark-mode -1)
@@ -147,10 +148,12 @@ interface and inserts it at point."
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1) 
+
 ;; mac-specific: menu-bar-mode needed for fullscreen, for some reason?
 (if (eq system-type 'darwin)
   (menu-bar-mode 1)
   (menu-bar-mode -1))
+
 (fringe-mode 0)
 
 ;; No $ displayed for truncated lines
@@ -161,25 +164,12 @@ interface and inserts it at point."
 
 ;; Now make it prettier:
 (require 'powerline)
+(powerline-default-theme)
+
 (set-face-attribute 'mode-line nil
                     :foreground "Black"
                     :background "DarkOrange"
                     :box nil)
-(setq powerline-arrow-shape 'diagonal)
-(setq-default mode-line-format '("%e"
-  (:eval
-   (concat
-    (powerline-rmw 'left nil)
-    (powerline-buffer-id 'left nil powerline-color1)
-    (powerline-minor-modes 'left powerline-color1)
-    (powerline-narrow 'left powerline-color1 powerline-color2)
-    (powerline-vc 'center powerline-color2)
-    (powerline-make-fill powerline-color2)
-    (powerline-row 'right powerline-color1 powerline-color2)
-    (powerline-make-text ":" powerline-color1)
-    (powerline-column 'right powerline-color1)
-    (powerline-percent 'right nil powerline-color1)
-    (powerline-make-text "  " nil)))))
 
 ;; Unique buffer names:
 (require 'uniquify)
@@ -197,9 +187,6 @@ interface and inserts it at point."
 (setq recentf-max-saved-items 100000)
 (global-set-key (kbd "C-x C-a") 'recentf-open-files) ;; Open recent files easily
 
-;; make text-mode the default major mode
-(setq default-major-mode 'text-mode)
-
                                         ; KEY REBINDINGS
 ;; Do nothing on C-x C-c:
 (global-unset-key (kbd "C-x C-c"))
@@ -212,13 +199,13 @@ interface and inserts it at point."
 (global-set-key (kbd "C-S-b") 'list-buffers)
 
 ;; Make complete tag not be alt-tab!
-(global-set-key (kbd "M-<return>") 'complete-tag)
+(global-set-key (kbd "M-s-<return>") 'complete-tag)
 
 ;; Some nice keyboard shortcuts:
 (global-set-key (kbd "C-x 5 3") 'make-frame-command)
 (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c C-j") 'compile)
-(global-set-key (kbd "C-c a") 'align-regexp)
+(global-set-key (kbd "C-c C-a") 'align-regexp)
 (global-set-key (kbd "M-#") 'ispell-complete-word)
 
 ;; C-w remap:
@@ -236,19 +223,51 @@ interface and inserts it at point."
 ;; Automatically omit "uninteresting" files from the listing. (Toggled with M-o.)
 (add-hook 'dired-mode-hook 'dired-omit-mode)
 
+;; Automatically update dired buffers when the directory changes:
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+
+                                        ; JSON
+;; Set the indent level to 4 for JSON files, making it buffer local to not
+;; change .js files.
+(defun json-indent-hook ()
+  (make-local-variable 'js-indent-level)
+  (setq js-indent-level 4))
+(add-hook 'json-mode-hook 'json-indent-hook)
+
                                         ; ORG-MODE
+(require 'org)
+
+;; Globally accessible org commands
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(defun unset-agenda-binding () (local-unset-key (kbd "C-c C-a")))
+(add-hook 'comint-mode-hook 'unset-agenda-binding)
+
+;; Agenda configuration
+(setq org-agenda-window-setup 'other-window)
+(setq org-agenda-restore-windows-after-quit t)
+
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
 
 ;; Allow markup in the middle of words.
-;; (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
-;; (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
-;; (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+(setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
+(setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
+(org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
+;; Configuring title page formatting with #+OPTION is too fiddly, so
+;; we want to override the elisp variable instead
+(put 'org-reveal-title-slide 'safe-local-variable 'stringp)
+
 
 (defun my-org-mode-hook ()
   (local-set-key (kbd "M-{") 'outline-previous-visible-heading)
-  (local-set-key (kbd "M-}") 'outline-next-visible-heading))
+  (local-set-key (kbd "M-}") 'outline-next-visible-heading)
+  (local-set-key (kbd "C-c C-,") 'org-promote-subtree)
+  (local-set-key (kbd "C-c C-.") 'org-demote-subtree))
 (add-hook 'org-mode-hook 'my-org-mode-hook)
 
                                         ; SHELL BUFFERS
@@ -268,7 +287,7 @@ prompt to name>."
     (shell (current-buffer))
     (sleep-for 0 200)
     (delete-region (point-min) (point-max))
-    (comint-simple-send (get-buffer-process (current-buffer)) 
+    (comint-simple-send (get-buffer-process (current-buffer))
                       (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))))
 (global-set-key (kbd "C-c s") 'new-shell)
 
@@ -279,28 +298,43 @@ prompt to name>."
 ;; A mode to handle buffers gotten from stdout:
 (require 'stdout-mode)
 
+                                        ; DIRENV
+
+;; Our nix environment is quite large so the summary messages that direnv-mode
+;; provides can be a bit annoying. You may add these lines to suppress the
+;; message once you confirmed that everything works.
+(setq direnv-show-paths-in-summary nil)
+(setq direnv-always-show-summary nil)
+
                                         ; ELISP
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
+                                        ; PYTHON
+(setq enable-local-eval t)
+(put 'python-shell-interpreter 'safe-local-variable t)
+(put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
+
+                                        ; THETA
+;; (require 'theta-mode)
+;; (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
+
                                         ; HASKELL
 ;; Load Haskell mode:
-(require 'haskell)
+(require 'haskell-mode)
 (require 'haskell-indentation)
 
-;; Don't use stack for running Haskell projects:
-(setq haskell-process-type 'cabal-repl)
+(setq haskell-process-type 'cabal-new-repl)
+(setq haskell-process-args-cabal-new-repl '("--ghc-option=-ferror-spans"))
 
 ;; Wrap haskell-mode's comamnds in a nix-shell by default:
 (setq haskell-process-wrapper-function
       (lambda (argv)
-        (append (list "nix-shell" "-I" "." "--command" )
+        (append (list "nix-shell" "-I" "." "--command")
                 (list (mapconcat 'identity argv " ")))))
 
-(add-to-list 'safe-local-variable-values
-             '(haskell-process-wrapper-function . (lambda (argv)
-                                                    (append (list "nix-shell" "-I" "." "--command" )
-                                                            (list (mapconcat 'identity argv " "))))))
+(put 'haskell-process-wrapper-function 'safe-local-variable 'functionp)
+(put 'haskell-process-args-cabal-repl 'safe-local-variable 'listp)
 
 (defun haskell-save-and-format ()
   "Formats the import statements using haskell-stylish and saves
@@ -325,10 +359,8 @@ the current file."
   (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run))
 
 (defun my-inferior-haskell-mode-hook ()
+  (local-set-key (kbd "C-a") 'haskell-interactive-mode-beginning)
   (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
-
-;;; More custom font lock symbols:
-;; (add-to-list 'haskell-font-lock-symbols-alist '("Nat" . ?ℕ))
 
 (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -483,7 +515,11 @@ the current file."
  '(column-number-mode t)
  '(package-selected-packages
    (quote
-    (nix-mode typescript-mode paredit mmm-mode haskell-mode auto-complete)))
+    (ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
+ '(default-input-method "TeX")
+ '(describe-char-unidata-list
+   (quote
+    (name old-name general-category decomposition uppercase lowercase titlecase)))
  '(send-mail-function (quote sendmail-send-it))
  '(show-paren-mode t)
  '(tool-bar-mode nil)
@@ -494,10 +530,12 @@ the current file."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 122 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
+ '(erc-input-face ((t (:foreground "cornflower blue"))))
+ '(erc-my-nick-face ((t (:foreground "CornflowerBlue" :weight bold))))
  '(flycheck-error ((t (:underline "red"))))
  '(flycheck-warning ((t (:underline "darkorange"))))
- '(flymake-errline ((t (:background "#00000000" :underline "red"))))
- '(flymake-warnline ((t (:background "#00000000" :underline "dark orange"))))
+ '(flymake-error ((t (:background "#00000000" :underline "red"))))
+ '(flymake-warning ((t (:background "#00000000" :underline "dark orange"))))
  '(sgml-namespace ((t (:inherit font-lock-builtin-face)))))
 
                                         ; COMMANDS
