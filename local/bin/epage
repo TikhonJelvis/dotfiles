@@ -3,8 +3,11 @@
 
 import           Data.Functor       ((<$))
 
+import           GHC.IO.Encoding    (setLocaleEncoding)
+
 import           System.Directory   (removeFile)
 import           System.Environment (getArgs)
+import           System.IO
 import           System.Process     (runCommand)
 
 import           Text.Printf        (printf)
@@ -14,8 +17,23 @@ main = do args <- getArgs
           let buffer   = arg "-b" "*STDIN*"        args
           let filename = arg "-f" "emacsStdin.stdout" args 
           let mode     = arg "-m" "stdout-mode"    args
-          getContents >>= writeFile filename
+
+          -- force UTF-8 to get around some weird behavior with Nix
+          -- and locale settings (see
+          -- https://github.com/NixOS/nixpkgs/issues/64603 for
+          -- details)
+          setLocaleEncoding utf8
+          getStdinUtf8 >>= writeFile filename
           () <$ runCommand (emacsBuffer filename buffer mode)
+  where -- helper functions to force UTF-8
+        getStdinUtf8 = do
+          hSetEncoding stdin utf8
+          hGetContents stdin
+        writeFileUtf8 file contents = withFile file WriteMode $ \ handle -> do
+          hSetEncoding handle utf8
+          hPutStr handle contents
+          
+        
   
 emacsBuffer :: String -> String -> String -> String
 emacsBuffer file buffer mode = printf "emacsclient --alternate-editor %s --eval '%s'" alternative elisp
