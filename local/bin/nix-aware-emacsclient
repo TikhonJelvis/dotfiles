@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Run emacsclient with the given arguments, explicitly setting TMPDIR
+# to /tmp to make sure it works from Nix shells on Linux.
+TMPDIR=/tmp emacsclient "$@"

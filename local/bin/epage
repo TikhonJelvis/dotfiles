@@ -36,8 +36,15 @@ main = do args <- getArgs
           hSetEncoding stdin utf8
           hGetContents stdin
 
+-- | Template for the command we use to invoke emacsclient.
+--
+-- nix-aware-emacsclient is a wrapper script that has some workarounds
+-- to make sure emacsclient works properly from Nix shells on Linux.
+emacsclient :: String
+emacsclient = "nix-aware-emacsclient --alternate-editor %s --eval '%s'"
+
 emacsBuffer :: String -> String -> String -> String
-emacsBuffer file buffer mode = printf "emacsclient --alternate-editor %s --eval '%s'" alternative elisp
+emacsBuffer file buffer mode = printf emacsclient alternative elisp
   where alternative       = "'/usr/bin/env false'"
         letVals :: String = printf "(b (create-file-buffer \"%s\")) " buffer
         startFn :: String = printf "(switch-to-buffer b) (insert-file-contents \"%s\") (%s)" file mode
