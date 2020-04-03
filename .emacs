@@ -9,17 +9,19 @@
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
-                                        ; TERRIBLE MAC HACKS
+                                        ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier nil)
-  (require 'exec-path-from-shell)
-  (let ((nix-vars '("NIX_LINK"
-                    "NIX_PATH"
-                    "SSL_CERT_FILE")))
-    (when (memq window-system '(mac ns))
-      (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
-      (mapcar 'exec-path-from-shell-copy-env nix-vars))))
+  (setq mac-option-modifier nil))
+
+                                        ; EXEC PATH
+;; Make sure Emacs sees executables from Nix correctly.
+(require 'exec-path-from-shell)
+(let ((nix-vars '("NIX_LINK"
+                  "NIX_PATH"
+                  "SSL_CERT_FILE")))
+  (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
+  (mapcar 'exec-path-from-shell-copy-env nix-vars))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -148,7 +150,6 @@ interface and inserts it at point."
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1) 
-
 ;; mac-specific: menu-bar-mode needed for fullscreen, for some reason?
 (if (eq system-type 'darwin)
   (menu-bar-mode 1)
