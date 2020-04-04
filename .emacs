@@ -289,7 +289,9 @@ prompt to name>."
     (sleep-for 0 200)
     (delete-region (point-min) (point-max))
     (comint-simple-send (get-buffer-process (current-buffer))
-                      (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))))
+                        (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
+    (comint-simple-send (get-buffer-process (current-buffer))
+                        "export PAGER=epage")))
 (global-set-key (kbd "C-c s") 'new-shell)
 
 ;; ANSI colors in shell mode would be nice by default:
