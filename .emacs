@@ -89,7 +89,7 @@ interface and inserts it at point."
 (setq-default compilation-scroll-output 'foo-bar)
 
 ;; Flyspell stuff
-(setq ispell-program-name "/Users/z0028sn/.nix-profile/bin/aspell")
+(setq ispell-program-name "~/.nix-profile/bin/aspell")
 (add-hook 'flyspell-mode-hook '(lambda ()
 				(set-face-attribute 'flyspell-duplicate nil
 						    :foreground nil
@@ -237,6 +237,12 @@ interface and inserts it at point."
 
                                         ; ORG-MODE
 (require 'org)
+
+;; Extra states I use
+(setq org-todo-keywords '((sequence "TODO" "|" "DONE")
+                          (sequence "CONSIDER" "TODO" "|" "DONE")
+                          (sequence "PROJECT" "|" "DONE")))
+
 
 ;; Globally accessible org commands
 (global-set-key (kbd "C-c l") 'org-store-link)
