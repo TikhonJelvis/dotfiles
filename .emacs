@@ -1,3 +1,8 @@
+                                        ; CUSTOM-SET
+;; Put custom-set variables in a different file:
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
                                          ; PACKAGE INITIALIZATION
 (add-to-list 'load-path "~/.emacs.d/packages")
 
@@ -8,6 +13,11 @@
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
+
+;; Make sure all the selected packages are installed. This ensured I
+;; have the same set of Emacs packages available across all my
+;; machines.
+(package-install-selected-packages)
 
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
@@ -88,18 +98,6 @@ interface and inserts it at point."
 ;; Have compile scroll to the end by default.
 (setq-default compilation-scroll-output 'foo-bar)
 
-;; Flyspell stuff
-(setq ispell-program-name "~/.nix-profile/bin/aspell")
-(add-hook 'flyspell-mode-hook '(lambda ()
-				(set-face-attribute 'flyspell-duplicate nil
-						    :foreground nil
-						    :underline "dark orange"
-						    :bold nil)
-				(set-face-attribute 'flyspell-incorrect nil
-						    :foreground nil
-						    :underline "red"
-						    :bold nil)))
-
 ;; Better commands for window management:
 ;; swap-with taken from emacsd-tile 0.1 by marius a. eriksen
 ;; (https://gist.github.com/287633)
@@ -130,47 +128,8 @@ interface and inserts it at point."
 (ido-mode t)
 (setq ido-default-buffer-method 'selected-window)
 
-;; Some minor preferences:
-;; (setq visible-bell 'nil)
-(setq ring-bell-function 'ignore)
-(show-paren-mode 1)
-(column-number-mode t)
-(transient-mark-mode -1)
-(setq mark-even-if-inactive t)
-(setq-default truncate-lines t)
-
 ;; I don't like tabs very much:
 (setq-default indent-tabs-mode nil)
-
-;; For enabling color themes:
-(setq custom-theme-directory "~/.emacs.d/themes/")
-(setq custom-safe-themes t)
-(load-theme 'blackboard)
-
-;;Make the window simpler:
-(tool-bar-mode -1)
-(scroll-bar-mode -1) 
-;; mac-specific: menu-bar-mode needed for fullscreen, for some reason?
-(if (eq system-type 'darwin)
-  (menu-bar-mode 1)
-  (menu-bar-mode -1))
-
-(fringe-mode 0)
-
-;; No $ displayed for truncated lines
-(set-display-table-slot standard-display-table 0 ?\ )
-
-;; Fill to 80 characters by default:
-(setq fill-column 80)
-
-;; Now make it prettier:
-(require 'powerline)
-(powerline-default-theme)
-
-(set-face-attribute 'mode-line nil
-                    :foreground "Black"
-                    :background "DarkOrange"
-                    :box nil)
 
 ;; Unique buffer names:
 (require 'uniquify)
@@ -187,6 +146,44 @@ interface and inserts it at point."
 (recentf-open-files nil "*Recent Files*")
 (setq recentf-max-saved-items 100000)
 (global-set-key (kbd "C-x C-a") 'recentf-open-files) ;; Open recent files easily
+
+                                        ; APPEARANCE
+(setq ring-bell-function 'ignore)
+(show-paren-mode 1)
+(column-number-mode t)
+(transient-mark-mode -1)
+(setq mark-even-if-inactive t)
+(setq-default truncate-lines t)
+
+;; For enabling color themes:
+(setq custom-theme-directory "~/.emacs.d/themes/")
+(setq custom-safe-themes t)
+(load-theme 'blackboard)
+
+;;Make the window simpler:
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+;; mac-specific: menu-bar-mode needed for fullscreen, for some reason?
+(if (eq system-type 'darwin)
+  (menu-bar-mode 1)
+  (menu-bar-mode -1))
+
+(fringe-mode 0)
+
+;; No $ displayed for truncated lines
+(set-display-table-slot standard-display-table 0 ?\ )
+
+;; Fill to 80 characters by default:
+(setq fill-column 80)
+
+;; Prettier mode line
+(require 'powerline)
+(powerline-default-theme)
+
+(set-face-attribute 'mode-line nil
+                    :foreground "Black"
+                    :background "DarkOrange"
+                    :box nil)
 
                                         ; KEY REBINDINGS
 ;; Do nothing on C-x C-c:
@@ -217,15 +214,41 @@ interface and inserts it at point."
 ;; incredibly annoying:
 (global-unset-key (kbd "<f2>"))
 
+                                        ; INPUT MODES
+(setq default-input-method "TeX")
+
 					; DIRED
-;; Has to be above JABBER settings because it has a conflicting keybinding :(.
+;; Has to be above JABBER settings because it has a conflicting
+;; keybinding :(.
 (require 'dired-x)
 
-;; Automatically omit "uninteresting" files from the listing. (Toggled with M-o.)
+;; Automatically omit "uninteresting" files from the listing. (Toggled
+;; with M-o.)
 (add-hook 'dired-mode-hook 'dired-omit-mode)
 
 ;; Automatically update dired buffers when the directory changes:
 (add-hook 'dired-mode-hook 'auto-revert-mode)
+
+                                        ; FLYSPELL
+;; If the aspell executable is not available, check two things:
+;;
+;;   1. Does Emacs see the right PATH variable? See EXEC PATH section
+;;   above.
+;;
+;;   2. Is aspell installed to your Nix user profile? Run nix/switch
+;;   to make sure.
+(setq ispell-program-name "~/.nix-profile/bin/aspell")
+
+(add-hook 'flyspell-mode-hook '(lambda ()
+				(set-face-attribute 'flyspell-duplicate nil
+						    :foreground nil
+						    :underline "dark orange"
+						    :bold nil)
+				(set-face-attribute 'flyspell-incorrect nil
+						    :foreground nil
+						    :underline "red"
+						    :bold nil)))
+
 
                                         ; JSON
 ;; Set the indent level to 4 for JSON files, making it buffer local to not
@@ -390,37 +413,6 @@ the current file."
 (load "hpaste/hpaste")
 (require 'hpaste)
 
-                                        ; OCAML
-
-(setq tuareg-font-lock-symbols t)
-
-(add-to-list 'auto-mode-alist '("\\.atd" . tuareg-mode))
-
-                                        ; JAVA
-;; use tabs (I guess that's what Eclipse does by default?)
-(defun my-java-indent-tabs-hook ()
-  (setq c-basic-offset 2
-        tab-width 2
-        indent-tabs-mode nil))
-(add-hook 'java-mode-hook 'my-java-indent-tabs-hook)
-
-;; ignore warnings in *compilation* buffer:
-(setq compilation-skip-threshold 2)
-
-;;; display errors and warnings at point
-(setq help-at-pt-display-when-idle t)
-(setq help-at-pt-timer-delay 0.1)
-(help-at-pt-set-timer)
-
-                                        ; XML
-(defun my-nxml-hook ()
-  (local-unset-key (kbd "M-{"))
-  (local-unset-key (kbd "M-}")))
-(add-hook 'nxml-mode-hook 'my-nxml-hook)
-
-                                        ; ARDUINO
-(add-to-list 'auto-mode-alist '("\\.pde" . java-mode))
-
                                         ; SKETCH
 (require 'sketch-mode)
 (add-to-list 'auto-mode-alist '("\\.sk" . sketch-mode))
@@ -519,38 +511,6 @@ the current file."
 
 ;; I don't do much php, so let's edit it with html mode:
 (add-to-list 'auto-mode-alist '("\\.php$" . html-mode))
-
-                                        ; CUSTOM-SET STUFF
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(default-input-method "TeX")
- '(describe-char-unidata-list
-   (quote
-    (name old-name general-category decomposition uppercase lowercase titlecase)))
- '(package-selected-packages
-   (quote
-    (ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
- '(send-mail-function (quote sendmail-send-it))
- '(show-paren-mode t)
- '(tool-bar-mode nil)
- '(transient-mark-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 122 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
- '(erc-input-face ((t (:foreground "cornflower blue"))))
- '(erc-my-nick-face ((t (:foreground "CornflowerBlue" :weight bold))))
- '(flycheck-error ((t (:underline "red"))))
- '(flycheck-warning ((t (:underline "darkorange"))))
- '(flymake-error ((t (:background "#00000000" :underline "red"))))
- '(flymake-warning ((t (:background "#00000000" :underline "dark orange"))))
- '(sgml-namespace ((t (:inherit font-lock-builtin-face)))))
 
                                         ; COMMANDS
 (put 'downcase-region 'disabled nil)
