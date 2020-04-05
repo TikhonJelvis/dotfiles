@@ -1,0 +1,16 @@
+[$Version]
+update_info=kwin.upd:replace-scalein-with-scale,kwin.upd:port-minimizeanimation-effect-to-js,kwin.upd:port-scale-effect-to-js,kwin.upd:port-dimscreen-effect-to-js,kwin.upd:auto-bordersize,kwin.upd:animation-speed
+
+[Compositing]
+OpenGLIsUnsafe=false
+
+[Desktops]
+Id_1=b61830dd-6a12-4c0a-ae09-fb0742db7122
+Id_2=d52b9e4b-6e26-45d9-8aef-0743d059ddcd
+Rows=2
+
+[ModifierOnlyShortcuts]
+Alt=
+Control=
+Meta=
+Shift=
