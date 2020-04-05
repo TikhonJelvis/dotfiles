@@ -286,12 +286,17 @@ prompt to name>."
   (pop-to-buffer (concat "<*" name "*>"))
   (unless (eq major-mode 'shell-mode)
     (shell (current-buffer))
+    (comint-simple-send (get-buffer-process (current-buffer))
+                        "export PAGER=epage")
+
+    ;; Remove any messages the shell outputs when it's launched.
     (sleep-for 0 200)
     (delete-region (point-min) (point-max))
+
+    ;; Running this command *after* clearing ensures we have the
+    ;; correct prompt displayed when we open the buffer.
     (comint-simple-send (get-buffer-process (current-buffer))
-                        (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
-    (comint-simple-send (get-buffer-process (current-buffer))
-                        "export PAGER=epage")))
+                        (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))))
 (global-set-key (kbd "C-c s") 'new-shell)
 
 ;; ANSI colors in shell mode would be nice by default:
