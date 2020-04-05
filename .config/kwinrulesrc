@@ -1,0 +1,40 @@
+[1]
+Description=Window settings for emacs
+clientmachine=localhost
+clientmachinematch=0
+strictgeometry=false
+strictgeometryrule=2
+title=nixpkgs.nix
+titlematch=1
+types=1
+wmclass=emacs
+wmclasscomplete=false
+wmclassmatch=1
+
+[2]
+Description=Window settings for emacs
+clientmachine=localhost
+clientmachinematch=0
+ignoregeometry=true
+ignoregeometryrule=2
+strictgeometry=false
+strictgeometryrule=2
+title=emacs@tikhon-gaming-laptop
+titlematch=1
+types=1
+wmclass=emacs
+wmclasscomplete=false
+wmclassmatch=1
+
+[3]
+Description=Application settings for emacs
+clientmachine=localhost
+clientmachinematch=0
+ignoregeometry=true
+ignoregeometryrule=2
+wmclass=emacs
+wmclasscomplete=false
+wmclassmatch=1
+
+[General]
+count=3
