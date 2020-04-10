@@ -1,2 +1,2 @@
-source ~/.bash_profile
+
 

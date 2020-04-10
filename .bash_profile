@@ -8,6 +8,7 @@ export EDITOR=nix-aware-emacsclient
 
 export PATH=$HOME/local:$PATH
 export PATH=$HOME/local/bin:$PATH
+export PATH=/Applications/Emacs.app/Contents/MacOS/bin:$PATH
 
 export PS1='λ x → \W>'
 
