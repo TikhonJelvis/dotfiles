@@ -1,4 +1,5 @@
 #! /usr/bin/env runhaskell
+{-# LANGUAGE LambdaCase          #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 import           Data.Functor       ((<$))
@@ -6,8 +7,9 @@ import           Data.Functor       ((<$))
 import           GHC.IO.Encoding    (setLocaleEncoding)
 
 import           System.Directory   (removeFile)
-import           System.Environment (getArgs)
+import           System.Environment (getArgs, getEnv)
 import           System.IO
+import           System.IO.Error    (ioError, isDoesNotExistError, tryIOError)
 import           System.Process     (runCommand)
 
 import           Text.Printf        (printf)
@@ -15,8 +17,15 @@ import           Text.Printf        (printf)
 main :: IO ()
 main = do args <- getArgs
           let buffer   = arg "-b" "*STDIN*"        args
-          let filename = arg "-f" "emacsStdin.stdout" args 
-          let mode     = arg "-m" "stdout-mode"    args
+              filename = arg "-f" "emacsStdin.stdout" args
+              mode     = arg "-m" "stdout-mode"    args
+
+          tmpdir <- tryIOError (getEnv "TMPDIR") >>= \case
+            Left err
+              | isDoesNotExistError err -> pure "/tmp"
+              | otherwise               -> ioError err
+            Right dir -> pure dir
+          let filepath = tmpdir <> "/" <> filename
 
           -- force UTF-8 to get around some weird behavior with Nix
           -- and locale settings (see
@@ -27,8 +36,8 @@ main = do args <- getArgs
           input <- getStdinUtf8
           if length (lines input) > 30
             then do
-              writeFile filename input
-              () <$ runCommand (emacsBuffer filename buffer mode)
+              writeFile filepath input
+              () <$ runCommand (emacsBuffer filepath buffer mode)
             else do
               putStr input
   where -- helper functions to force UTF-8
