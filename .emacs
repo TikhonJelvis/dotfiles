@@ -353,8 +353,9 @@ prompt to name>."
 (put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
 
                                         ; THETA
-;; (require 'theta-mode)
-;; (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
+(load "~/Programming/theta/emacs/theta-mode.el")
+(require 'theta-mode)
+(add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
 
                                         ; HASKELL
 ;; Load Haskell mode:
