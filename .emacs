@@ -229,6 +229,24 @@ interface and inserts it at point."
 ;; Automatically update dired buffers when the directory changes:
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 
+                                        ; IMAGES
+;; Set the background for image-previews to an light color. This makes
+;; reading diagrams with transparent backgrounds easier.
+(defun set-buffer-background (color)
+  "Set the background color of the current buffer to COLOR.
+
+This uses the `buffer-face' minor mode."
+  (interactive "sColor:")
+  (buffer-face-set `(:background ,color))
+  (buffer-face-mode 1))
+
+(defun image-preview-set-background-color ()
+  "Set the background color to a nice light background for images
+  to make it easier to read diagrams with transparent
+  backgrounds."
+  (set-buffer-background "#cadbf2"))
+(add-hook 'image-mode-hook 'image-preview-set-background-color)
+
                                         ; FLYSPELL
 ;; If the aspell executable is not available, check two things:
 ;;
