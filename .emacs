@@ -158,7 +158,7 @@ interface and inserts it at point."
 ;; For enabling color themes:
 (setq custom-theme-directory "~/.emacs.d/themes/")
 (setq custom-safe-themes t)
-(load-theme 'blackboard)
+(load-theme 'blackboard t)
 
 ;;Make the window simpler:
 (tool-bar-mode -1)
@@ -322,6 +322,12 @@ This uses the `buffer-face' minor mode."
 ;; Stop Emacs from expanding things like !! in history
 (setq comint-input-autoexpand 'nil)
 
+;; Clear comint buffers with C-c C-k. A lot more useful than the
+;; standard binding of C-c C-k killing the buffer's process!
+(defun my-comint-hook ()
+  (local-set-key (kbd "C-c C-k") 'comint-clear-buffer))
+(add-hook 'comint-mode-hook 'my-comint-hook)
+
 ;; I want an easy command for opening new shells:
 (defun new-shell (name)
   "Opens a new shell buffer with the given name in
@@ -336,14 +342,15 @@ prompt to name>."
     (comint-simple-send (get-buffer-process (current-buffer))
                         "export PAGER=epage")
 
-    ;; Remove any messages the shell outputs when it's launched.
     (sleep-for 0 200)
-    (delete-region (point-min) (point-max))
-
-    ;; Running this command *after* clearing ensures we have the
-    ;; correct prompt displayed when we open the buffer.
     (comint-simple-send (get-buffer-process (current-buffer))
-                        (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))))
+                        (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
+
+    ;; Remove any messages the shell outputs when it's launched and
+    ;; reset the prompt. (This removed the weird behavior where I get
+    ;; multiple promts concatenated at the start of the buffer.)
+    (delete-region (point-min) (point-max))
+    (comint-clear-buffer)))
 (global-set-key (kbd "C-c s") 'new-shell)
 
 ;; ANSI colors in shell mode would be nice by default:
