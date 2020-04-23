@@ -377,6 +377,9 @@ prompt to name>."
 (put 'python-shell-interpreter 'safe-local-variable t)
 (put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
 
+;; (setq elpy-rpc-python-command <path to Nix Python 3>)
+(elpy-enable)
+
                                         ; THETA
 ;; (require 'theta-mode)
 ;; (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
