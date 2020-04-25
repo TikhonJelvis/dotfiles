@@ -279,6 +279,11 @@ interface and inserts it at point."
 (setq org-agenda-window-setup 'other-window)
 (setq org-agenda-restore-windows-after-quit t)
 
+;; Agenda files are stored in Dropbox unless I'm on a work computer.
+(when (not (eq system-type 'darwin))
+  (setq org-agenda-files
+        '("~/Dropbox/org/Tasks.org")))
+
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
