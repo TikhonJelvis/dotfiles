@@ -400,9 +400,12 @@ prompt to name>."
 (elpy-enable)
 
                                         ; THETA
-(load "~/Programming/theta/emacs/theta-mode.el")
-(require 'theta-mode)
-(add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
+
+;;; Theta currently only makes sense at work.
+(when (eq system-type 'darwin)
+  (load "~/Programming/theta/emacs/theta-mode.el")
+  (require 'theta-mode)
+  (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode)))
 
                                         ; HASKELL
 ;; Load Haskell mode:
