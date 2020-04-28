@@ -158,6 +158,17 @@ interface and inserts it at point."
 (setq custom-safe-themes t)
 (load-theme 'blackboard t)
 
+;; Change company-mode colors to match blackboard:
+(require 'color)
+(let ((bg (face-attribute 'default :background)))
+  (custom-set-faces
+   `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
+   `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
+   `(company-scrollbar-fg ((t (:background "DarkOrange"))))
+   `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
+   `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
+   `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face))))))
+
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -369,6 +380,7 @@ prompt to name>."
                                         ; ELISP
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
 
                                         ; JENKINSFILES
 (require 'jenkinsfile-mode)
