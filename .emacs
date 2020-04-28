@@ -9,8 +9,6 @@
 ;; Configure package management:
 (require 'package)
 (add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
@@ -371,6 +369,10 @@ prompt to name>."
                                         ; ELISP
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
+                                        ; JENKINSFILES
+(require 'jenkinsfile-mode)
+(add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
 
                                         ; PYTHON
 (setq enable-local-eval t)
