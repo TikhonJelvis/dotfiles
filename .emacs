@@ -285,6 +285,10 @@ This uses the `buffer-face' minor mode."
   (setq js-indent-level 4))
 (add-hook 'json-mode-hook 'json-indent-hook)
 
+                                        ; MAGIT
+(require 'magit)
+(customize-set-variable 'magit-commit-ask-to-stage 'stage)
+
                                         ; ORG-MODE
 (require 'org)
 
