@@ -288,6 +288,7 @@ This uses the `buffer-face' minor mode."
                                         ; MAGIT
 (require 'magit)
 (customize-set-variable 'magit-commit-ask-to-stage 'stage)
+(global-set-key (kbd "C-x g") 'magit-status)
 
                                         ; ORG-MODE
 (require 'org)
