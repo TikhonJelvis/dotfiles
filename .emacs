@@ -370,6 +370,10 @@ prompt to name>."
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
+                                        ; JENKINSFILES
+(require 'jenkinsfile-mode)
+(add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
+
                                         ; PYTHON
 (setq enable-local-eval t)
 (put 'python-shell-interpreter 'safe-local-variable t)
@@ -377,10 +381,6 @@ prompt to name>."
 
 ;; (setq elpy-rpc-python-command <path to Nix Python 3>)
 (elpy-enable)
-
-                                        ; THETA
-;; (require 'theta-mode)
-;; (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
 
                                         ; HASKELL
 ;; Load Haskell mode:
