@@ -5,6 +5,7 @@
 handles ANSI colors and man-style “overstriking” (using ‘’ to
 specify bold parts of the text)."
   (ansi-color-apply-on-region (point-min) (point-max))
-  (Man-fontify-manpage))
+  (Man-fontify-manpage)
+  (beginning-of-buffer))
 
 (provide 'stdout-mode)
