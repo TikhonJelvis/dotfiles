@@ -355,15 +355,12 @@ prompt to name>."
     (shell (current-buffer))
     (comint-simple-send (get-buffer-process (current-buffer))
                         "export PAGER=epage")
-
-    (sleep-for 0 200)
     (comint-simple-send (get-buffer-process (current-buffer))
                         (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
 
-    ;; Remove any messages the shell outputs when it's launched and
-    ;; reset the prompt. (This removed the weird behavior where I get
-    ;; multiple promts concatenated at the start of the buffer.)
-    (delete-region (point-min) (point-max))
+
+    (sleep-for 0 200)
+    (comint-send-input)
     (comint-clear-buffer)))
 (global-set-key (kbd "C-c s") 'new-shell)
 
