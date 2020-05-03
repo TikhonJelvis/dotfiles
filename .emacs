@@ -9,8 +9,6 @@
 ;; Configure package management:
 (require 'package)
 (add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 
@@ -160,6 +158,17 @@ interface and inserts it at point."
 (setq custom-safe-themes t)
 (load-theme 'blackboard t)
 
+;; Change company-mode colors to match blackboard:
+(require 'color)
+(let ((bg (face-attribute 'default :background)))
+  (custom-set-faces
+   `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
+   `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
+   `(company-scrollbar-fg ((t (:background "DarkOrange"))))
+   `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
+   `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
+   `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face))))))
+
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -276,6 +285,11 @@ This uses the `buffer-face' minor mode."
   (setq js-indent-level 4))
 (add-hook 'json-mode-hook 'json-indent-hook)
 
+                                        ; MAGIT
+(require 'magit)
+(customize-set-variable 'magit-commit-ask-to-stage 'stage)
+(global-set-key (kbd "C-x g") 'magit-status)
+
                                         ; ORG-MODE
 (require 'org)
 
@@ -385,6 +399,11 @@ prompt to name>."
                                         ; ELISP
 (require 'paredit)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+
+                                        ; JENKINSFILES
+(require 'jenkinsfile-mode)
+(add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
 
                                         ; PYTHON
 (setq enable-local-eval t)
@@ -395,8 +414,12 @@ prompt to name>."
 (elpy-enable)
 
                                         ; THETA
-;; (require 'theta-mode)
-;; (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode))
+
+;;; Theta currently only makes sense at work.
+(when (eq system-type 'darwin)
+  (load "~/Programming/theta/emacs/theta-mode.el")
+  (require 'theta-mode)
+  (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode)))
 
                                         ; HASKELL
 ;; Load Haskell mode:
