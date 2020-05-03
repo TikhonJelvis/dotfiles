@@ -8,7 +8,7 @@
     (name old-name general-category decomposition uppercase lowercase titlecase)))
  '(package-selected-packages
    (quote
-    (groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
+    (lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
  '(send-mail-function (quote sendmail-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -16,6 +16,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 122 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
+ '(company-scrollbar-bg ((t (:background "#19b3224446ac"))))
+ '(company-scrollbar-fg ((t (:background "#12df192a33e6"))))
+ '(company-tooltip ((t (:inherit default :background "#0ec713b428a3"))))
+ '(company-tooltip-annotation ((t (:inherit font-lock-builtin-face))))
+ '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
  '(erc-input-face ((t (:foreground "cornflower blue"))))
  '(erc-my-nick-face ((t (:foreground "CornflowerBlue" :weight bold))))
  '(flycheck-error ((t (:underline "red"))))
