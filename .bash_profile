@@ -12,4 +12,10 @@ export PATH=/Applications/Emacs.app/Contents/MacOS/bin:$PATH
 
 export PS1='λ x → \W>'
 
-
+# Hask to make Haskell executables built by Nix happy.
+#
+# Nix on Linux has a glibc version with a weird way of setting
+# locales, which forces GHC into ASCII mode; this setting fixes that
+# and lets Haskell binaries deal with UTF-8 encoded text.
+export LOCALE_ARCHIVE=$(nix-instantiate -E 'with import <nixpkgs> {}; pkgs.buildPackages.glibcLocales' 2> /dev/null)/lib/locale/locale-archive
+export LANG="C.UTF-8";

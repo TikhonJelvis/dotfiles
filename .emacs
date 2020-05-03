@@ -311,6 +311,20 @@ This uses the `buffer-face' minor mode."
 (setq org-agenda-window-setup 'other-window)
 (setq org-agenda-restore-windows-after-quit t)
 
+;; My core *.org files are stored in Dropbox unless I'm on a work
+;; computer. (Only place I would use macOS!)
+(when (not (eq system-type 'darwin))
+  (setq org-directory "~/Dropbox/org"))
+
+(setq org-agenda-files
+      (list (concat org-directory "/Tasks.org")
+            (concat org-directory "/Books.org")))
+(setq org-default-notes-file (concat org-directory "/Notes.org"))
+
+(setq org-capture-templates
+      '(("t" "Todo" entry (file "Tasks.org")
+         "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
+
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)

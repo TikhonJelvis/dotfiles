@@ -39,7 +39,7 @@ mute=Volume Mute,Volume Mute,Mute
 [krunner.desktop]
 RunClipboard=Alt+Shift+F2,Alt+Shift+F2,Run command on clipboard contents
 _k_friendly_name=KRunner
-_launch=\tAlt+F2\tSearch,Alt+Space\tAlt+F2\tSearch,KRunner
+_launch=Alt+2\tAlt+F2\tSearch,Alt+Space\tAlt+F2\tSearch,KRunner
 
 [ksmserver]
 Halt Without Confirmation=Ctrl+Alt+Shift+PgDown,none,Halt Without Confirmation
@@ -129,7 +129,7 @@ Window Fullscreen=Meta+C,none,Make Window Fullscreen
 Window Grow Horizontal=none,none,Pack Grow Window Horizontally
 Window Grow Vertical=none,none,Pack Grow Window Vertically
 Window Lower=none,none,Lower Window
-Window Maximize=Meta+X,Meta+PgUp,Maximize Window
+Window Maximize=none,Meta+PgUp,Maximize Window
 Window Maximize Horizontal=none,none,Maximize Window Horizontally
 Window Maximize Vertical=none,none,Maximize Window Vertically
 Window Minimize=Meta+PgDown,Meta+PgDown,Minimize Window
@@ -209,7 +209,7 @@ CurrentMonitorScreenShot=,none,Capture Current Monitor
 FullScreenScreenShot=Shift+Print,Shift+Print,Capture Entire Desktop
 RectangularRegionScreenShot=Meta+Shift+Print,Meta+Shift+Print,Capture Rectangular Region
 _k_friendly_name=Spectacle
-_launch=Print,Print,Spectacle
+_launch=Print,Print,Launch Spectacle
 
 [org_kde_powerdevil]
 Decrease Keyboard Brightness=Keyboard Brightness Down,Keyboard Brightness Down,Decrease Keyboard Brightness
