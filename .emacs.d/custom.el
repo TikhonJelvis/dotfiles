@@ -8,7 +8,7 @@
     (name old-name general-category decomposition uppercase lowercase titlecase)))
  '(package-selected-packages
    (quote
-    (lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
+    (visual-fill-column lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
  '(send-mail-function (quote sendmail-send-it)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
