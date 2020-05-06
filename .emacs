@@ -179,6 +179,9 @@ interface and inserts it at point."
 
 (fringe-mode 0)
 
+;; Icons that I can use in dired, buffer mode lines... etc
+(require 'all-the-icons)
+
 ;; No $ displayed for truncated lines
 (set-display-table-slot standard-display-table 0 ?\ )
 
@@ -231,12 +234,20 @@ interface and inserts it at point."
 ;; keybinding :(.
 (require 'dired-x)
 
-;; Automatically omit "uninteresting" files from the listing. (Toggled
+;; Automatically omit “uninteresting” files from the listing. (Toggled
 ;; with M-o.)
 (add-hook 'dired-mode-hook 'dired-omit-mode)
 
+;; Simplify the dired view by hiding permissions, users, date
+;; modified... etc
+(setq dired-hide-details-hide-symlink-targets nil)
+(add-hook 'dired-mode-hook 'dired-hide-details-mode)
+
 ;; Automatically update dired buffers when the directory changes:
 (add-hook 'dired-mode-hook 'auto-revert-mode)
+
+;; Display icons by dired files
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
                                         ; IMAGES
 ;; Set the background for image-previews to an light color. This makes
