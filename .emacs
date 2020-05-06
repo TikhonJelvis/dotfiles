@@ -179,23 +179,17 @@ interface and inserts it at point."
 
 (fringe-mode 0)
 
-;; Icons that I can use in dired, buffer mode lines... etc
-(require 'all-the-icons)
-
 ;; No $ displayed for truncated lines
 (set-display-table-slot standard-display-table 0 ?\ )
 
 ;; Fill to 80 characters by default:
 (setq fill-column 80)
 
-;; Prettier mode line
-(require 'powerline)
-(powerline-default-theme)
+;; Icons that I can use in dired, buffer mode lines... etc
+(require 'all-the-icons)
 
-(set-face-attribute 'mode-line nil
-                    :foreground "Black"
-                    :background "DarkOrange"
-                    :box nil)
+;; Prettier mode line
+(load-file "~/.emacs.d/mode-line.el")
 
                                         ; KEY REBINDINGS
 ;; Do nothing on C-x C-c:
