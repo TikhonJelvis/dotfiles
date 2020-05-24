@@ -295,6 +295,14 @@ This uses the `buffer-face' minor mode."
 (customize-set-variable 'magit-commit-ask-to-stage 'stage)
 (global-set-key (kbd "C-x g") 'magit-status)
 
+(defun my-git-commit-setup-hook ()
+  (visual-line-mode 1)
+  (visual-fill-column-mode 1))
+
+(remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
+(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+(add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook)
+
                                         ; ORG-MODE
 (require 'org)
 
@@ -412,7 +420,6 @@ prompt to name>."
 (put 'python-shell-interpreter 'safe-local-variable t)
 (put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
 
-;; (setq elpy-rpc-python-command <path to Nix Python 3>)
 (elpy-enable)
 
                                         ; THETA
