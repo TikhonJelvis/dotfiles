@@ -8,6 +8,6 @@ let
 in
 {
   # emacs = pkgs.emacs.override { imagemagick = pkgs.imagemagickBig; };
-  inherit (pkgs) imagemagick nix ghc stylish-haskell emacs git;
+  inherit (pkgs) imagemagick nix ghc stylish-haskell emacs git synergy;
   aspell = pkgs.aspellWithDicts aspell-dicts;
 }
