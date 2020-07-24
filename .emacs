@@ -306,6 +306,35 @@ This uses the `buffer-face' minor mode."
                                         ; ORG-MODE
 (require 'org)
 
+;; Making Org mode prettier
+
+(require 'org-bullets)
+(add-hook 'org-mode-hook 'org-bullets-mode)
+
+(defun org-mode-prettify-hook ()
+  "Configure prettify-symbols to replace todo/consider/done with
+  pretty Unicode characters."
+  (push '("TODO" . "☛") prettify-symbols-alist)
+  (push '("CONSIDER" . "❓") prettify-symbols-alist)
+  (push '("DONE" . "✔") prettify-symbols-alist)
+  (prettify-symbols-mode 1))
+(add-hook 'org-mode-hook 'org-mode-prettify-hook)
+(add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook)
+
+(setq org-agenda-scheduled-leaders '("" " %2d×"))
+
+(setq org-agenda-prefix-format
+      '((agenda . " %i %-8t% s")
+        (todo . " %i %-12:c")
+        (tags . " %i %-12:c")
+        (search . " %i %-12:c")))
+(setq org-agenda-remove-times-when-in-prefix 'beg)
+(setq org-agenda-time-grid
+      '((daily today require-timed)
+        (800 1000 1200 1400 1600 1800 2000)
+        " ∘ " "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
+(setq org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
+
 ;; Extra states I use
 (setq org-todo-keywords '((sequence "TODO" "|" "DONE")
                           (sequence "CONSIDER" "TODO" "|" "DONE")
@@ -322,7 +351,6 @@ This uses the `buffer-face' minor mode."
 
 ;; Agenda configuration
 (setq org-agenda-window-setup 'other-window)
-(setq org-agenda-restore-windows-after-quit t)
 
 ;; My core *.org files are stored in Dropbox unless I'm on a work
 ;; computer. (Only place I would use macOS!)
