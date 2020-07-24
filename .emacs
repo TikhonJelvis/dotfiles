@@ -295,6 +295,8 @@ This uses the `buffer-face' minor mode."
 (customize-set-variable 'magit-commit-ask-to-stage 'stage)
 (global-set-key (kbd "C-x g") 'magit-status)
 
+(setq magit-bury-buffer-function 'magit-mode-quit-window)
+
 (defun my-git-commit-setup-hook ()
   (visual-line-mode 1)
   (visual-fill-column-mode 1))
