@@ -331,7 +331,7 @@ This uses the `buffer-face' minor mode."
 (setq org-agenda-remove-times-when-in-prefix 'beg)
 (setq org-agenda-time-grid
       '((daily today require-timed)
-        (800 1000 1200 1400 1600 1800 2000)
+        (800 1200 1600 2000)
         " ∘ " "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
 (setq org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
 
