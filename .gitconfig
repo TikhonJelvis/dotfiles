@@ -6,5 +6,4 @@
         ui = always
 
 [core]
-        pager = epage
         fileMode = false
