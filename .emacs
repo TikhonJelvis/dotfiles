@@ -43,6 +43,7 @@ makes sense in read-only buffers, obviously."
   "Prompts to save unsaved buffers and then kills the emacs server."
   (interactive)
   (save-some-buffers)
+  (recentf-save-list)
   (kill-emacs))
 
 (defun kill-current-buffer-process ()
