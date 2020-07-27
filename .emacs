@@ -368,6 +368,11 @@ This uses the `buffer-face' minor mode."
       '(("t" "Todo" entry (file "Tasks.org")
          "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
 
+;; Set up the templates I use (triggered by typing < followed by a
+;; letter followed by <TAB>)
+(add-to-list 'org-structure-template-alist
+             '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
+
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)
 (add-hook 'org-mode-hook 'auto-fill-mode)
