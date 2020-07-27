@@ -223,6 +223,7 @@ interface and inserts it at point."
 
                                         ; INPUT MODES
 (setq default-input-method "TeX")
+(toggle-input-method)
 
 (let ((quail-current-package (assoc "TeX" quail-package-alist)))
   ;; A few extra symbols I find useful.
