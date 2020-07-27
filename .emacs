@@ -211,6 +211,7 @@ interface and inserts it at point."
 (global-set-key (kbd "C-c C-j") 'compile)
 (global-set-key (kbd "C-c C-a") 'align-regexp)
 (global-set-key (kbd "M-#") 'ispell-complete-word)
+(global-set-key (kbd "M-j") 'next-error)
 
 ;; C-w remap:
 (global-set-key (kbd "C-w") 'backward-kill-word)
