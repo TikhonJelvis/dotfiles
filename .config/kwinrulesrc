@@ -32,9 +32,25 @@ clientmachine=localhost
 clientmachinematch=0
 ignoregeometry=true
 ignoregeometryrule=2
+strictgeometry=false
+strictgeometryrule=2
 wmclass=emacs
 wmclasscomplete=false
 wmclassmatch=1
 
 [General]
+ColorScheme[$d]
 count=3
+fixed[$d]
+font[$d]
+menuFont[$d]
+smallestReadableFont[$d]
+toolBarFont[$d]
+widgetStyle[$d]
+
+[Icons]
+Theme[$d]
+
+[KDE]
+ColorScheme[$d]
+widgetStyle[$d]
