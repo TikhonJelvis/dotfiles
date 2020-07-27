@@ -223,6 +223,15 @@ interface and inserts it at point."
                                         ; INPUT MODES
 (setq default-input-method "TeX")
 
+(let ((quail-current-package (assoc "TeX" quail-package-alist)))
+  ;; A few extra symbols I find useful.
+  (quail-define-rules ((append . t))
+                      ("_i" ?ᵢ)
+                      ("\\To" ?⇒))
+
+  ;; Use ; in place of \
+  (quail-defrule ";" (quail-lookup-key "\\")))
+
 					; DIRED
 ;; Has to be above JABBER settings because it has a conflicting
 ;; keybinding :(.
