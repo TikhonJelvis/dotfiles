@@ -305,15 +305,20 @@ This uses the `buffer-face' minor mode."
 
                                         ; MAGIT
 (require 'magit)
-(customize-set-variable 'magit-commit-ask-to-stage 'stage)
 (global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-c g") 'magit-clone)
 
+;; Don't ask for confirmation on actions I'm not worried about:
+(customize-set-variable 'magit-commit-ask-to-stage 'stage)
+(customize-set-variable 'magit-clone-set-remote.pushDefault t)
+
+;; Don't revert my window layout when I q out of a Magit buffer
 (setq magit-bury-buffer-function 'magit-mode-quit-window)
 
+;; Improve ergonomics of Git commit message buffers
 (defun my-git-commit-setup-hook ()
   (visual-line-mode 1)
   (visual-fill-column-mode 1))
-
 (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook)

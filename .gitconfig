@@ -8,3 +8,6 @@
 [core]
         pager = epage
         fileMode = false
+
+[github]
+        user = TikhonJelvis
