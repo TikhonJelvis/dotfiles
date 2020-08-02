@@ -230,7 +230,8 @@ interface and inserts it at point."
   ;; A few extra symbols I find useful.
   (quail-define-rules ((append . t))
                       ("_i" ?ᵢ)
-                      ("\\To" ?⇒))
+                      ("\\To" ?⇒)
+                      ("\\::" ?∷))
 
   ;; Use ; in place of \
   (quail-defrule ";" (quail-lookup-key "\\")))
@@ -384,6 +385,8 @@ This uses the `buffer-face' minor mode."
 ;; letter followed by <TAB>)
 (add-to-list 'org-structure-template-alist
              '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
+(add-to-list 'org-structure-template-alist
+             '("f" "#+ATTR_REVEAL: :frag roll-in"))
 
 ;; Spellcheck my org mode files.
 (add-hook 'org-mode-hook 'flyspell-mode)

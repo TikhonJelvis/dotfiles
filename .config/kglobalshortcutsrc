@@ -48,11 +48,11 @@ run command on clipboard contents=Alt+Shift+F2,Alt+Shift+F2,Run Command on clipb
 [krunner.desktop]
 RunClipboard=none,Alt+Shift+F2,Run command on clipboard contents
 _k_friendly_name=KRunner
-_launch=Alt+2,Alt+Space\tAlt+F2\tSearch,KRunner
+_launch=\tAlt+2,Alt+Space\tAlt+F2\tSearch,KRunner
 
 [ksmserver]
 Halt Without Confirmation=Ctrl+Alt+Shift+PgDown,none,Halt Without Confirmation
-Lock Session=Ctrl+Alt+L\tScreensaver,Ctrl+Alt+L\tScreensaver,Lock Session
+Lock Session=\tScreensaver,Ctrl+Alt+L\tScreensaver,Lock Session
 Log Out=Ctrl+Alt+Del,none,Log Out
 Log Out Without Confirmation=Ctrl+Alt+Shift+Del,none,Log Out Without Confirmation
 Reboot Without Confirmation=Ctrl+Alt+Shift+PgUp,none,Reboot Without Confirmation
@@ -213,7 +213,7 @@ _launch=Meta+E,Meta+E,Dolphin
 
 [org.kde.plasma.emojier.desktop]
 _k_friendly_name=Emoji Selector
-_launch=Meta+.,Meta+.,Emoji Selector
+_launch=none,Meta+.,Emoji Selector
 
 [org.kde.spectacle.desktop]
 ActiveWindowScreenShot=Meta+Print,Meta+Print,Capture Active Window
