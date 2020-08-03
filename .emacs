@@ -213,6 +213,7 @@ interface and inserts it at point."
 (global-set-key (kbd "C-c C-a") 'align-regexp)
 (global-set-key (kbd "M-#") 'ispell-complete-word)
 (global-set-key (kbd "M-j") 'next-error)
+(global-set-key (kbd "M-J") 'flycheck-next-error)
 
 ;; C-w remap:
 (global-set-key (kbd "C-w") 'backward-kill-word)
@@ -293,6 +294,9 @@ This uses the `buffer-face' minor mode."
 						    :foreground nil
 						    :underline "red"
 						    :bold nil)))
+
+                                        ; FLYCHECK
+(customize-set-variable 'flycheck-check-syntax-automatically '(save mode-enabled))
 
 
                                         ; JSON
@@ -477,6 +481,12 @@ prompt to name>."
 
 (elpy-enable)
 (setq elpy-rpc-virtualenv-path 'current)
+
+(require 'flycheck-mypy)
+(customize-set-variable 'flycheck-python-mypy-args
+                        '("--ignore-missing-imports"
+                          "--follow-imports=silent"))
+(add-hook 'python-mode-hook 'flycheck-mode)
 
                                         ; THETA
 
