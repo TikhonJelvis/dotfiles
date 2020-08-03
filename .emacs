@@ -476,6 +476,7 @@ prompt to name>."
 (put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
 
 (elpy-enable)
+(setq elpy-rpc-virtualenv-path 'current)
 
                                         ; THETA
 
