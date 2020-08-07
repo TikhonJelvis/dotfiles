@@ -6,10 +6,10 @@
  '(describe-char-unidata-list
    (quote
     (name old-name general-category decomposition uppercase lowercase titlecase)))
- '(magit-commit-ask-to-stage (quote stage))
+ '(magit-commit-ask-to-stage (quote stage) t)
  '(package-selected-packages
    (quote
-    (flycheck-mypy org-bullets all-the-icons all-the-icons-dired visual-fill-column lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
+    (js2-mode use-package flycheck-mypy org-bullets all-the-icons all-the-icons-dired visual-fill-column lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((python-shell-interpreter . "bin/nix-aware-python")

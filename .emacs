@@ -3,13 +3,13 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
-                                         ; PACKAGE INITIALIZATION
+					; PACKAGES
 (add-to-list 'load-path "~/.emacs.d/packages")
 
 ;; Configure package management:
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/"))
+	     '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 
 ;; Make sure all the selected packages are installed. This ensured I
@@ -24,12 +24,13 @@
 
                                         ; EXEC PATH
 ;; Make sure Emacs sees executables from Nix correctly.
-(require 'exec-path-from-shell)
-(let ((nix-vars '("NIX_LINK"
-                  "NIX_PATH"
-                  "SSL_CERT_FILE")))
-  (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
-  (mapcar 'exec-path-from-shell-copy-env nix-vars))
+(use-package exec-path-from-shell
+  :config
+  (let ((nix-vars '("NIX_LINK"
+                    "NIX_PATH"
+                    "SSL_CERT_FILE")))
+    (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
+    (mapcar 'exec-path-from-shell-copy-env nix-vars)))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -89,7 +90,7 @@ interface and inserts it at point."
   (let ((action (if add-to-kill-ring 'kill-new 'insert))
         (path (if ido-mode
                   (ido-read-file-name "file path: ")
-                  (read-file-name "file path: "))))
+                (read-file-name "file path: "))))
     (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
@@ -97,44 +98,52 @@ interface and inserts it at point."
 ;; Have compile scroll to the end by default.
 (setq-default compilation-scroll-output 'foo-bar)
 
-;; Better commands for window management:
-;; swap-with taken from emacsd-tile 0.1 by marius a. eriksen
-;; (https://gist.github.com/287633)
-(defun swap-with (dir)
-  (interactive)
-  (let ((other-window (windmove-find-other-window dir)))
-    (when other-window
-      (let* ((this-window  (selected-window))
-             (this-buffer  (window-buffer this-window))
-             (other-buffer (window-buffer other-window))
-             (this-start   (window-start this-window))
-             (other-start  (window-start other-window)))
-        (set-window-buffer this-window  other-buffer)
-        (set-window-buffer other-window this-buffer)
-        (set-window-start  this-window  other-start)
-        (set-window-start  other-window this-start)))))
+(use-package windmove
+  :init
+  ;; Better commands for window management:
+  ;; swap-with taken from emacsd-tile 0.1 by marius a. eriksen
+  ;; (https://gist.github.com/287633)
+  (defun swap-with (dir)
+    (interactive)
+    (let ((other-window (windmove-find-other-window dir)))
+      (when other-window
+        (let* ((this-window  (selected-window))
+               (this-buffer  (window-buffer this-window))
+               (other-buffer (window-buffer other-window))
+               (this-start   (window-start this-window))
+               (other-start  (window-start other-window)))
+          (set-window-buffer this-window  other-buffer)
+          (set-window-buffer other-window this-buffer)
+          (set-window-start  this-window  other-start)
+          (set-window-start  other-window this-start)))))
 
-(global-set-key (kbd "C-M-S-N") (lambda () (interactive) (swap-with 'down)))
-(global-set-key (kbd "C-M-S-P") (lambda () (interactive) (swap-with 'up)))
-(global-set-key (kbd "C-M-S-B") (lambda () (interactive) (swap-with 'left)))
-(global-set-key (kbd "C-M-S-F") (lambda () (interactive) (swap-with 'right)))
+  :bind (("C-M-S-N" . (lambda () (interactive) (swap-with 'down)))
+         ("C-M-S-P" . (lambda () (interactive) (swap-with 'up)))
+         ("C-M-S-B" . (lambda () (interactive) (swap-with 'left)))
+         ("C-M-S-F" . (lambda () (interactive) (swap-with 'right)))
 
-(global-set-key (kbd "M-N") 'windmove-down)
-(global-set-key (kbd "M-P") 'windmove-up)
-(global-set-key (kbd "M-B") 'windmove-left)
-(global-set-key (kbd "M-F") 'windmove-right)
+         ("M-N" . windmove-down)
+         ("M-P" . windmove-up)
+         ("M-B" . windmove-left)
+         ("M-F" . windmove-right)))
 
-(ido-mode t)
-(setq ido-default-buffer-method 'selected-window)
+(use-package ido
+  :config
+  (ido-mode t)
+  (setq ido-default-buffer-method 'selected-window)
+
+  ;; Set C-x C-b to switching buffer—for some reason, I always hit by
+  ;; accident. It's annoying!
+  :bind ("C-x C-b" . ido-switch-buffer))
 
 ;; I don't like tabs very much:
 (setq-default indent-tabs-mode nil)
 
 ;; Unique buffer names:
-(require 'uniquify)
-(setq
- uniquify-buffer-name-style 'post-forward
- uniquify-separator " • ")
+(use-package uniquify
+  :custom
+  (uniquify-buffer-name-style 'post-forward)
+  (uniquify-separator " • "))
 
 ;; Get rid of the annoying splash screen:
 (setq inhibit-splash-screen t)
@@ -160,22 +169,25 @@ interface and inserts it at point."
 (load-theme 'blackboard t)
 
 ;; Change company-mode colors to match blackboard:
-(require 'color)
-(let ((bg (face-attribute 'default :background)))
-  (custom-set-faces
-   `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
-   `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
-   `(company-scrollbar-fg ((t (:background "DarkOrange"))))
-   `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
-   `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
-   `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face))))))
+(use-package company
+  :after color
+  :hook (emacs-lisp-mode . company-mode)
+  :config
+  (let ((bg (face-attribute 'default :background)))
+    (custom-set-faces
+     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
+     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
+     `(company-scrollbar-fg ((t (:background "DarkOrange"))))
+     `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
+     `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
+     `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face)))))))
 
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 ;; mac-specific: menu-bar-mode needed for fullscreen, for some reason?
 (if (eq system-type 'darwin)
-  (menu-bar-mode 1)
+    (menu-bar-mode 1)
   (menu-bar-mode -1))
 
 (fringe-mode 0)
@@ -187,7 +199,11 @@ interface and inserts it at point."
 (setq fill-column 80)
 
 ;; Icons that I can use in dired, buffer mode lines... etc
-(require 'all-the-icons)
+(use-package all-the-icons)
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :hook dired-mode)
+
 
 ;; Prettier mode line
 (load-file "~/.emacs.d/mode-line.el")
@@ -198,9 +214,6 @@ interface and inserts it at point."
 ;; I'm phasing C-x o out:
 (global-set-key (kbd "C-x o") 'other-frame)
 
-;; Set C-x C-b to switching buffer—for some reason, I always hit by
-;; accident. It's annoying!
-(global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
 (global-set-key (kbd "C-S-b") 'list-buffers)
 
 ;; Make complete tag not be alt-tab!
@@ -240,11 +253,10 @@ interface and inserts it at point."
 					; DIRED
 ;; Has to be above JABBER settings because it has a conflicting
 ;; keybinding :(.
-(require 'dired-x)
-
-;; Automatically omit “uninteresting” files from the listing. (Toggled
-;; with M-o.)
-(add-hook 'dired-mode-hook 'dired-omit-mode)
+(use-package dired-x
+  ;; Automatically omit “uninteresting” files from the listing. (Toggled
+  ;; with M-o.)
+  :hook (dired-mode-hook . dired-omit-mode))
 
 ;; Simplify the dired view by hiding permissions, users, date
 ;; modified... etc
@@ -253,9 +265,6 @@ interface and inserts it at point."
 
 ;; Automatically update dired buffers when the directory changes:
 (add-hook 'dired-mode-hook 'auto-revert-mode)
-
-;; Display icons by dired files
-(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
                                         ; IMAGES
 ;; Set the background for image-previews to an light color. This makes
@@ -283,375 +292,362 @@ This uses the `buffer-face' minor mode."
 ;;
 ;;   2. Is aspell installed to your Nix user profile? Run nix/switch
 ;;   to make sure.
-(setq ispell-program-name "~/.nix-profile/bin/aspell")
-
-(add-hook 'flyspell-mode-hook '(lambda ()
-				(set-face-attribute 'flyspell-duplicate nil
-						    :foreground nil
-						    :underline "dark orange"
-						    :bold nil)
-				(set-face-attribute 'flyspell-incorrect nil
-						    :foreground nil
-						    :underline "red"
-						    :bold nil)))
+(use-package flyspell
+  :init
+  (defun flyspell-color-hook ()
+    (set-face-attribute 'flyspell-duplicate nil
+                        :foreground nil
+                        :underline "dark orange"
+                        :bold nil)
+    (set-face-attribute 'flyspell-incorrect nil
+                        :foreground nil
+                        :underline "red"
+                        :bold nil))
+  :config
+  (setq ispell-program-name "~/.nix-profile/bin/aspell")
+  (add-hook 'flyspell-mode-hook 'flyspell-color-hook))
 
                                         ; FLYCHECK
-(customize-set-variable 'flycheck-check-syntax-automatically '(save mode-enabled))
+(use-package flycheck
+  :hook (python-mode . flycheck-mode)
+  :custom (flycheck-check-syntax-automatically
+           '(save mode-enabled)))
 
 
                                         ; JSON
 ;; Set the indent level to 4 for JSON files, making it buffer local to not
 ;; change .js files.
-(defun json-indent-hook ()
-  (make-local-variable 'js-indent-level)
-  (setq js-indent-level 4))
-(add-hook 'json-mode-hook 'json-indent-hook)
+(use-package json-mode
+  :mode "\\.json\\'"
+  :init
+  (defun json-indent-hook ()
+    (make-local-variable 'js-indent-level)
+    (setq js-indent-level 4))
+  :config
+  (add-hook 'json-mode-hook 'json-indent-hook))
 
                                         ; MAGIT
-(require 'magit)
-(global-set-key (kbd "C-x g") 'magit-status)
-(global-set-key (kbd "C-c g") 'magit-clone)
+(use-package magit
+  :bind (("C-x g" . magit-status)
+         ("C-c g" . magit-clone))
 
-;; Don't ask for confirmation on actions I'm not worried about:
-(customize-set-variable 'magit-commit-ask-to-stage 'stage)
-(customize-set-variable 'magit-clone-set-remote.pushDefault t)
+  :custom
+  (magit-commit-ask-to-stage 'stage)
+  (magit-clone-set-remote.pushDefault t)
+  ;; Don't revert my window layout when I q out of a Magit buffer
+  (magit-bury-buffer-function 'magit-mode-quit-window)
 
-;; Don't revert my window layout when I q out of a Magit buffer
-(setq magit-bury-buffer-function 'magit-mode-quit-window)
-
-;; Improve ergonomics of Git commit message buffers
-(defun my-git-commit-setup-hook ()
-  (visual-line-mode 1)
-  (visual-fill-column-mode 1))
-(remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
-(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
-(add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook)
+  :config
+  ;; Improve ergonomics of Git commit message buffers
+  (defun my-git-commit-setup-hook ()
+    (visual-line-mode 1)
+    (visual-fill-column-mode 1))
+  (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-auto-fill)
+  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+  (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook))
 
                                         ; ORG-MODE
-(require 'org)
+(use-package org
+  :custom
+  (org-agenda-scheduled-leaders '("" " %2d×"))
+  (org-agenda-prefix-format
+   '((agenda . " %i %-8t% s")
+     (todo . " %i %-12:c")
+     (tags . " %i %-12:c")
+     (search . " %i %-12:c")))
+  (org-agenda-remove-times-when-in-prefix 'beg)
+  (org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1200 1600 2000)
+     " ∘ " "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
+  (org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
 
-;; Making Org mode prettier
+  (org-todo-keywords
+   '((sequence "TODO" "|" "DONE" "CANCELED")
+     (sequence "CONSIDER" "TODO" "|" "DONE")
+     (sequence "PROJECT" "|" "DONE")))
 
-(require 'org-bullets)
-(add-hook 'org-mode-hook 'org-bullets-mode)
+  (org-agenda-window-setup 'other-window)
 
-(defun org-mode-prettify-hook ()
-  "Configure prettify-symbols to replace todo/consider/done with
+  (org-capture-templates
+   '(("t" "Todo" entry (file "Tasks.org")
+      "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
+
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c c" . org-capture)
+
+         :map org-mode-map
+         ("M-{" . outline-previous-visible-heading)
+         ("M-}" . outline-next-visible-heading)
+         ("C-c C-," . org-promote-subtree)
+         ("C-c C-." . org-demote-subtree))
+
+  :config
+  (defun org-mode-prettify-hook ()
+    "Configure prettify-symbols to replace todo/consider/done with
   pretty Unicode characters."
-  (push '("TODO" . "☛") prettify-symbols-alist)
-  (push '("CONSIDER" . "❓") prettify-symbols-alist)
-  (push '("DONE" . "✔") prettify-symbols-alist)
-  (prettify-symbols-mode 1))
-(add-hook 'org-mode-hook 'org-mode-prettify-hook)
-(add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook)
+    (push '("TODO" . "☛") prettify-symbols-alist)
+    (push '("CONSIDER" . "❓") prettify-symbols-alist)
+    (push '("DONE" . "✔") prettify-symbols-alist)
+    (prettify-symbols-mode 1))
 
-(setq org-agenda-scheduled-leaders '("" " %2d×"))
+  (add-hook 'org-mode-hook 'org-mode-prettify-hook)
+  (add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook)
 
-(setq org-agenda-prefix-format
-      '((agenda . " %i %-8t% s")
-        (todo . " %i %-12:c")
-        (tags . " %i %-12:c")
-        (search . " %i %-12:c")))
-(setq org-agenda-remove-times-when-in-prefix 'beg)
-(setq org-agenda-time-grid
-      '((daily today require-timed)
-        (800 1200 1600 2000)
-        " ∘ " "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
-(setq org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
+  (defun unset-agenda-binding () (local-unset-key (kbd "C-c C-a")))
+  (add-hook 'comint-mode-hook 'unset-agenda-binding)
 
-;; Extra states I use
-(setq org-todo-keywords '((sequence "TODO" "|" "DONE" "CANCELED")
-                          (sequence "CONSIDER" "TODO" "|" "DONE")
-                          (sequence "PROJECT" "|" "DONE")))
+  ;; My core *.org files are stored in Dropbox unless I'm on a work
+  ;; computer. (Only place I would use macOS!)
+  (when (not (eq system-type 'darwin))
+    (setq org-directory "~/Dropbox/org"))
 
+  (setq org-agenda-files
+        (list (concat org-directory "/Tasks.org")
+              (concat org-directory "/Books.org")))
+  (setq org-default-notes-file (concat org-directory "/Notes.org"))
 
-;; Globally accessible org commands
-(global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c c") 'org-capture)
+  ;; Set up the templates I use (triggered by typing < followed by a
+  ;; letter followed by <TAB>)
+  (add-to-list 'org-structure-template-alist
+               '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
+  (add-to-list 'org-structure-template-alist
+               '("f" "#+ATTR_REVEAL: :frag roll-in"))
 
-(defun unset-agenda-binding () (local-unset-key (kbd "C-c C-a")))
-(add-hook 'comint-mode-hook 'unset-agenda-binding)
+  ;; Spellcheck my org mode files.
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
 
-;; Agenda configuration
-(setq org-agenda-window-setup 'other-window)
+  ;; Allow markup in the middle of words.
+  (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
+  (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
 
-;; My core *.org files are stored in Dropbox unless I'm on a work
-;; computer. (Only place I would use macOS!)
-(when (not (eq system-type 'darwin))
-  (setq org-directory "~/Dropbox/org"))
+  ;; Configuring title page formatting with #+OPTION is too fiddly, so
+  ;; we want to override the elisp variable instead
+  (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
-(setq org-agenda-files
-      (list (concat org-directory "/Tasks.org")
-            (concat org-directory "/Books.org")))
-(setq org-default-notes-file (concat org-directory "/Notes.org"))
-
-(setq org-capture-templates
-      '(("t" "Todo" entry (file "Tasks.org")
-         "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
-
-;; Set up the templates I use (triggered by typing < followed by a
-;; letter followed by <TAB>)
-(add-to-list 'org-structure-template-alist
-             '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
-(add-to-list 'org-structure-template-alist
-             '("f" "#+ATTR_REVEAL: :frag roll-in"))
-
-;; Spellcheck my org mode files.
-(add-hook 'org-mode-hook 'flyspell-mode)
-(add-hook 'org-mode-hook 'auto-fill-mode)
-
-;; Allow markup in the middle of words.
-(setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
-(setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
-(org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
-
-;; Configuring title page formatting with #+OPTION is too fiddly, so
-;; we want to override the elisp variable instead
-(put 'org-reveal-title-slide 'safe-local-variable 'stringp)
-
-
-(defun my-org-mode-hook ()
-  (local-set-key (kbd "M-{") 'outline-previous-visible-heading)
-  (local-set-key (kbd "M-}") 'outline-next-visible-heading)
-  (local-set-key (kbd "C-c C-,") 'org-promote-subtree)
-  (local-set-key (kbd "C-c C-.") 'org-demote-subtree))
-(add-hook 'org-mode-hook 'my-org-mode-hook)
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode))
 
                                         ; SHELL BUFFERS
-;; Stop Emacs from expanding things like !! in history
-(setq comint-input-autoexpand 'nil)
+(use-package comint
+  ;; Stop Emacs from expanding things like !! in history
+  :custom (comint-input-autoexpand 'nil)
 
-;; Clear comint buffers with C-c C-k. A lot more useful than the
-;; standard binding of C-c C-k killing the buffer's process!
-(defun my-comint-hook ()
-  (local-set-key (kbd "C-c C-k") 'comint-clear-buffer))
-(add-hook 'comint-mode-hook 'my-comint-hook)
+  :bind (("C-c s" . new-shell)
+         :map comint-mode-map
+         ("C-c C-k" . comint-clear-buffer))
 
-;; I want an easy command for opening new shells:
-(defun new-shell (name)
-  "Opens a new shell buffer with the given name in
+  :config
+  (defun new-shell (name)
+    "Opens a new shell buffer with the given name in
 asterisks (*name*) in the current directory with and changes the
 prompt to name>."
-  (interactive "sName: ")
-  (when (equal name "")
-    (setq name (file-name-base (directory-file-name default-directory))))
-  (pop-to-buffer (concat "<*" name "*>"))
-  (unless (eq major-mode 'shell-mode)
-    (shell (current-buffer))
-    (comint-simple-send (get-buffer-process (current-buffer))
-                        "export PAGER=epage")
-    (comint-simple-send (get-buffer-process (current-buffer))
-                        (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
+    (interactive "sName: ")
+    (when (equal name "")
+      (setq name (file-name-base (directory-file-name default-directory))))
+    (pop-to-buffer (concat "<*" name "*>"))
+    (unless (eq major-mode 'shell-mode)
+      (shell (current-buffer))
+      (comint-simple-send (get-buffer-process (current-buffer))
+                          "export PAGER=epage")
+      (comint-simple-send (get-buffer-process (current-buffer))
+                          (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
 
 
-    (sleep-for 0 200)
-    (comint-send-input)
-    (comint-clear-buffer)))
-(global-set-key (kbd "C-c s") 'new-shell)
+      (sleep-for 0 200)
+      (comint-send-input)
+      (comint-clear-buffer))))
 
-;; ANSI colors in shell mode would be nice by default:
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-(setq ansi-color-names-vector ["white" "orange red" "green" "yellow" "pale blue" "magenta" "cyan" "tan"])
+(use-package ansi-color
+  :hook (shell-mode . ansi-color-for-comint-mode-on)
+  :custom (ansi-color-names-vector ["white" "orange red" "green" "yellow" "pale blue" "magenta" "cyan" "tan"]))
 
 ;; A mode to handle buffers gotten from stdout:
-(require 'stdout-mode)
+(use-package stdout-mode)
 
                                         ; DIRENV
 
-;; Our nix environment is quite large so the summary messages that direnv-mode
-;; provides can be a bit annoying. You may add these lines to suppress the
-;; message once you confirmed that everything works.
-(setq direnv-show-paths-in-summary nil)
-(setq direnv-always-show-summary nil)
+(use-package direnv
+  ;; Our nix environment is quite large so the summary messages that direnv-mode
+  ;; provides can be a bit annoying. You may add these lines to suppress the
+  ;; message once you confirmed that everything works.
+  :custom
+  (direnv-show-paths-in-summary nil)
+  (direnv-always-show-summary nil))
 
                                         ; ELISP
-(require 'paredit)
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'company-mode)
+(use-package elisp-mode)
+(use-package paredit
+  :hook (emacs-lisp-mode . paredit-mode))
 
                                         ; JENKINSFILES
-(require 'jenkinsfile-mode)
-(add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
+(use-package jenkinsfile-mode
+  :mode "Jenkinsfile\\'")
 
                                         ; PYTHON
-(setq enable-local-eval t)
-(put 'python-shell-interpreter 'safe-local-variable t)
-(put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
+(use-package elpy
+  :custom
+  (elpy-rpc-virtualenv-path 'current)
 
-(elpy-enable)
-(setq elpy-rpc-virtualenv-path 'current)
+  :config
+  (elpy-enable))
 
-(require 'flycheck-mypy)
-(customize-set-variable 'flycheck-python-mypy-args
-                        '("--ignore-missing-imports"
-                          "--follow-imports=silent"))
-(add-hook 'python-mode-hook 'flycheck-mode)
+(use-package flycheck-mypy
+  :requires flycheck
+
+  :custom
+  (flycheck-python-mypy-args
+   '("--ignore-missing-imports"
+     "--follow-imports=silent")))
 
                                         ; THETA
 
 ;;; Theta currently only makes sense at work.
 (when (eq system-type 'darwin)
-  (load "~/Programming/theta/emacs/theta-mode.el")
-  (require 'theta-mode)
-  (add-to-list 'auto-mode-alist '("\\.theta" . theta-mode)))
+  (use-package theta-mode
+    :mode "\\.theta\\'"))
 
                                         ; HASKELL
-;; Load Haskell mode:
-(require 'haskell-mode)
-(require 'haskell-indentation)
+(use-package haskell-mode
+  :custom
+  (haskell-process-type 'cabal-new-repl)
+  (haskell-process-args-cabal-new-repl '("--ghc-option=-ferror-spans"))
 
-(setq haskell-process-type 'cabal-new-repl)
-(setq haskell-process-args-cabal-new-repl '("--ghc-option=-ferror-spans"))
+  (haskell-font-lock-symbols nil)
 
-;; Wrap haskell-mode's comamnds in a nix-shell by default:
-(setq haskell-process-wrapper-function
-      (lambda (argv)
-        (append (list "nix-shell" "-I" "." "--command")
-                (list (mapconcat 'identity argv " ")))))
+  ;; Wrap haskell-mode's comamnds in a nix-shell by default:
+  (haskell-process-wrapper-function
+   (lambda (argv)
+     (append (list "nix-shell" "-I" "." "--command")
+             (list (mapconcat 'identity argv " ")))))
 
-(put 'haskell-process-wrapper-function 'safe-local-variable 'functionp)
-(put 'haskell-process-args-cabal-repl 'safe-local-variable 'listp)
+  :bind  (("C-c C-s" . haskell-save-and-format)
+          ("C-c C-r" . my-haskell-load-and-run))
 
-(defun haskell-save-and-format ()
-  "Formats the import statements using haskell-stylish and saves
+  :init
+  (defun haskell-save-and-format ()
+    "Formats the import statements using haskell-stylish and saves
 the current file."
-  (interactive)
-  (save-buffer)
-  (haskell-mode-stylish-buffer)
-  (save-buffer))
+    (interactive)
+    (save-buffer)
+    (haskell-mode-stylish-buffer)
+    (save-buffer))
 
-(defun my-haskell-load-and-run ()
-  "Loads and runs the current Haskell file."
-  (interactive)
-  (let ((start-buffer (current-buffer)))
-    (inferior-haskell-load-and-run inferior-haskell-run-command)
-    (sleep-for 0 100)
-    (end-of-buffer)
-    (pop-to-buffer start-buffer)))
-(setq inferior-haskell-run-command "main")
+  (defun my-haskell-load-and-run ()
+    "Loads and runs the current Haskell file."
+    (interactive)
+    (let ((start-buffer (current-buffer)))
+      (inferior-haskell-load-and-run "main")
+      (sleep-for 0 100)
+      (end-of-buffer)
+      (pop-to-buffer start-buffer)))
 
-(defun my-haskell-mode-hook ()
-  (local-set-key (kbd "C-c C-s") 'haskell-save-and-format)
-  (local-set-key (kbd "C-c C-r") 'my-haskell-load-and-run))
+  :config
+  (require 'haskell-indentation)
 
-(defun my-inferior-haskell-mode-hook ()
-  (local-set-key (kbd "C-a") 'haskell-interactive-mode-beginning)
-  (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
+  (put 'haskell-process-wrapper-function 'safe-local-variable 'functionp)
+  (put 'haskell-process-args-cabal-repl 'safe-local-variable 'listp)
 
-(add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-(add-hook 'haskell-mode-hook 'font-lock-mode)
-(add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
-(add-hook 'inferior-haskell-mode-hook 'my-inferior-haskell-mode-hook)
-(setq haskell-font-lock-symbols nil)
-(setq delete-selection-mode nil)
+  (setq inferior-haskell-find-project-root nil)
 
-(setq inferior-haskell-find-project-root nil)
+  (defun my-inferior-haskell-mode-hook ()
+    (local-set-key (kbd "C-a") 'haskell-interactive-mode-beginning)
+    (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
+  (add-hook 'inferior-haskell-mode-hook 'my-inferior-haskell-mode-hook)
 
-;; hpaste integration
-(load "hpaste/hpaste")
-(require 'hpaste)
+  (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook 'haskell-mode-hook 'font-lock-mode))
 
                                         ; SKETCH
-(require 'sketch-mode)
-(add-to-list 'auto-mode-alist '("\\.sk" . sketch-mode))
-
-;;; Add support for sketch files embedded in Haskell:
-(mmm-add-classes
- '((haskell-sketch
-    :submode java-mode
-    :front   "\\[sketch|\n?"
-    :back    "|\\]")))
-;; (mmm-add-mode-ext-class nil nil 'haskell-sketch)
-
-                                        ; FORTH
-(defun forth-load-current-file ()
-  "Loads the currently visited file into a running forth process."
-  (interactive)
-  (save-buffer)
-  (let ((name (buffer-file-name)))
-    (unless (and forth-process-buffer
-                 (get-buffer forth-process-buffer)
-                 (get-buffer-process forth-process-buffer))
-      (run-forth forth-program-name))
-    (forth-load-file name)
-    (pop-to-buffer forth-process-buffer)
-    (end-of-buffer)))
-(add-hook 'forth-mode-hook
-          '(lambda () (local-set-key (kbd "C-c C-l") 'forth-load-current-file)))
+(use-package sketch-mode
+  :mode "\\.sk\\'"
+  :after mmm-mode
+  :config
+  ;;; Add support for sketch files embedded in Haskell:
+  (mmm-add-classes
+   '((haskell-sketch
+      :submode java-mode
+      :front   "\\[sketch|\n?"
+      :back    "|\\]"))))
 
                                         ; ARRAYFORTH
-(require 'array-forth-mode)
-(add-to-list 'auto-mode-alist '("\\.\\(cfs\\|forth\\)" . array-forth-mode))
-(setq array-forth-trim-markers t)
+(use-package array-forth-mode
+  :mode "\\.\\(cfs\\|forth\\)\\'"
+  :custom (array-forth-trim-markers t))
 
                                         ; MARKDOWN
-(add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
-(defun my-markdown-hook ()
-  (message "My Markdown hook!")
-  (flyspell-mode)
-  (visual-line-mode 1)
-  (visual-fill-column-mode 1)
-  (flyspell-buffer)
-  (local-unset-key (kbd "C-M-b"))
-  (local-unset-key (kbd "C-M-f")))
-(add-hook 'markdown-mode-hook 'my-markdown-hook)
-(setq markdown-enable-math t)
+(use-package markdown-mode
+  :mode "\\.md\\'"
+
+  :custom
+  (markdown-enable-math t)
+
+  :config
+  (defun my-markdown-hook ()
+    (message "My Markdown hook!")
+    (flyspell-mode)
+    (visual-line-mode 1)
+    (visual-fill-column-mode 1)
+    (flyspell-buffer)
+    (local-unset-key (kbd "C-M-b"))
+    (local-unset-key (kbd "C-M-f")))
+  (add-hook 'markdown-mode-hook 'my-markdown-hook))
 
                                         ; LATEX
-(defun my-LaTeX-hook ()
-  "Turn on wrapping and spell-check for LaTeX documents."
-  (flyspell-mode)
-  (auto-fill-mode))
-(add-hook 'LaTeX-mode-hook 'my-LaTeX-hook)
 
-;; PDF Mode by default:
-(add-hook 'LaTeX-mode-hook 'TeX-PDF-mode) ;;pdf mode by default
+(use-package tex-mode
+  :config
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+  (add-hook 'LaTeX-mode-hook 'autofill-mode)
+  (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode))
 
-;; Continuous scroll when viewing pdfs:
-(setq doc-view-continuous 1)
-
-;; Automatically update pdfs (and other buffers):
 (global-auto-revert-mode t)
-(defun my-doc-view-hook ()
-  "Make documents refresh faster."
-  (set (make-local-variable 'auto-revert-interval) 0.5)
-  (auto-revert-set-timer))
-(add-hook 'doc-view-mode-hook 'my-doc-view-hook)
-
-;; Pandoc stuff:
-(setq pandoc-binary "pandoc")
+(use-package doc-view
+  :custom (doc-view-continuous 1)
+  :config
+  (defun my-doc-view-hook ()
+    "Make documents refresh faster."
+    (set (make-local-variable 'auto-revert-interval) 0.5)
+    (auto-revert-set-timer))
+  (add-hook 'doc-view-mode-hook 'my-doc-view-hook))
 
                                         ; CFDG
-(require 'cfdg-mode)
-(add-to-list 'auto-mode-alist '("\\.cfdg" . cfdg-mode))
+(use-package cfdg-mode :mode "\\.cfdg\\'")
 
                                         ; TPL
-(require 'tpl-mode)
+(use-package tpl-mode)
 
                                         ; CS 164
-(require 'cs164-mode)
-(setq cs164-base-directory "~/Documents/cs/164/p/2/cs164sp12/pa2/")
-(setq cs164-grammar "cs164b.grm")
+(use-package cs164-mode
+  :custom
+  (cs164-base-directory "~/Documents/cs/164/p/2/cs164sp12/pa2/")
+  (cs164-grammar "cs164b.grm"))
 
                                         ; WEB DEVELOPMENT
-;; Make the default browser googly chrome:
-(setq browse-url-generic-program "firefox"
-      browse-url-browser-function 'browse-url-generic)
+(use-package browse-url
+  :custom
+  (browse-url-generic-program "firefox")
+  (browse-url-browser-function 'browse-url-generic))
 
-;; Make JS-2 mode the default:
-(add-to-list 'auto-mode-alist '("\\.js" . javascript-mode))
-(setq js2-basic-offset 2)
-(setq js-indent-level 2)
+(use-package js2-mode
+  :mode "\\.js\\'"
 
-;; Edit .less files with css mode:
-(add-to-list 'auto-mode-alist '("\\.less$" . css-mode))
+  :custom
+  (js2-basic-offset 2))
 
-(setq css-indent-offset 2)
+(use-package css-mode
+  :mode "\\(\\.css\\|\\.less\\)\\'"
 
-;; I don't do much php, so let's edit it with html mode:
-(add-to-list 'auto-mode-alist '("\\.php$" . html-mode))
+  :custom
+  (css-indent-offset 2))
+
+(use-package sgml-mode
+  :mode "\\(\\.php\\|\\.html\\)\\'")
 
                                         ; COMMANDS
 (put 'downcase-region 'disabled nil)
