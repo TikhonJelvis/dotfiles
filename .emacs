@@ -256,7 +256,7 @@ interface and inserts it at point."
 (use-package dired-x
   ;; Automatically omit “uninteresting” files from the listing. (Toggled
   ;; with M-o.)
-  :hook (dired-mode-hook . dired-omit-mode))
+  :hook (dired-mode . dired-omit-mode))
 
 ;; Simplify the dired view by hiding permissions, users, date
 ;; modified... etc
