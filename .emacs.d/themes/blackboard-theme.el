@@ -23,6 +23,7 @@
 (deftheme blackboard
   "Based on Color theme by JD Huntington, which based off the TextMate Blackboard theme, created 2008-11-27")
 
+(require 'color)
 (defun org-color (n)
    "Org mode color palette (based on
 learnui.design/tools/data-color-picker.html + blackboard)."
