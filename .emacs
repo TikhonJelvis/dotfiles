@@ -347,34 +347,29 @@ This uses the `buffer-face' minor mode."
   (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook))
 
                                         ; ORG-MODE
-(use-package org
-  :custom
-  (org-agenda-scheduled-leaders '("" " %2d×"))
-  (org-agenda-prefix-format
-   '((agenda . " %i %-8t% s")
-     (todo . " %i %-12:c")
-     (tags . " %i %-12:c")
-     (search . " %i %-12:c")))
-  (org-agenda-remove-times-when-in-prefix 'beg)
-  (org-agenda-time-grid
-   '((daily today require-timed)
-     (800 1200 1600 2000)
-     " ∘ " "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
-  (org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
+(use-package prog-mode)
 
+(defun org-mode-prettify-hook ()
+  "Configure prettify-symbols to replace todo/consider/done with
+  pretty Unicode characters."
+  (push '("TODO" . "☛") prettify-symbols-alist)
+  (push '("CONSIDER" . "❓") prettify-symbols-alist)
+  (push '("DONE" . "✔") prettify-symbols-alist)
+  (prettify-symbols-mode 1))
+
+(use-package org
+  :after prog-mode
+  :custom
   (org-todo-keywords
    '((sequence "TODO" "|" "DONE" "CANCELED")
      (sequence "CONSIDER" "TODO" "|" "DONE")
      (sequence "PROJECT" "|" "DONE")))
-
-  (org-agenda-window-setup 'other-window)
 
   (org-capture-templates
    '(("t" "Todo" entry (file "Tasks.org")
       "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
 
   :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
          ("C-c c" . org-capture)
 
          :map org-mode-map
@@ -384,16 +379,7 @@ This uses the `buffer-face' minor mode."
          ("C-c C-." . org-demote-subtree))
 
   :config
-  (defun org-mode-prettify-hook ()
-    "Configure prettify-symbols to replace todo/consider/done with
-  pretty Unicode characters."
-    (push '("TODO" . "☛") prettify-symbols-alist)
-    (push '("CONSIDER" . "❓") prettify-symbols-alist)
-    (push '("DONE" . "✔") prettify-symbols-alist)
-    (prettify-symbols-mode 1))
-
   (add-hook 'org-mode-hook 'org-mode-prettify-hook)
-  (add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook)
 
   (defun unset-agenda-binding () (local-unset-key (kbd "C-c C-a")))
   (add-hook 'comint-mode-hook 'unset-agenda-binding)
@@ -403,9 +389,6 @@ This uses the `buffer-face' minor mode."
   (when (not (eq system-type 'darwin))
     (setq org-directory "~/Dropbox/org"))
 
-  (setq org-agenda-files
-        (list (concat org-directory "/Tasks.org")
-              (concat org-directory "/Books.org")))
   (setq org-default-notes-file (concat org-directory "/Notes.org"))
 
   ;; Set up the templates I use (triggered by typing < followed by a
@@ -427,6 +410,120 @@ This uses the `buffer-face' minor mode."
   ;; Configuring title page formatting with #+OPTION is too fiddly, so
   ;; we want to override the elisp variable instead
   (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
+
+(use-package el-patch
+  :config
+  (setq el-patch-enable-use-package-integration t))
+
+(define-advice org-agenda-format-item (:filter-args (&rest args) fontify-org)
+  "Force fontify ageda item. (hack)
+
+Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not_working_with_orgagenda/"
+  (cl-multiple-value-bind (extra txt level category tags dotime remove-re habitp) (car args)
+    (with-temp-buffer
+      (cl-letf (((symbol-function 'yant/process-att-abbrev) #'identity)
+		((symbol-function 'yant/process-att-id-abbrev) #'identity)) ;; expanding sometimes causes errors when attempting to access ancestors
+	(org-mode)
+        (setq txt (replace-regexp-in-string "[ \t]*:[[:alnum:]_@#%:]+:[ 	]*$" "" txt))
+	(insert "* "
+		txt
+		"\t"
+		(or (and tags (s-join ":" `(nil ,@(cl-remove-duplicates tags) nil)))
+		    "")
+		"\n")
+	(font-lock-fontify-buffer)
+	(goto-char (point-min))
+	(looking-at "^\\* \\(\\([^\t]+\\)[ 	]+\\(:\\([[:alnum:]_@#%:]+\\):\\)*\\)[ 	]*$")
+	(setq txt (match-string 2))
+	(setq tags (and tags (s-split ":" (match-string 3) 't))))
+      (list extra txt level category tags dotime remove-re habitp))))
+
+(use-package org-agenda
+  :after el-patch
+
+  :bind (("C-c a" . org-agenda))
+
+  :custom
+  (org-agenda-scheduled-leaders '("" " %2d×"))
+  (org-agenda-prefix-format
+   '((agenda . " %i %-8t% s")
+     (todo . " %i %-12:c")
+     (tags . " %i %-12:c")
+     (search . " %i %-12:c")))
+  (org-agenda-remove-times-when-in-prefix 'beg)
+  (org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1200 1600 2000)
+     " ∘ " "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
+  (org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
+
+  (org-agenda-window-setup 'other-window)
+
+  :config
+  (setq org-agenda-files
+        (list (concat org-directory "/Tasks.org")
+              (concat org-directory "/Books.org")))
+
+
+  :config/el-patch
+  (el-patch-feature org-agenda)
+
+  ;; calling `org-agenda-highlight-todo' breaks 'composition text property of
+  ;; todo keywords, which breaks pretty-symbols fontifications fixing the
+  ;; function to keep 'composition
+  (defun org-agenda-highlight-todo (x)
+    (let ((org-done-keywords org-done-keywords-for-agenda)
+	  (case-fold-search nil)
+	  re
+          (el-patch-add composition-property))
+      (if (eq x 'line)
+	  (save-excursion
+	    (beginning-of-line 1)
+	    (setq re (org-get-at-bol 'org-todo-regexp))
+	    (goto-char (or (text-property-any (point-at-bol) (point-at-eol) 'org-heading t) (point)))
+	    (when (looking-at (concat "[ \t]*\\.*\\(" re "\\) +"))
+	      (add-text-properties (match-beginning 0) (match-end 1)
+				   (list 'face (org-get-todo-face 1)))
+              (el-patch-add (setq composition-property (plist-get (text-properties-at (match-beginning 1)) 'composition)))
+	      (let ((s (buffer-substring (match-beginning 1) (match-end 1))))
+		(delete-region (match-beginning 1) (1- (match-end 0)))
+		(goto-char (match-beginning 1))
+		(insert (format org-agenda-todo-keyword-format s))
+                (el-patch-add (add-text-properties (match-beginning 1) (match-end 1) (list 'composition composition-property))))))
+	(let ((pl (text-property-any 0 (length x) 'org-heading t x)))
+	  (setq re (get-text-property 0 'org-todo-regexp x))
+	  (when (and re
+		     ;; Test `pl' because if there's no heading content, there's
+		     ;; no point matching to highlight.  Note that if we didn't
+		     ;; test `pl' first, and there happened to be no keyword
+		     ;; from `org-todo-regexp' on this heading line, then the
+		     ;; `equal' comparison afterwards would spuriously succeed
+		     ;; in the case where `pl' is nil -- causing an
+		     ;; args-out-of-range error when we try to add text
+		     ;; properties to text that isn't there.
+		     pl
+		     (equal
+                      (string-match (concat "\\(\\.*\\)" re "\\( +\\)") x pl)
+                      pl))
+	    (add-text-properties
+	     (or (match-end 1) (match-end 0))
+             (match-end 0)
+             (list 'face (org-get-todo-face (match-string 2 x)))
+             x)
+	    (when (match-end 1)
+	      (setq x
+		    (concat
+		     (substring x 0 (match-end 1))
+		     (format org-agenda-todo-keyword-format (match-string 2 x))
+
+		     ;; Remove `display' property as the icon could
+		     ;; leak on the white space.
+		     (org-add-props " "
+                         (org-plist-delete (text-properties-at 0 x) 'display))
+		     (substring x (match-end 3)))))))
+	x)))
+
+  (add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook))
 
 (use-package org-bullets
   :after org
