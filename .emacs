@@ -202,7 +202,7 @@ interface and inserts it at point."
 (use-package all-the-icons)
 (use-package all-the-icons-dired
   :after all-the-icons
-  :hook dired-mode)
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 
 ;; Prettier mode line
