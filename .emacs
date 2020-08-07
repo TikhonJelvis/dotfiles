@@ -352,17 +352,19 @@ This uses the `buffer-face' minor mode."
 (defun org-mode-prettify-hook ()
   "Configure prettify-symbols to replace todo/consider/done with
   pretty Unicode characters."
-  (push '("TODO" . "☛") prettify-symbols-alist)
+  (push '("TODO" . "") prettify-symbols-alist)
+  (push '("FOLLOW-UP" . "") prettify-symbols-alist)
   (push '("CONSIDER" . "❓") prettify-symbols-alist)
+  (push '("INVESTIGATE" . "") prettify-symbols-alist)
   (push '("DONE" . "✔") prettify-symbols-alist)
+  (push '("CANCELED" . "") prettify-symbols-alist)
   (prettify-symbols-mode 1))
 
 (use-package org
   :after prog-mode
   :custom
   (org-todo-keywords
-   '((sequence "TODO" "|" "DONE" "CANCELED")
-     (sequence "CONSIDER" "TODO" "|" "DONE")
+   '((type "TODO" "CONSIDER" "FOLLOW-UP" "INVESTIGATE" "|" "DONE" "CANCELED")
      (sequence "PROJECT" "|" "DONE")))
 
   (org-capture-templates
