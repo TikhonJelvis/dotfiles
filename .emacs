@@ -360,7 +360,7 @@ This uses the `buffer-face' minor mode."
 (setq org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
 
 ;; Extra states I use
-(setq org-todo-keywords '((sequence "TODO" "|" "DONE")
+(setq org-todo-keywords '((sequence "TODO" "|" "DONE" "CANCELED")
                           (sequence "CONSIDER" "TODO" "|" "DONE")
                           (sequence "PROJECT" "|" "DONE")))
 
