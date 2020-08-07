@@ -1,12 +1,13 @@
 ;; Blackboard Color Theme for Emacs.
 ;;
 ;; MIT License Copyright (c) 2008 JD Huntington <jdhuntington at gmail dot com>
+;;                       (c) 2020 Tikhon Jelvis <tikhon@jelv.is>
 ;; Credits due to the excellent TextMate Blackboard theme
 ;;
 ;; All patches welcome
 
 ;; --------------
-;; This porting makes blackboard no longer rely on color-theme package, 
+;; This porting makes blackboard no longer rely on color-theme package,
 ;; since Emacs has it's theme mechanism from Emacs 24.
 
 ;; How to use:
@@ -19,8 +20,22 @@
 ;;; blackboard-theme
 
 ;;; Code
-(deftheme blackboard 
+(deftheme blackboard
   "Based on Color theme by JD Huntington, which based off the TextMate Blackboard theme, created 2008-11-27")
+
+(defun org-color (n)
+   "Org mode color palette (based on
+learnui.design/tools/data-color-picker.html + blackboard)."
+   (nth n '("#6699ff"
+            "#ad8dfa"
+            "#e37ee5"
+            "#ff70c4"
+            "#ff6b9b"
+            "#ff766f"
+            "#ff8c41"
+            "#ffa600"
+            "#8da6ce"
+            "#d8fa3c")))
 
 (custom-theme-set-faces
  `blackboard
@@ -41,12 +56,15 @@
  `(font-lock-regexp-grouping-backslash ((t (:foreground "#E9C062"))))
  `(font-lock-regexp-grouping-construct ((t (:foreground "red"))))
 
- ;; org-mode
  `(org-hide ((t (:foreground "#2e3436"))))
- `(org-level-1 ((t (:bold nil :foreground "dodger blue" :height 1.3))))
- `(org-level-2 ((t (:bold nil :foreground "#edd400" :height 1.2))))
- `(org-level-3 ((t (:bold nil :foreground "#6ac214" :height 1.1))))
- `(org-level-4 ((t (:bold nil :foreground "tomato" :height 1.0))))
+
+ `(org-level-1 ((t (:bold nil :foreground ,(org-color 0) :height 1.3))))
+ `(org-level-2 ((t (:bold nil :foreground ,(org-color 1) :height 1.2))))
+ `(org-level-3 ((t (:bold nil :foreground ,(org-color 5) :height 1.1))))
+ `(org-level-4 ((t (:bold nil :foreground ,(org-color 7) :height 1.0))))
+ `(org-level-5 ((t (:bold nil :foreground ,(org-color 8) :height 1.0))))
+ `(org-level-6 ((t (:bold nil :foreground ,(org-color 9) :height 1.0))))
+
  `(org-date ((t (:underline t :foreground "magenta3"))))
  `(org-footnote  ((t (:underline t :foreground "magenta3"))))
  `(org-link ((t (:foreground "skyblue2" :background "#2e3436"))))
@@ -55,12 +73,16 @@
  `(org-block ((t (:foreground "#bbbbbc"))))
  `(org-quote ((t (:inherit org-block :slant italic))))
  `(org-verse ((t (:inherit org-block :slant italic))))
- `(org-todo ((t (:bold t :foreground "Red"))))
- `(org-done ((t (:bold t :foreground "ForestGreen"))))
- `(org-agenda-structure ((t (:weight bold :foreground "tomato"))))
- `(org-agenda-date ((t (:foreground "#6ac214"))))
- `(org-agenda-date-weekend ((t (:weight normal :foreground "dodger blue"))))
- `(org-agenda-date-today ((t (:weight bold :foreground "#edd400"))))
+ `(org-todo ((t (:bold t :foreground ,(org-color 6)))))
+ `(org-done ((t (:bold t :foreground "#61CE3C"))))
+
+ `(org-agenda-done ((t (:foreground ,(color-desaturate-name (org-color 8) 40)))))
+ `(org-scheduled-today ((t (:foreground ,(color-lighten-name (org-color 1) 20)))))
+ `(org-scheduled ((t (:foreground ,(org-color 8)))))
+ `(org-agenda-structure ((t (:weight bold :foreground ,(org-color 0)))))
+ `(org-agenda-date ((t (:foreground ,(org-color 1)))))
+ `(org-agenda-date-weekend ((t (:weight normal :foreground ,(org-color 2)))))
+ `(org-agenda-date-today ((t (:weight bold :foreground ,(org-color 7)))))
 
  `(font-lock-string-face ((t (:foreground "#61CE3C"))))
  `(font-lock-type-face ((t (:foreground "#8DA6CE"))))
