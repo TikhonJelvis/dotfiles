@@ -598,10 +598,9 @@ prompt to name>."
 (use-package flycheck-mypy
   :requires flycheck
 
-  :custom
-  (flycheck-python-mypy-args
-   '("--ignore-missing-imports"
-     "--follow-imports=silent")))
+  :config
+  (setq flycheck-python-mypy-args '("--ignore-missing-imports"
+                                    "--follow-imports=silent")))
 
                                         ; THETA
 
