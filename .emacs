@@ -624,7 +624,8 @@ prompt to name>."
      (append (list "nix-shell" "-I" "." "--command")
              (list (mapconcat 'identity argv " ")))))
 
-  :bind  (("C-c C-s" . haskell-save-and-format)
+  :bind  (:map haskell-mode-map
+          ("C-c C-s" . haskell-save-and-format)
           ("C-c C-r" . my-haskell-load-and-run))
 
   :init
