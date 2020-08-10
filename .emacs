@@ -245,7 +245,9 @@ interface and inserts it at point."
   (quail-define-rules ((append . t))
                       ("_i" ?ᵢ)
                       ("\\To" ?⇒)
-                      ("\\::" ?∷))
+                      ("\\::" ?∷)
+                      ("''" ?`)
+                      ("\\x" ?×))
 
   ;; Use ; in place of \
   (quail-defrule ";" (quail-lookup-key "\\")))
