@@ -452,20 +452,25 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
   :custom
   (org-agenda-scheduled-leaders '("" " %2d×"))
   (org-agenda-prefix-format
-   '((agenda . " %i %-8t% s")
+   '((agenda . " %i %-7t% s")
      (todo . " %i %-12:c")
      (tags . " %i %-12:c")
      (search . " %i %-12:c")))
   (org-agenda-remove-times-when-in-prefix 'beg)
+  (org-agenda-remove-tags t)
   (org-agenda-time-grid
    '((daily today require-timed)
      (800 1200 1600 2000)
-     " ∘ " "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
+     "" "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
   (org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
 
   (org-agenda-window-setup 'other-window)
 
   :config
+  (defun org-agenda-custom-date-format (date)
+    (concat "\n" (org-agenda-format-date-aligned date)))
+  (setq org-agenda-format-date 'org-agenda-custom-date-format)
+
   (setq org-agenda-files
         (list (concat org-directory "/Tasks.org")
               (concat org-directory "/Books.org")))
