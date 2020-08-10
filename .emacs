@@ -599,12 +599,7 @@ prompt to name>."
   :config
   (elpy-enable))
 
-(use-package flycheck-mypy
-  :requires flycheck
-
-  :config
-  (setq flycheck-python-mypy-args '("--ignore-missing-imports"
-                                    "--follow-imports=silent")))
+(use-package flycheck-mypy :requires flycheck)
 
                                         ; THETA
 
