@@ -445,7 +445,9 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 (use-package org-agenda
   :after el-patch
 
-  :bind (("C-c a" . org-agenda))
+  :bind (("C-c a" . org-agenda)
+         :map org-agenda-mode-map
+         ("k" . org-capture))
 
   :custom
   (org-agenda-scheduled-leaders '("" " %2d×"))
