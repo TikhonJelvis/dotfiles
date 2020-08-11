@@ -9,7 +9,7 @@
  '(magit-commit-ask-to-stage (quote stage))
  '(package-selected-packages
    (quote
-    (org-bullets all-the-icons all-the-icons-dired visual-fill-column lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
+    (el-patch use-package org-bullets all-the-icons all-the-icons-dired visual-fill-column lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((python-shell-interpreter . "bin/nix-aware-python")

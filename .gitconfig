@@ -7,3 +7,6 @@
 
 [core]
         fileMode = false
+
+[github]
+        user = TikhonJelvis

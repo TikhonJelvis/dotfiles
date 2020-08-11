@@ -7,6 +7,7 @@ OpenGLIsUnsafe=false
 [Desktops]
 Id_1=b61830dd-6a12-4c0a-ae09-fb0742db7122
 Id_2=d52b9e4b-6e26-45d9-8aef-0743d059ddcd
+Number=1
 Rows=2
 
 [ModifierOnlyShortcuts]
