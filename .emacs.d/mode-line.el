@@ -36,18 +36,6 @@
                'display '(raise -0.1))))
     (powerline-raw icon face 'l)))
 
-(defun mode-line/git ()
-  "Display a Git icon for files saved in Git repos."
-  (when (and vc-mode (string-match "Git[:-]" vc-mode))
-    (let ((branch (mapconcat 'concat (cdr (split-string vc-mode "[:-]")) "-")))
-      (concat
-       (propertize (format " %s" (all-the-icons-alltheicon "git")) 'face `(:height 1.2) 'display '(raise -0.1))
-       " · "
-       (propertize (format "%s" (all-the-icons-octicon "git-branch"))
-                   'face `(:height 1.3 :family ,(all-the-icons-octicon-family))
-                   'display '(raise -0.1))
-       (propertize (format " %s" branch) 'face `(:height 0.9))))))
-
 ;; The default setup for powerline, customized with symbols in a few
 ;; locations.
 (setq-default mode-line-format
@@ -105,7 +93,6 @@
                 (powerline-narrow face1 'l)
                 (powerline-raw " " face1)
                 (funcall separator-left face1 face2)
-                (powerline-vc face2 'r)
                 (when
                     (bound-and-true-p nyan-mode)
                   (powerline-raw

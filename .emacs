@@ -22,14 +22,22 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil))
 
+                                        ; WINDOWS-SPECIFIC SETTINGS
+(when (eq system-type 'windows-nt)
+  (setq gc-cons-threshold (* 511 1024 1024))
+  (setq gc-cons-percentage 0.5)
+  (run-with-idle-timer 5 t #'garbage-collect)
+  (setq garbage-collection-messages t))
+
                                         ; EXEC PATH
 ;; Make sure Emacs sees executables from Nix correctly.
-(require 'exec-path-from-shell)
-(let ((nix-vars '("NIX_LINK"
-                  "NIX_PATH"
-                  "SSL_CERT_FILE")))
-  (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
-  (mapcar 'exec-path-from-shell-copy-env nix-vars))
+(when (not (eq system-type 'windows-nt))
+  (require 'exec-path-from-shell)
+  (let ((nix-vars '("NIX_LINK"
+		    "NIX_PATH"
+		    "SSL_CERT_FILE")))
+    (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
+    (mapcar 'exec-path-from-shell-copy-env nix-vars)))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -186,10 +194,13 @@ interface and inserts it at point."
 (setq fill-column 80)
 
 ;; Icons that I can use in dired, buffer mode lines... etc
-(require 'all-the-icons)
+(when (not (eq system-type 'windows-nt)) ;; lags awfuly on Windows :(
+  (require 'all-the-icons))
+
 
 ;; Prettier mode line
-(load-file "~/.emacs.d/mode-line.el")
+(when (not (eq system-type 'windows-nt)) ;; lags awfuly on Windows :(
+  (load-file "~/.emacs.d/mode-line.el"))
 
                                         ; KEY REBINDINGS
 ;; Do nothing on C-x C-c:
@@ -241,7 +252,8 @@ interface and inserts it at point."
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 
 ;; Display icons by dired files
-(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+(when (not (eq system-type 'windows-nt))
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
                                         ; IMAGES
 ;; Set the background for image-previews to an light color. This makes
@@ -269,7 +281,10 @@ This uses the `buffer-face' minor mode."
 ;;
 ;;   2. Is aspell installed to your Nix user profile? Run nix/switch
 ;;   to make sure.
-(setq ispell-program-name "~/.nix-profile/bin/aspell")
+(setq ispell-program-name
+      (if (eq system-type 'windows-nt)
+          "C:\\ProgramData\\chocolatey\\lib\\hunspell.portable\\tools\\hunspell.exe"
+        "~/.nix-profile/bin/aspell"))
 
 (add-hook 'flyspell-mode-hook '(lambda ()
 				(set-face-attribute 'flyspell-duplicate nil
@@ -320,10 +335,10 @@ This uses the `buffer-face' minor mode."
   (push '("CONSIDER" . "❓") prettify-symbols-alist)
   (push '("DONE" . "✔") prettify-symbols-alist)
   (prettify-symbols-mode 1))
-(add-hook 'org-mode-hook 'org-mode-prettify-hook)
-(add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook)
-
-(setq org-agenda-scheduled-leaders '("" " %2d×"))
+(when (not (eq system-type 'windows-nt))
+  (add-hook 'org-mode-hook 'org-mode-prettify-hook)
+  (add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook)
+  (setq org-agenda-scheduled-leaders '("" " %2d×")))
 
 (setq org-agenda-prefix-format
       '((agenda . " %i %-8t% s")
@@ -446,11 +461,11 @@ prompt to name>."
 (add-to-list 'auto-mode-alist '("Jenkinsfile" . jenkinsfile-mode))
 
                                         ; PYTHON
-(setq enable-local-eval t)
-(put 'python-shell-interpreter 'safe-local-variable t)
-(put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
+(when (not (eq system-type 'windows-nt)) (setq enable-local-eval t)
+      (put 'python-shell-interpreter 'safe-local-variable t)
+      (put 'python-shell-interpreter-args 'safe-local-variable 'stringp)
 
-(elpy-enable)
+      (elpy-enable))
 
                                         ; THETA
 
