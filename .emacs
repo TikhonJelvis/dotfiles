@@ -207,11 +207,10 @@ interface and inserts it at point."
 (setq fill-column 80)
 
 ;; Icons that I can use in dired, buffer mode lines... etc
-(when (not (eq system-type 'windows-nt))
-  (use-package all-the-icons)
-  (use-package all-the-icons-dired
-	       :after all-the-icons
-	       :hook (dired-mode . all-the-icons-dired-mode)))
+(use-package all-the-icons)
+(use-package all-the-icons-dired
+  :after all-the-icons
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 ;; Prettier mode line
 (when (not (eq system-type 'windows-nt)) ;; lags awfuly on Windows :(
@@ -315,9 +314,10 @@ This uses the `buffer-face' minor mode."
                         :underline "red"
                         :bold nil))
   :config
-  (setq ispell-program-name (if (eq system-type 'windows-nt)
-				"C:\\ProgramData\\chocolatey\\lib\\hunspell.portable\\tools\\hunspell.exe"
-			      "~/.nix-profile/bin/aspell"))
+  (setq ispell-program-name
+        (if (eq system-type 'windows-nt)
+            "C:\\ProgramData\\chocolatey\\lib\\hunspell.portable\\tools\\hunspell.exe"
+          "~/.nix-profile/bin/aspell"))
   (add-hook 'flyspell-mode-hook 'flyspell-color-hook))
 
                                         ; FLYCHECK
@@ -370,7 +370,8 @@ This uses the `buffer-face' minor mode."
   (push '("INVESTIGATE" . "") prettify-symbols-alist)
   (push '("DONE" . "✔") prettify-symbols-alist)
   (push '("CANCELED" . "") prettify-symbols-alist)
-  (prettify-symbols-mode 1))
+  (when (not (eq system-type 'windows-nt))
+    (prettify-symbols-mode 1)))
 
 (use-package org
   :after prog-mode
@@ -412,9 +413,10 @@ This uses the `buffer-face' minor mode."
   (add-to-list 'org-structure-template-alist
                '("f" "#+ATTR_REVEAL: :frag roll-in"))
 
-  ;; Spellcheck my org mode files.
-  (add-hook 'org-mode-hook 'flyspell-mode)
-  (add-hook 'org-mode-hook 'auto-fill-mode)
+  ;; Spellcheck my org mode files, but not on Windows :/
+  (when (not (eq system-type 'windows-nt))
+    (add-hook 'org-mode-hook 'flyspell-mode)
+    (add-hook 'org-mode-hook 'auto-fill-mode))
 
   ;; Allow markup in the middle of words.
   (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
@@ -428,6 +430,8 @@ This uses the `buffer-face' minor mode."
 (use-package el-patch
   :config
   (setq el-patch-enable-use-package-integration t))
+
+(use-package s)
 
 (define-advice org-agenda-format-item (:filter-args (&rest args) fontify-org)
   "Force fontify ageda item. (hack)
@@ -460,7 +464,6 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
          ("k" . org-capture))
 
   :custom
-  (org-agenda-scheduled-leaders '("" " %2d×"))
   (org-agenda-prefix-format
    '((agenda . " %i %-7t% s")
      (todo . " %i %-12:c")
@@ -477,6 +480,9 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
   (org-agenda-window-setup 'other-window)
 
   :config
+  (when (not (eq system-type 'windows-nt))
+    (customize-set-variable 'org-agenda-scheduled-leaders '("" " %2d×")))
+
   (defun org-agenda-custom-date-format (date)
     (concat "\n" (org-agenda-format-date-aligned date)))
   (setq org-agenda-format-date 'org-agenda-custom-date-format)
