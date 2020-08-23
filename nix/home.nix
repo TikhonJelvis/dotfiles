@@ -2,16 +2,13 @@
 
 let
   sources = import ./nix/sources.nix;
-in
-{
-  imports = [ ./emacs.nix ];
-
-  home.packages = with pkgs; [ firefox git unzip niv ];
-
-  home.sessionVariables = {
+  sessionVariables = {
     EDITOR = "emacsclient";
     PS1 = "λ x → \W>";
   };
+in
+{
+  imports = [ ./emacs.nix ./firefox.nix ];
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -24,41 +21,59 @@ in
     };
   };
 
-  programs.bash = {
-    enable = true;
+  home = {
+    packages = with pkgs;
+      [ firefox
+        git
+        ghc
+        niv
+        unzip
+      ];
+    inherit sessionVariables;
+
+    username = "tikhon";
+    homeDirectory = "/home/tikhon";
+
+    file = {
+      "local" = {
+        source = ../local;
+        recursive = true;
+      };
+    };
+
+    # This value determines the Home Manager release that your
+    # configuration is compatible with. This helps avoid breakage when
+    # a new Home Manager release introduces backwards incompatible
+    # changes.
+    #
+    # You can update Home Manager without changing this value. See the
+    # Home Manager release notes for a list of state version changes
+    # in each release.
+    stateVersion = "20.09";
   };
 
-  programs.firefox = import ./firefox.nix { inherit pkgs; };
+  fonts.fontconfig.enable = true;
 
-  programs.git = {
-    enable = true;
-    ignores = [ "*~" ];
+  programs = {
+    home-manager.enable = true;
 
-    userName = "tikhon";
-    userEmail = "tikhon@jelv.is";
+    bash = {
+      enable = true;
+      inherit sessionVariables;
+    };
 
-    extraConfig = {
-      ui.color = "always";
-      github.user = "TikhonJelvis";
-      core.fileMode = false;
+    git = {
+      enable = true;
+      ignores = [ "*~" ];
+
+      userName = "tikhon";
+      userEmail = "tikhon@jelv.is";
+
+      extraConfig = {
+        ui.color = "always";
+        github.user = "TikhonJelvis";
+        core.fileMode = false;
+      };
     };
   };
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "tikhon";
-  home.homeDirectory = "/home/tikhon";
-
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "20.09";
 }

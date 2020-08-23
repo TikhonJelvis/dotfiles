@@ -3,34 +3,13 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
-					; PACKAGES
+                                        ; PERSONAL PACKAGES
 (add-to-list 'load-path "~/.emacs.d/packages")
-
-;; Configure package management:
-(require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
-
-;; Make sure all the selected packages are installed. This ensured I
-;; have the same set of Emacs packages available across all my
-;; machines.
-(package-install-selected-packages)
 
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil))
-
-                                        ; EXEC PATH
-;; Make sure Emacs sees executables from Nix correctly.
-(use-package exec-path-from-shell
-  :config
-  (let ((nix-vars '("NIX_LINK"
-                    "NIX_PATH"
-                    "SSL_CERT_FILE")))
-    (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
-    (mapcar 'exec-path-from-shell-copy-env nix-vars)))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -170,6 +149,7 @@ interface and inserts it at point."
 
 ;; Change company-mode colors to match blackboard:
 (use-package company
+  :ensure t
   :after color
   :hook (emacs-lisp-mode . company-mode)
   :config
@@ -199,13 +179,17 @@ interface and inserts it at point."
 (setq fill-column 80)
 
 ;; Icons that I can use in dired, buffer mode lines... etc
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t)
 (use-package all-the-icons-dired
+  :ensure t
   :after all-the-icons
   :hook (dired-mode . all-the-icons-dired-mode))
 
 
 ;; Prettier mode line
+(use-package powerline
+  :ensure t)
 (load-file "~/.emacs.d/mode-line.el")
 
                                         ; KEY REBINDINGS
@@ -240,17 +224,8 @@ interface and inserts it at point."
 (setq default-input-method "TeX")
 (toggle-input-method)
 
-(let ((quail-current-package (assoc "TeX" quail-package-alist)))
-  ;; A few extra symbols I find useful.
-  (quail-define-rules ((append . t))
-                      ("_i" ?ᵢ)
-                      ("\\To" ?⇒)
-                      ("\\::" ?∷)
-                      ("''" ?`)
-                      ("\\x" ?×))
-
-  ;; Use ; in place of \
-  (quail-defrule ";" (quail-lookup-key "\\")))
+;; My quail customizations
+(load-file ".emacs.d/quail-rules.el")
 
 					; DIRED
 ;; Has to be above JABBER settings because it has a conflicting
@@ -311,15 +286,32 @@ This uses the `buffer-face' minor mode."
 
                                         ; FLYCHECK
 (use-package flycheck
+  :ensure t
   :hook (python-mode . flycheck-mode)
   :custom (flycheck-check-syntax-automatically
            '(save mode-enabled)))
+
+
+                                        ; Nix
+(use-package nix-mode
+  :ensure t
+  :mode "\\.nix\\'")
+
+(use-package direnv
+  :ensure t
+  ;; Our nix environment is quite large so the summary messages that direnv-mode
+  ;; provides can be a bit annoying. You may add these lines to suppress the
+  ;; message once you confirmed that everything works.
+  :custom
+  (direnv-show-paths-in-summary nil)
+  (direnv-always-show-summary nil))
 
 
                                         ; JSON
 ;; Set the indent level to 4 for JSON files, making it buffer local to not
 ;; change .js files.
 (use-package json-mode
+  :ensure t
   :mode "\\.json\\'"
   :init
   (defun json-indent-hook ()
@@ -330,6 +322,7 @@ This uses the `buffer-face' minor mode."
 
                                         ; MAGIT
 (use-package magit
+  :ensure t
   :bind (("C-x g" . magit-status)
          ("C-c g" . magit-clone))
 
@@ -418,6 +411,7 @@ This uses the `buffer-face' minor mode."
   (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
 (use-package el-patch
+  :ensure t
   :config
   (setq el-patch-enable-use-package-integration t))
 
@@ -539,6 +533,7 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
   (add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook))
 
 (use-package org-bullets
+  :ensure t
   :after org
   :hook (org-mode . org-bullets-mode))
 
@@ -563,7 +558,8 @@ prompt to name>."
     (unless (eq major-mode 'shell-mode)
       (shell (current-buffer))
       (comint-simple-send (get-buffer-process (current-buffer))
-                          "export PAGER=epage")
+                          (format "export PAGER=%s"
+                                  (expand-file-name "~/local/bin/epage")))
       (comint-simple-send (get-buffer-process (current-buffer))
                           (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
 
@@ -579,34 +575,29 @@ prompt to name>."
 ;; A mode to handle buffers gotten from stdout:
 (use-package stdout-mode)
 
-                                        ; DIRENV
-
-(use-package direnv
-  ;; Our nix environment is quite large so the summary messages that direnv-mode
-  ;; provides can be a bit annoying. You may add these lines to suppress the
-  ;; message once you confirmed that everything works.
-  :custom
-  (direnv-show-paths-in-summary nil)
-  (direnv-always-show-summary nil))
-
                                         ; ELISP
 (use-package elisp-mode)
 (use-package paredit
+  :ensure t
   :hook (emacs-lisp-mode . paredit-mode))
 
                                         ; JENKINSFILES
 (use-package jenkinsfile-mode
+  :ensure t
   :mode "Jenkinsfile\\'")
 
                                         ; PYTHON
 (use-package elpy
+  :ensure t
   :custom
   (elpy-rpc-virtualenv-path 'current)
 
   :config
   (elpy-enable))
 
-(use-package flycheck-mypy :requires flycheck)
+(use-package flycheck-mypy
+  :ensure t
+  :requires flycheck)
 
                                         ; THETA
 
@@ -617,6 +608,7 @@ prompt to name>."
 
                                         ; HASKELL
 (use-package haskell-mode
+  :ensure t
   :custom
   (haskell-process-type 'cabal-new-repl)
   (haskell-process-args-cabal-new-repl '("--ghc-option=-ferror-spans"))
@@ -687,6 +679,7 @@ the current file."
 
                                         ; MARKDOWN
 (use-package markdown-mode
+  :ensure t
   :mode "\\.md\\'"
 
   :custom
@@ -740,6 +733,7 @@ the current file."
   (browse-url-browser-function 'browse-url-generic))
 
 (use-package js2-mode
+  :ensure t
   :mode "\\.js\\'"
 
   :custom

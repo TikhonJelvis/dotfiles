@@ -17,11 +17,9 @@ in
 
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs;
-    extraPackages = (epkgs:
-      with epkgs; [
-        use-package
-      ]);
+    package = pkgs.emacsWithPackagesFromUsePackage {
+      config = ../emacs/init.el;
+    };
   };
 
   home.file = {

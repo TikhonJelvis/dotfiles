@@ -1,6 +1,4 @@
                                         ; POWERLINE
-(require 'powerline)
-
 (powerline-default-theme)
 
 (set-face-attribute 'mode-line nil
