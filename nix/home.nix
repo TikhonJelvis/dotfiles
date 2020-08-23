@@ -76,4 +76,8 @@ in
       };
     };
   };
+
+  services = {
+    dropbox.enable = true;
+  };
 }
