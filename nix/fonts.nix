@@ -12,5 +12,7 @@
       source-code-pro
       ubuntu_font_family
     ];
+
+    enableDefaultFonts = true;
   };
 }
