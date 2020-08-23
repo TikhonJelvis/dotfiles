@@ -28,6 +28,7 @@ in
         ghc
         niv
         spectacle
+        synergy
         unzip
       ];
     inherit sessionVariables;

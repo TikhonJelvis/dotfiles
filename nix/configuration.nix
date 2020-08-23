@@ -58,27 +58,31 @@
     };
   };
 
-  networking.hostName = "tikhon-nixos-pc"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.nameservers = ["1.1.1.1" "8.8.8.8"];
+  networking = {
+    hostName = "tikhon-nixos-pc";
+    nameservers = ["1.1.1.1" "8.8.8.8"];
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp35s0.useDHCP = true;
-  networking.interfaces.wlp37s0.useDHCP = true;
+    # The global useDHCP flag is deprecated.
+    useDHCP = false;
+    interfaces.enp35s0.useDHCP = true;
+    interfaces.wlp37s0.useDHCP = true;
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    firewall = {
+      allowedTCPPorts = [
+        24800 # Synergy
+      ];
+    };
+
+    # Proxy settings (if needed in the future):
+    # proxy.default = "http://user:password@proxy:port/";
+    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    # TODO: Get wifi working
+    wireless.enable = false;
+  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  # };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -100,12 +104,6 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -141,4 +139,3 @@
   system.stateVersion = "20.03"; # Did you read the comment?
 
 }
-
