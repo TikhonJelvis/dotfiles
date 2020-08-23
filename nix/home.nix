@@ -1,6 +1,8 @@
-{ config, pkgs, stdenv, ... }:
+{ config, pkgs, ... }:
 
 let
+  sources = import ./nix/sources.nix;
+
   emacs = [ pkgs.emacs ];
   basics = with pkgs; [ firefox git unzip niv ];
 in
@@ -10,6 +12,17 @@ in
   home.sessionVariables = {
     EDITOR = "emacsclient";
     PS1 = "λ x → \W>";
+  };
+
+  nixpkgs.config = {
+    allowUnfree = true;
+
+    packageOverrides = pkgs: {
+      stable = import sources."nixpkgs-20.03" {};
+      nur = import sources.NUR {
+        inherit pkgs;
+      };
+    };
   };
 
   programs.bash = {
