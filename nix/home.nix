@@ -3,7 +3,7 @@
 let
   sources = import ./nix/sources.nix;
   sessionVariables = {
-    EDITOR = "emacsclient";
+    EDITOR = "emacsclient --create-frame --alternate-editor emacs";
     PS1 = "λ x → \W>";
   };
 in
@@ -78,6 +78,9 @@ in
   };
 
   services = {
-    dropbox.enable = true;
+    dropbox = {
+      enable = true;
+      path = "${config.home.homeDirectory}/Dropbox";
+    };
   };
 }
