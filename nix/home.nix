@@ -30,6 +30,7 @@ in
         spectacle
         synergy
         unzip
+        zoom-us
       ];
     inherit sessionVariables;
 
