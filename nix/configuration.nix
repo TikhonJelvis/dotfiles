@@ -37,8 +37,25 @@
   };
 
   boot = {
-    loader.systemd-boot.enable = true;
-    loader.efi.canTouchEfiVariables = true;
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        devices = [ "nodev" ];
+        efiSupport = true;
+        useOSProber = true;
+        version = 2;
+        extraEntries = ''
+          menuentry "Restart" {
+            reboot
+          }
+          menuentry "Turn Off" {
+            halt
+          }
+        '';
+      };
+    };
   };
 
   networking.hostName = "tikhon-nixos-pc"; # Define your hostname.
