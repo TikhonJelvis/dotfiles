@@ -2,12 +2,11 @@
 
 let
   sources = import ./nix/sources.nix;
-
-  emacs = [ pkgs.emacs ];
-  basics = with pkgs; [ firefox git unzip niv ];
 in
 {
-  home.packages = emacs ++ basics;
+  imports = [ ./emacs.nix ];
+
+  home.packages = with pkgs; [ firefox git unzip niv ];
 
   home.sessionVariables = {
     EDITOR = "emacsclient";
