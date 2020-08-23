@@ -77,6 +77,10 @@ interface and inserts it at point."
 ;; Have compile scroll to the end by default.
 (setq-default compilation-scroll-output 'foo-bar)
 
+;; Using X-resources on KDE leads to the wrong cursor color in new
+;; frames :/
+(setq inhibit-x-resources t)
+
 (use-package windmove
   :init
   ;; Better commands for window management:
