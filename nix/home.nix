@@ -29,6 +29,7 @@ in
     extraConfig = {
       ui.color = "always";
       github.user = "TikhonJelvis";
+      core.fileMode = false;
     };
   };
 
