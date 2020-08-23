@@ -8,6 +8,15 @@ in
   # Packages
   home.packages = emacs ++ basics;
 
+  home.sessionVariables = {
+    EDITOR = "emacsclient";
+    PS1 = "λ x → \W>";
+  };
+
+  programs.bash = {
+    enable = true;
+  };
+
   programs.firefox = import ./firefox.nix { inherit pkgs; };
 
   programs.git = {
