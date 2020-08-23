@@ -27,6 +27,7 @@ in
         git
         ghc
         niv
+        spectacle
         unzip
       ];
     inherit sessionVariables;
