@@ -2,10 +2,9 @@
 
 let
   emacs = [ pkgs.emacs ];
-  basics = with pkgs; [ firefox git unzip ];
+  basics = with pkgs; [ firefox git unzip niv ];
 in
 {
-  # Packages
   home.packages = emacs ++ basics;
 
   home.sessionVariables = {
