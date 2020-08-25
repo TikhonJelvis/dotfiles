@@ -552,9 +552,10 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 
   (add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook))
 
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode))
+(when (not (eq system-type 'windows-nt))
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode)))
 
                                         ; SHELL BUFFERS
 (use-package comint
