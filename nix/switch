@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-# Reset all the Nix packages in the user environment to the ones
-# listed in packages.nix.
-nix-env -irf ~/nix/packages.nix
