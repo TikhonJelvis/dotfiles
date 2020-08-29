@@ -10,7 +10,7 @@ let
   aspell-with-dicts = pkgs.aspellWithDicts (d: [d.en d.ru]);
 in
 {
-  imports = [ ./emacs.nix ./firefox.nix ];
+  imports = [ ./emacs.nix ./firefox.nix ./xmonad.nix ];
 
   nixpkgs.config = {
     allowUnfree = true;
