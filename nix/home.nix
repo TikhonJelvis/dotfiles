@@ -6,6 +6,8 @@ let
     EDITOR = "emacsclient --create-frame --alternate-editor emacs";
     PS1 = "λ x → \W>";
   };
+
+  aspell-with-dicts = pkgs.aspellWithDicts (d: [d.en d.ru]);
 in
 {
   imports = [ ./emacs.nix ./firefox.nix ];
@@ -23,7 +25,8 @@ in
 
   home = {
     packages = with pkgs;
-      [ firefox
+      [ aspell-with-dicts
+        firefox
         git
         ghc
         niv
