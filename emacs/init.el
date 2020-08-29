@@ -271,8 +271,8 @@ This uses the `buffer-face' minor mode."
 ;;   1. Does Emacs see the right PATH variable? See EXEC PATH section
 ;;   above.
 ;;
-;;   2. Is aspell installed to your Nix user profile? Run nix/switch
-;;   to make sure.
+;;   2. Is aspell installed to your Nix user profile? Run home-manager
+;;   switch to make sure.
 (use-package flyspell
   :init
   (defun flyspell-color-hook ()
@@ -284,8 +284,11 @@ This uses the `buffer-face' minor mode."
                         :foreground nil
                         :underline "red"
                         :bold nil))
+  :custom
+  (ispell-program-name "~/.nix-profile/bin/aspell")
+  (ispell-personal-dictionary "~/Programming/dotfiles/.aspell.en.pws")
+
   :config
-  (setq ispell-program-name "~/.nix-profile/bin/aspell")
   (add-hook 'flyspell-mode-hook 'flyspell-color-hook))
 
                                         ; FLYCHECK

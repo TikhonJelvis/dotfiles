@@ -41,8 +41,8 @@ in
     homeDirectory = "/home/tikhon";
 
     file = {
-      "local" = {
-        source = ../local;
+      "." = {
+        source = ./home;
         recursive = true;
       };
     };

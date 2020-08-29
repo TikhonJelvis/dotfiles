@@ -19,13 +19,13 @@ in
     enable = true;
     package = pkgs.emacsWithPackagesFromUsePackage {
       package = pkgs.emacsGcc;
-      config = ../emacs/init.el;
+      config = ./emacs/init.el;
     };
   };
 
   home.file = {
     ".emacs.d" = {
-      source = ../emacs;
+      source = ./emacs;
       recursive = true;
     };
   };
