@@ -182,6 +182,9 @@ interface and inserts it at point."
 ;; Fill to 80 characters by default:
 (setq fill-column 80)
 
+;; Basic color Emoji support with Noto:
+(set-fontset-font t 'symbol "Noto Color Emoji" nil)
+
 ;; Icons that I can use in dired, buffer mode lines... etc
 (use-package all-the-icons
   :ensure t)
@@ -670,6 +673,11 @@ the current file."
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook 'haskell-mode-hook 'font-lock-mode))
+
+                                        ; RUST
+(use-package rust-mode
+  :ensure t
+  :mode "\\.rs\\'")
 
                                         ; SKETCH
 (use-package sketch-mode
