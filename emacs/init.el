@@ -363,7 +363,7 @@ This uses the `buffer-face' minor mode."
   pretty Unicode characters."
   (push '("TODO" . "") prettify-symbols-alist)
   (push '("FOLLOW-UP" . "") prettify-symbols-alist)
-  (push '("CONSIDER" . "❓") prettify-symbols-alist)
+  (push '("CONSIDER" . "") prettify-symbols-alist)
   (push '("INVESTIGATE" . "") prettify-symbols-alist)
   (push '("DONE" . "✔") prettify-symbols-alist)
   (push '("CANCELED" . "") prettify-symbols-alist)
