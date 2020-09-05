@@ -299,7 +299,7 @@ This uses the `buffer-face' minor mode."
            '(save mode-enabled)))
 
 
-                                        ; Nix
+                                        ; NIX
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
@@ -326,6 +326,10 @@ This uses the `buffer-face' minor mode."
     (setq js-indent-level 4))
   :config
   (add-hook 'json-mode-hook 'json-indent-hook))
+
+                                        ; YAML
+(use-package yaml-mode
+  :ensure t)
 
                                         ; MAGIT
 (use-package magit
