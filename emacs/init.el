@@ -751,7 +751,14 @@ the current file."
 
   :custom
   (cargo-process--custom-path-to-bin "cargo")
-  (cargo-process--rustc-cmd "rustc"))
+  (cargo-process--rustc-cmd "rustc")
+
+  :config
+  (defun my-cargo-process-hook ()
+    (defun my-advice-compilation-filter (f proc string)
+      (funcall f proc (xterm-color-filter string)))
+    (advice-add 'compilation-filter :around #'my-advice-compilation-filter))
+  (add-hook 'cargo-process-mode-hook #'my-cargo-process-hook))
 
 (use-package flycheck-rust
   :ensure t
