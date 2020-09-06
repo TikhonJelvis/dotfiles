@@ -688,7 +688,11 @@ the current file."
 (use-package cargo
   :ensure t
   :after rust-mode
-  :hook (rust-mode . cargo-minor-mode))
+  :hook (rust-mode . cargo-minor-mode)
+
+  :custom
+  (cargo-process--custom-path-to-bin "cargo")
+  (cargo-process--rustc-cmd "rustc"))
 
 (use-package flycheck-rust
   :ensure t
