@@ -568,30 +568,84 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
          ("C-c C-k" . comint-clear-buffer))
 
   :config
+  (defun format-shell-name (s)
+    (subst-char-in-string ?' #x2032 s))
+
+  (defun find-useful-directory-name (dir)
+    "Starting with the given directory and moving up in the
+filesystem hierarchy, find the first directory that isn't a
+really common name like 'src' or 'bin'."
+    (let ((common-names '("src" "bin"))
+          (base (file-name-base (directory-file-name dir)))
+          (up (file-name-directory (directory-file-name dir))))
+      (if (member base common-names)
+          (find-useful-directory-name up)
+        base)))
+
   (defun new-shell (name)
     "Opens a new shell buffer with the given name in
 asterisks (*name*) in the current directory with and changes the
 prompt to name>."
     (interactive "sName: ")
     (when (equal name "")
-      (setq name (file-name-base (directory-file-name default-directory))))
+      (setq name (find-useful-directory-name default-directory)))
+    (setq name (format-shell-name name))
     (pop-to-buffer (concat "<*" name "*>"))
     (unless (eq major-mode 'shell-mode)
       (shell (current-buffer))
-      (comint-simple-send (get-buffer-process (current-buffer))
-                          (format "export PAGER=%s"
-                                  (expand-file-name "~/local/bin/epage")))
-      (comint-simple-send (get-buffer-process (current-buffer))
-                          (concat "export PS1=\"\033[33m" name "\033[0m:\033[35m\\W\033[0m>\""))
 
+      (comint-simple-send
+       (get-buffer-process (current-buffer))
+       "export TERM='xterm-256color'")
+      (comint-simple-send
+       (get-buffer-process (current-buffer))
+       (format "export PAGER=%s"
+               (expand-file-name "~/local/bin/epage")))
+      (comint-simple-send
+       (get-buffer-process (current-buffer))
+       (concat "export PS1='"
+               "\033[31m" name
+               "\033[37m" ":"
+               "\033[32m" "\\W"
+               "\033[37m" ">"
+               "\033[0m"
+               "'"))
 
       (sleep-for 0 200)
       (comint-send-input)
       (comint-clear-buffer))))
 
+(use-package xterm-color
+  :ensure t
+
+  :config
+  (defun from-face (face)
+    (face-attribute face :foreground))
+  (setq xterm-color-names
+        `[,(from-face 'default)
+          ,(from-face 'font-lock-builtin-face)
+          ,(from-face 'font-lock-comment-face)
+          ,(from-face 'font-lock-constant-face)
+          ,(from-face 'font-lock-string-face)
+          ,(from-face 'font-lock-function-name-face)
+          ,(from-face 'font-lock-keyword-face)
+          ,(from-face 'font-lock-preprocessor-face)
+          ])
+
+  (defun shell-mode-xterm-colors ()
+    ;; Disable font-lock in shell-mode to improve performance;
+    ;; xterm-colors will handle coloring the output.
+    (font-lock-mode -1)
+    (make-local-variable 'font-lock-function)
+    (setq font-lock-function (lambda (_) nil))
+
+    (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t))
+  (add-hook 'shell-mode-hook #'shell-mode-xterm-colors))
+
 (use-package ansi-color
-  :hook (shell-mode . ansi-color-for-comint-mode-on)
-  :custom (ansi-color-names-vector ["white" "orange red" "green" "yellow" "pale blue" "magenta" "cyan" "tan"]))
+  :custom
+  (ansi-color-names-vector
+   ["white" "orange red" "green" "yellow" "pale blue" "magenta" "cyan" "tan"]))
 
 ;; A mode to handle buffers gotten from stdout:
 (use-package stdout-mode)
