@@ -13,7 +13,7 @@ let
   packages = with pkgs;
     let
       applications = [ firefox spectacle synergy zoom-us ];
-      development  = [ git ghc niv ];
+      development  = [ direnv git ghc niv ];
       utils        = [ aspell-with-dicts unzip ];
     in applications ++ development ++ utils;
 in
@@ -85,5 +85,7 @@ in
       enable = true;
       path = "${config.home.homeDirectory}/Dropbox";
     };
+
+    lorri.enable = true;
   };
 }
