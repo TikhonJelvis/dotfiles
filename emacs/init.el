@@ -569,7 +569,7 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 
   :config
   (defun format-shell-name (s)
-    (subst-char-in-string ?' #x2032 s))
+    (subst-char-in-string ?' 8242 s))
 
   (defun find-useful-directory-name (dir)
     "Starting with the given directory and moving up in the
