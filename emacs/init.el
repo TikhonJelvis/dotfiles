@@ -182,8 +182,13 @@ interface and inserts it at point."
 ;; Fill to 80 characters by default:
 (setq fill-column 80)
 
-;; Basic color Emoji support with Noto:
-(set-fontset-font t 'symbol "Noto Color Emoji" nil)
+;; Not sure why this needs to be in a hook, but it didn't initialize
+;; correctly otherwise.
+(defun emoji-fonts-hook (frame)
+  ;; Basic color Emoji support with Noto:
+  (set-fontset-font t 'symbol "Noto Color Emoji" frame))
+(add-hook 'after-make-frame-functions #'emoji-fonts-hook)
+
 
 ;; Icons that I can use in dired, buffer mode lines... etc
 (use-package all-the-icons
