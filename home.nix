@@ -4,10 +4,18 @@ let
   sources = import ./nix/sources.nix;
   sessionVariables = {
     EDITOR = "emacsclient --create-frame --alternate-editor emacs";
-    PS1 = "λ x → \W>";
+    PS1    = "λ x → \W>";
   };
 
   aspell-with-dicts = pkgs.aspellWithDicts (d: [d.en d.ru]);
+
+  # Different kinds of packages I use
+  packages = with pkgs;
+    let
+      applications = [ firefox spectacle synergy zoom-us ];
+      development  = [ git ghc niv ];
+      utils        = [ aspell-with-dicts unzip ];
+    in applications ++ development ++ utils;
 in
 {
   imports = [ ./emacs.nix ./firefox.nix ./xmonad.nix ];
@@ -24,18 +32,7 @@ in
   };
 
   home = {
-    packages = with pkgs;
-      [ aspell-with-dicts
-        firefox
-        git
-        ghc
-        niv
-        spectacle
-        synergy
-        unzip
-        zoom-us
-      ];
-    inherit sessionVariables;
+    inherit packages sessionVariables;
 
     username = "tikhon";
     homeDirectory = "/home/tikhon";
