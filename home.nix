@@ -12,8 +12,8 @@ let
   # Different kinds of packages I use
   packages = with pkgs;
     let
-      applications = [ firefox spectacle synergy zoom-us ];
-      development  = [ direnv git ghc niv ];
+      applications = [ spectacle synergy zoom-us ];
+      development  = [ ghc niv ];
       utils        = [ aspell-with-dicts unzip ];
     in applications ++ development ++ utils;
 in
@@ -63,6 +63,24 @@ in
     bash = {
       enable = true;
       inherit sessionVariables;
+    };
+
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+
+      ## use lorri if available
+      stdlib = ''
+        eval "`declare -f use_nix | sed '1s/.*/_&/'`"
+        use_nix() {
+          if type lorri &>/dev/null; then
+            echo "direnv: using lorri from PATH ($(type -p lorri))"
+            eval "$(lorri direnv)"
+          else
+            _use_nix
+          fi
+        }
+      '';
     };
 
     git = {

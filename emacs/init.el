@@ -309,12 +309,14 @@ This uses the `buffer-face' minor mode."
 
 (use-package direnv
   :ensure t
-  ;; Our nix environment is quite large so the summary messages that direnv-mode
-  ;; provides can be a bit annoying. You may add these lines to suppress the
-  ;; message once you confirmed that everything works.
+
   :custom
   (direnv-show-paths-in-summary nil)
-  (direnv-always-show-summary nil))
+  (direnv-always-show-summary nil)
+
+  :config
+  (direnv-mode)
+  (add-to-list 'direnv-non-file-modes 'shell-mode))
 
 
                                         ; JSON
@@ -677,7 +679,39 @@ the current file."
                                         ; RUST
 (use-package rust-mode
   :ensure t
-  :mode "\\.rs\\'")
+  :mode "\\.rs\\'"
+  :hook (rust-mode . flycheck-mode)
+
+  :bind (:map rust-mode-map
+         ("C-c C-t" . racer-describe)))
+
+(use-package cargo
+  :ensure t
+  :after rust-mode
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package flycheck-rust
+  :ensure t
+  :after rust-mode
+  :hook (rust-mode . flycheck-rust-setup))
+
+(use-package racer
+  :ensure t
+  :after rust-mode
+  :hook (rust-mode . racer-mode)
+
+  :custom
+  (racer-rust-src-path nil)
+  (racer-cmd "racer")
+
+  :config
+  (defun my-racer-mode-hook ()
+    (set (make-local-variable 'company-backends)
+         '((company-capf company-files))))
+  (add-hook 'racer-mode-hook 'my-racer-mode-hook)
+
+  (add-hook 'racer-mode-hook #'company-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode))
 
                                         ; SKETCH
 (use-package sketch-mode
