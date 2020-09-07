@@ -1,14 +1,16 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# This is my "base" configuration—settings that are shared across all
+# my machines.
+#
+# Configurations for each machine import this file and overwrite any
+# machine-specific options they need. At minimum, this requires:
+#
+#  * networking.hostName
 
 { config, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./fonts.nix
+    [./fonts.nix
     ];
 
   nixpkgs.config.allowUnfree = true;
@@ -59,7 +61,6 @@
   };
 
   networking = {
-    hostName = "tikhon-nixos-pc";
     nameservers = ["1.1.1.1" "8.8.8.8"];
 
     # The global useDHCP flag is deprecated.
@@ -72,13 +73,6 @@
         24800 # Synergy
       ];
     };
-
-    # Proxy settings (if needed in the future):
-    # proxy.default = "http://user:password@proxy:port/";
-    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-    # TODO: Get wifi working
-    wireless.enable = false;
   };
 
   # Select internationalisation properties.
@@ -130,21 +124,13 @@
     }];
   };
 
-  # Enable touchpad support.
-  # services.xserver.libinput.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.tikhon = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  users.users = {
+    tikhon = {
+      isNormalUser = true;
+      extraGroups = [
+        "wheel" # Enable ‘sudo’ for the user.
+      ];
+    };
   };
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.03"; # Did you read the comment?
-
 }
