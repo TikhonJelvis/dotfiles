@@ -38,28 +38,6 @@
     };
   };
 
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-      grub = {
-        enable = true;
-        devices = [ "nodev" ];
-        efiSupport = true;
-        useOSProber = true;
-        version = 2;
-        extraEntries = ''
-          menuentry "Restart" {
-            reboot
-          }
-          menuentry "Turn Off" {
-            halt
-          }
-        '';
-      };
-    };
-  };
-
   networking = {
     nameservers = ["1.1.1.1" "8.8.8.8"];
 
