@@ -624,7 +624,7 @@ prompt to name>."
   (setq xterm-color-names
         `[,(from-face 'default)
           ,(from-face 'font-lock-builtin-face)
-          ,(from-face 'font-lock-comment-face)
+          ,(from-face 'font-lock-variable-name-face)
           ,(from-face 'font-lock-constant-face)
           ,(from-face 'font-lock-string-face)
           ,(from-face 'font-lock-function-name-face)
