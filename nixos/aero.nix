@@ -33,12 +33,14 @@
       efi.canTouchEfiVariables = true;
       grub = {
         enable = true;
+        version = 2;
         devices = [ "nodev" ];
         efiSupport = true;
         useOSProber = false;
-        version = 2;
+        splashImage = ./grub/breeze/background.png;
+        theme = ./grub/breeze;
         extraEntries = ''
-          menuentry "Windows 10" {
+          menuentry "Windows 10" --class windows {
             insmod part_gpt
             insmod fat
             insmod search_fs_uuid
@@ -46,10 +48,10 @@
             search --no-floppy --fs-uuid --set=root 8AC1-64B9
             chainloader /EFI/Microsoft/Boot/bootmgfw.efi
           }
-          menuentry "Restart" {
+          menuentry "Restart" --class restart {
             reboot
           }
-          menuentry "Turn Off" {
+          menuentry "Turn Off" --class shutdown {
             halt
           }
         '';

@@ -98,8 +98,7 @@ learnui.design/tools/data-color-picker.html + blackboard)."
  `(left-margin ((t (nil))))
  `(text-cursor ((t (:background "yellow" :foreground "black"))))
  `(toolbar ((t (nil))))
- `(underline ((nil (:underline nil))))
- `(zmacs-region ((t (:background "snow" :foreground "ble")))))
+ `(underline ((nil (:underline nil)))))
 
 (provide-theme 'blackboard)
 

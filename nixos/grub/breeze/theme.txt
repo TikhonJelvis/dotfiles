@@ -1,0 +1,60 @@
+# Breeze GRUB theme
+#
+# 2018, Gustavo Castro < gustawho [at] gmail [dot] com >
+#
+# Some rights reserved. This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License.
+#
+
+desktop-image: "background.png"
+
+# colors are taken from the breeze default theme
+title-text: "Options"
+title-font: "Hack 18"
+title-color: "#eff0f1"
+message-font: "Hack 18"
+message-color: "#eff0f1"
+terminal-font: "Hack 18"
+terminal-box: "terminal_*.png"
+
++ boot_menu {
+  left = 20%
+  width = 60%
+  top = 30%
+  height = 40%
+
+  menu_pixmap_style = "boot_menu_*.png"
+
+  item_font = "Hack 22"
+  # breeze inactive text color
+  item_color = "#7f8c8d"
+  item_height = 48
+  item_icon_space = 8
+  item_spacing = 5
+  item_padding = 5
+
+  selected_item_font = "Hack 22"
+  selected_item_color= "#eff0f1"
+  selected_item_pixmap_style = "select_*.png"
+
+  icon_height = 48
+  icon_width = 48
+
+  scrollbar = true
+  scrollbar_width = 10
+  scrollbar_thumb = "slider_*.png"
+}
+
++ progress_bar {
+  id = "__timeout__"
+  text = "@TIMEOUT_NOTIFICATION_SHORT@"
+
+  left = 95%
+  width = 48
+  top = 95%
+  height = 48
+
+  text_color = "#eff0f1"
+
+  bar_style = "*"
+  highlight_style = "*"
+}

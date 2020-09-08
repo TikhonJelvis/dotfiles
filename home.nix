@@ -57,6 +57,8 @@ in
 
   fonts.fontconfig.enable = true;
 
+  news.display = "silent";
+
   programs = {
     home-manager.enable = true;
 
