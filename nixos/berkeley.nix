@@ -7,7 +7,6 @@
     ];
 
   networking.hostName = "tikhon-nixos-berkeley";
-
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -16,13 +15,23 @@
         enable = true;
         devices = [ "nodev" ];
         efiSupport = true;
-        useOSProber = true;
+        useOSProber = false;
         version = 2;
+        splashImage = ./grub/breeze/background.png;
+        theme = ./grub/breeze;
         extraEntries = ''
-          menuentry "Restart" {
+          menuentry "Windows" --class windows {
+            insmod part_gpt
+            insmod fat
+            insmod search_fs_uuid
+            insmod chain
+            search --no-floppy --fs-uuid --set=root CEA0-0302
+            chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+          }
+          menuentry "Restart" --class restart {
             reboot
           }
-          menuentry "Turn Off" {
+          menuentry "Turn Off" --class shutdown {
             halt
           }
         '';

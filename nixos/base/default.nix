@@ -59,26 +59,10 @@
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  # environment.systemPackages = with pkgs; [];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  #   pinentryFlavor = "gnome3";
-  # };
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.openssh.enable = true;
 
   # Enable sound.
   sound.enable = true;
@@ -102,7 +86,7 @@
     }];
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Don't forget to set a password with ‘passwd’.
   users.users = {
     tikhon = {
       isNormalUser = true;

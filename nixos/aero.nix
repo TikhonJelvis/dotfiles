@@ -40,7 +40,7 @@
         splashImage = ./grub/breeze/background.png;
         theme = ./grub/breeze;
         extraEntries = ''
-          menuentry "Windows 10" --class windows {
+          menuentry "Windows" --class windows {
             insmod part_gpt
             insmod fat
             insmod search_fs_uuid
