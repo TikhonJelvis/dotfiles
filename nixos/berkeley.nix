@@ -2,10 +2,11 @@
 
 {
   imports =
-    [ ./base-configuration.nix
+    [ ./base
+      ./hardware-configuration/berkeley.nix
     ];
 
-  networking.hostname = "tikhon-nixos-berkeley";
+  networking.hostName = "tikhon-nixos-berkeley";
 
   boot = {
     loader = {
