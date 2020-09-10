@@ -781,8 +781,7 @@ the current file."
          '((company-capf company-files))))
   (add-hook 'racer-mode-hook 'my-racer-mode-hook)
 
-  (add-hook 'racer-mode-hook #'company-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode))
+  (add-hook 'racer-mode-hook #'company-mode))
 
                                         ; SKETCH
 (use-package sketch-mode
