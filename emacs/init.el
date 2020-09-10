@@ -374,6 +374,7 @@ This uses the `buffer-face' minor mode."
   (push '("INVESTIGATE" . "") prettify-symbols-alist)
   (push '("DONE" . "✔") prettify-symbols-alist)
   (push '("CANCELED" . "") prettify-symbols-alist)
+  (push '("PROJECT" . "") prettify-symbols-alist)
   (prettify-symbols-mode 1))
 
 (use-package org
