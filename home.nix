@@ -12,7 +12,7 @@ let
   # Different kinds of packages I use
   packages = with pkgs;
     let
-      applications = [ spectacle synergy zoom-us ];
+      applications = [ slack spectacle synergy zoom-us ];
       development  = [ ghc niv ];
       utils        = [ aspell-with-dicts unzip ];
     in applications ++ development ++ utils;
