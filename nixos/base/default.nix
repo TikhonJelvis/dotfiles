@@ -36,6 +36,9 @@
       dates = "23:00";
       options = "--delete-older-than 30d";
     };
+    extraOptions = ''
+    http-connections = 0
+    '';
   };
 
   networking = {
