@@ -113,11 +113,14 @@ interface and inserts it at point."
 (use-package ido
   :config
   (ido-mode t)
-  (setq ido-default-buffer-method 'selected-window)
 
   ;; Set C-x C-b to switching buffer—for some reason, I always hit by
   ;; accident. It's annoying!
-  :bind ("C-x C-b" . ido-switch-buffer))
+  :bind ("C-x C-b" . ido-switch-buffer)
+
+  :custom
+  (ido-default-buffer-method 'selected-window)
+  (ido-auto-merge-work-directories-length -1))
 
 ;; I don't like tabs very much:
 (setq-default indent-tabs-mode nil)
