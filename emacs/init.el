@@ -391,6 +391,9 @@ This uses the `buffer-face' minor mode."
    '(("t" "Todo" entry (file "Tasks.org")
       "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
 
+  (org-refile-targets
+   '((org-agenda-files :maxlevel . 3)))
+
   :bind (("C-c l" . org-store-link)
          ("C-c c" . org-capture)
 
@@ -743,10 +746,7 @@ the current file."
 (use-package rust-mode
   :ensure t
   :mode "\\.rs\\'"
-  :hook (rust-mode . flycheck-mode)
-
-  :bind (:map rust-mode-map
-         ("C-c C-t" . racer-describe)))
+  :hook (rust-mode . flycheck-mode))
 
 (use-package cargo
   :ensure t
@@ -768,23 +768,6 @@ the current file."
   :ensure t
   :after rust-mode
   :hook (rust-mode . flycheck-rust-setup))
-
-(use-package racer
-  :ensure t
-  :after rust-mode
-  :hook (rust-mode . racer-mode)
-
-  :custom
-  (racer-rust-src-path nil)
-  (racer-cmd "racer")
-
-  :config
-  (defun my-racer-mode-hook ()
-    (set (make-local-variable 'company-backends)
-         '((company-capf company-files))))
-  (add-hook 'racer-mode-hook 'my-racer-mode-hook)
-
-  (add-hook 'racer-mode-hook #'company-mode))
 
                                         ; SKETCH
 (use-package sketch-mode
