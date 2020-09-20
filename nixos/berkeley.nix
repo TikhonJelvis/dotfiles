@@ -10,7 +10,14 @@
 
   services.xserver.wacom.enable = true;
 
-  networking.hostName = "tikhon-nixos-berkeley";
+  networking = {
+    hostName = "tikhon-nixos-berkeley";
+
+    interfaces.enp35s0.ipv4.addresses = [
+      { address = "192.168.0.37"; prefixLength = 24; }
+    ];
+  };
+
   boot = {
     loader = {
       systemd-boot.enable = true;
