@@ -6,6 +6,10 @@
       ./hardware-configuration/berkeley.nix
     ];
 
+  environment.systemPackages = with pkgs; [ wacomtablet ];
+
+  services.xserver.wacom.enable = true;
+
   networking.hostName = "tikhon-nixos-berkeley";
   boot = {
     loader = {
