@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+nix run -f run.nix -c ghci -package xmonad -package xmonad-contrib

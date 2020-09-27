@@ -730,6 +730,7 @@ the current file."
 
   (put 'haskell-process-wrapper-function 'safe-local-variable 'functionp)
   (put 'haskell-process-args-cabal-repl 'safe-local-variable 'listp)
+  (put 'haskell-process-type 'safe-local-variable 'symbolp)
 
   (setq inferior-haskell-find-project-root nil)
 

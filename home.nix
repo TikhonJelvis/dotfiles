@@ -18,7 +18,7 @@ let
     in applications ++ development ++ utils;
 in
 {
-  imports = [ ./emacs.nix ./firefox.nix ./xmonad.nix ];
+  imports = [ ./emacs ./firefox ./xmonad ];
 
   nixpkgs.config = {
     allowUnfree = true;

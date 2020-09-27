@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  sources = import ./nix/sources.nix;
+  sources = import ../nix/sources.nix;
   emacs-overlay = import sources.emacs-overlay;
 in
 {
@@ -19,13 +19,13 @@ in
     enable = true;
     package = pkgs.emacsWithPackagesFromUsePackage {
       package = pkgs.emacs;
-      config = ./emacs/init.el;
+      config = ./init.el;
     };
   };
 
   home.file = {
     ".emacs.d" = {
-      source = ./emacs;
+      source = ./.emacs.d;
       recursive = true;
     };
   };
