@@ -89,7 +89,7 @@ in
       enable = true;
       ignores = [ "*~" ];
 
-      userName = "tikhon";
+      userName = "Tikhon Jelvis";
       userEmail = "tikhon@jelv.is";
 
       extraConfig = {
