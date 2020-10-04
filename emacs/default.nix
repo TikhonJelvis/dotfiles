@@ -28,5 +28,8 @@ in
       source = ./.emacs.d;
       recursive = true;
     };
+    ".emacs" = {
+      source = ./init.el;
+    };
   };
 }

@@ -421,8 +421,6 @@ This uses the `buffer-face' minor mode."
   (add-to-list 'org-structure-template-alist
                '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
   (add-to-list 'org-structure-template-alist
-               '("f" "#+ATTR_REVEAL: :frag roll-in"))
-  (add-to-list 'org-structure-template-alist
                '("p" ":PROPERTIES:\n:CREATED: ?\n:END:"))
 
   ;; Spellcheck my org mode files.
@@ -432,11 +430,16 @@ This uses the `buffer-face' minor mode."
   ;; Allow markup in the middle of words.
   (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
   (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
-  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components))
 
+(use-package ox-reveal
+  :ensure t
+  :config
   ;; Configuring title page formatting with #+OPTION is too fiddly, so
   ;; we want to override the elisp variable instead
-  (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
+  (put 'org-reveal-title-slide 'safe-local-variable 'stringp)
+  (add-to-list 'org-structure-template-alist
+               '("f" "#+ATTR_REVEAL: :frag roll-in")))
 
 (use-package el-patch
   :ensure t
