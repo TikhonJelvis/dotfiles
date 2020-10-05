@@ -434,6 +434,9 @@ This uses the `buffer-face' minor mode."
 
 (use-package ox-reveal
   :ensure t
+  :bind (:map org-mode-map
+         ("M-S" . org-reveal-export-current-subtree)
+         ("M-R" . org-reveal-export-to-html))
   :config
   ;; Configuring title page formatting with #+OPTION is too fiddly, so
   ;; we want to override the elisp variable instead
