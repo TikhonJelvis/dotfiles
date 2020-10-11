@@ -18,7 +18,7 @@ in
   programs.emacs = {
     enable = true;
     package = pkgs.emacsWithPackagesFromUsePackage {
-      package = pkgs.emacs;
+      package = pkgs.emacsGcc;
       config = ./init.el;
     };
   };
