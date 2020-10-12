@@ -169,6 +169,11 @@ interface and inserts it at point."
      `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
      `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face)))))))
 
+;; Adds icons to company popups.
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
+
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -306,8 +311,8 @@ This uses the `buffer-face' minor mode."
 (use-package flycheck
   :ensure t
   :hook (python-mode . flycheck-mode)
-  :custom (flycheck-check-syntax-automatically
-           '(save mode-enabled)))
+  :custom
+  (flycheck-check-syntax-automatically '(save mode-enabled)))
 
 
                                         ; NIX
@@ -343,6 +348,34 @@ This uses the `buffer-face' minor mode."
                                         ; YAML
 (use-package yaml-mode
   :ensure t)
+
+                                        ; YASNIPPET
+(use-package yasnippet
+  :ensure t)
+
+                                        ; PROJECTILE
+(use-package projectile
+  :ensure t)
+
+                                        ; LSP
+(use-package lsp-mode
+  :ensure t
+  :custom
+  (lsp-eldoc-hook nil)
+  (lsp-ui-doc-show-with-cursor nil)
+  (lsp-ui-doc-position 'top)
+  (lsp-ui-doc-alignment 'window)
+  :bind
+  (:map lsp-mode-map
+   ("C-c C-d" . lsp-ui-doc-show)))
+
+(use-package lsp-ui
+  :ensure t)
+
+(use-package dap-mode
+  :ensure t
+  :init
+  (setq gud-key-prefix (kbd "C-c C-s")))
 
                                         ; MAGIT
 (use-package magit
@@ -675,17 +708,40 @@ prompt to name>."
   :mode "Jenkinsfile\\'")
 
                                         ; PYTHON
-(use-package elpy
-  :ensure t
-  :custom
-  (elpy-rpc-virtualenv-path 'current)
+(use-package pyvenv
+  :ensure t)
 
-  :config
-  (elpy-enable))
-
-(use-package flycheck-mypy
+(use-package auto-virtualenv
   :ensure t
-  :requires flycheck)
+  :after pyvenv
+  :hook (python-mode . auto-virtualenv-set-virtualenv))
+
+(use-package python-docstring
+  :ensure t)
+
+(use-package python-pytest
+  :ensure t
+  :bind
+  (:map python-mode-map
+   ("M-S" . python-pytest-dispatch)))
+
+(defun my-python-lsp-hook ()
+  (require 'lsp-python-ms)
+  (lsp))
+(use-package lsp-python-ms
+  :ensure t
+  :hook (python-mode . my-python-lsp-hook)
+  :init
+  (setq lsp-python-ms-executable (executable-find "python-language-server")))
+
+(defun my-flycheck-pycheckers-hook ()
+  (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
+(use-package flycheck-pycheckers
+  :ensure t
+  :after lsp-python-ms
+  :hook
+  (flycheck-mode . flycheck-pycheckers-setup)
+  (python-mode . my-flycheck-pycheckers-hook))
 
                                         ; THETA
 
