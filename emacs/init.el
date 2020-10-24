@@ -370,7 +370,9 @@ This uses the `buffer-face' minor mode."
    ("C-c C-d" . lsp-ui-doc-show)))
 
 (use-package lsp-ui
-  :ensure t)
+  :ensure t
+  :custom
+  (lsp-ui-sideline-enable nil))
 
 (use-package dap-mode
   :ensure t
