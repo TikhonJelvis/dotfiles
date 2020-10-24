@@ -417,15 +417,14 @@ This uses the `buffer-face' minor mode."
 
 (use-package org
   :after prog-mode
+
   :custom
   (org-todo-keywords
    '((type "TODO" "CONSIDER" "FOLLOW-UP" "INVESTIGATE" "|" "DONE" "CANCELED")
      (sequence "PROJECT" "|" "DONE")))
-
   (org-capture-templates
    '(("t" "Todo" entry (file "Tasks.org")
       "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
-
   (org-refile-targets
    '((org-agenda-files :maxlevel . 3)))
 
@@ -437,6 +436,15 @@ This uses the `buffer-face' minor mode."
          ("M-}" . outline-next-visible-heading)
          ("C-c C-," . org-promote-subtree)
          ("C-c C-." . org-demote-subtree))
+
+  :hook (org-insert-heading . org-insert-with-timestamp)
+
+  :init
+  (defun org-insert-with-timestamp ()
+    (when (member "CREATED" (org-buffer-property-keys))
+      (let* ((fmt (concat "[" (substring (cdr org-time-stamp-formats) 1 -1) "]"))
+             (timestamp (format-time-string fmt (current-time))))
+        (org-set-property "CREATED" timestamp))))
 
   :config
   (add-hook 'org-mode-hook 'org-mode-prettify-hook)
