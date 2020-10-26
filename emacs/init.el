@@ -424,7 +424,7 @@ This uses the `buffer-face' minor mode."
      (sequence "PROJECT" "|" "DONE")))
   (org-capture-templates
    '(("t" "Todo" entry (file "Tasks.org")
-      "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:")))
+      "* TODO %?\n  SCHEDULED: %T\n:PROPERTIES:\n:CREATED: %U\n:END:")))
   (org-refile-targets
    '((org-agenda-files :maxlevel . 3)))
 
