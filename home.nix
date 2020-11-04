@@ -12,13 +12,12 @@ let
   # Different kinds of packages I use
   packages = with pkgs;
     let
-      applications = [ slack spectacle synergy zoom-us ];
       development  = [ python3 ghc niv ];
-      utils        = [ aspell-with-dicts unrar unzip ];
-    in applications ++ development ++ utils;
+      utils        = [ aspell-with-dicts ];
+    in development ++ utils;
 in
 {
-  imports = [ ./emacs ./firefox ./xmonad ];
+  imports = [ ./emacs ];
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -34,8 +33,8 @@ in
   home = {
     inherit packages sessionVariables;
 
-    username = "tikhon";
-    homeDirectory = "/home/tikhon";
+    username = "z0028sn";
+    homeDirectory = "/Users/z0028sn";
 
     file = {
       "." = {
@@ -98,14 +97,5 @@ in
         core.fileMode = false;
       };
     };
-  };
-
-  services = {
-    dropbox = {
-      enable = true;
-      path = "${config.home.homeDirectory}/Dropbox";
-    };
-
-    lorri.enable = true;
   };
 }
