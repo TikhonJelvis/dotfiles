@@ -665,6 +665,29 @@ really common name like 'src' or 'bin'."
           (find-useful-directory-name up)
         base)))
 
+  (defun shell-prompt (name directory)
+    "Returns a shell prompt string for the given shell name and
+directory in the format that the PS1 environment variable
+expects.
+
+This function makes it easy to have different prompts in
+different context (eg explicitly mark out remote shells vs local
+ones)."
+    (setq name (format-shell-name name))
+    (if (file-remote-p directory)
+        (concat "\\033[35m" "ssh"
+                "\\033[37m" ":"
+                "\\033[31m" name
+                "\\033[37m" ":"
+                "\\033[32m" "\\W"
+                "\\033[37m" ">"
+                "\\033[0m")
+      (concat "\\033[31m" name
+              "\\033[37m" ":"
+              "\\033[32m" "\\W"
+              "\\033[37m" ">"
+              "\\033[0m")))
+
   (defun new-shell (name)
     "Opens a new shell buffer with the given name in
 asterisks (*name*) in the current directory with and changes the
@@ -672,31 +695,20 @@ prompt to name>."
     (interactive "sName: ")
     (when (equal name "")
       (setq name (find-useful-directory-name default-directory)))
-    (setq name (format-shell-name name))
     (pop-to-buffer (concat "<*" name "*>"))
-    (unless (eq major-mode 'shell-mode)
+    (unless (get-buffer-process (current-buffer))
       (shell (current-buffer))
+      (let* ((process (get-buffer-process (current-buffer)))
+             (remote (file-remote-p default-directory)))
+        (defun send (str) (comint-simple-send process str))
+        (send "export TERM='xterm-256color'")
+        (unless remote
+          (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))))
+        (send (concat "export PS1=\"" (shell-prompt name default-directory) "\""))
 
-      (comint-simple-send
-       (get-buffer-process (current-buffer))
-       "export TERM='xterm-256color'")
-      (comint-simple-send
-       (get-buffer-process (current-buffer))
-       (format "export PAGER=%s"
-               (expand-file-name "~/local/bin/epage")))
-      (comint-simple-send
-       (get-buffer-process (current-buffer))
-       (concat "export PS1='"
-               "\033[31m" name
-               "\033[37m" ":"
-               "\033[32m" "\\W"
-               "\033[37m" ">"
-               "\033[0m"
-               "'"))
-
-      (sleep-for 0 200)
-      (comint-send-input)
-      (comint-clear-buffer))))
+        (sleep-for 0 200)
+        (comint-send-input)
+        (comint-clear-buffer)))))
 
 (use-package xterm-color
   :ensure t
@@ -710,7 +722,7 @@ prompt to name>."
           ,(from-face 'font-lock-variable-name-face)
           ,(from-face 'font-lock-constant-face)
           ,(from-face 'font-lock-string-face)
-          ,(from-face 'font-lock-function-name-face)
+          ,(from-face 'font-lock-warning-face)
           ,(from-face 'font-lock-keyword-face)
           ,(from-face 'font-lock-preprocessor-face)
           ])
