@@ -11,6 +11,7 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil)
 
+  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen)
   (set-face-attribute 'default nil :height 150))
 
                                         ; UTILITY FUNCTIONS
@@ -318,6 +319,19 @@ This uses the `buffer-face' minor mode."
 
 
                                         ; NIX
+;; Make sure Emacs sees executables from Nix correctly.
+(use-package exec-path-from-shell
+  :ensure t
+  :custom
+  (exec-path-from-shell-check-startup-files nil)
+  :config
+  (let ((nix-vars '("NIX_LINK"
+                    "NIX_PATH"
+                    "NIX_SSL_CERT_FILE"
+                    "SSL_CERT_FILE")))
+    (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
+    (mapcar 'exec-path-from-shell-copy-env nix-vars)))
+
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
@@ -385,7 +399,12 @@ This uses the `buffer-face' minor mode."
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)
-         ("C-c g" . magit-clone))
+         ("C-c g" . magit-clone)
+
+         :map magit-file-section-map
+         ("RET" . magit-diff-visit-file-other-window))
+
+
 
   :custom
   (magit-commit-ask-to-stage 'stage)
@@ -466,6 +485,8 @@ This uses the `buffer-face' minor mode."
   (add-to-list 'org-structure-template-alist
                '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
   (add-to-list 'org-structure-template-alist
+               '("f" "#+ATTR_REVEAL: :frag roll-in"))
+  (add-to-list 'org-structure-template-alist
                '("p" ":PROPERTIES:\n:CREATED: ?\n:END:"))
 
   ;; Spellcheck my org mode files.
@@ -475,7 +496,11 @@ This uses the `buffer-face' minor mode."
   ;; Allow markup in the middle of words.
   (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
   (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
-  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components))
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
+  ;; Configuring title page formatting with #+OPTION is too fiddly, so
+  ;; we want to override the elisp variable instead
+  (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
 (use-package ox-reveal
   :ensure t
@@ -862,8 +887,12 @@ the current file."
   :custom (array-forth-trim-markers t))
 
                                         ; MARKDOWN
+(use-package visual-fill-column
+  :ensure t)
+
 (use-package markdown-mode
   :ensure t
+  :after visual-fill-column
   :mode "\\.md\\'"
 
   :custom
