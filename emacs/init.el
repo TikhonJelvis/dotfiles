@@ -9,7 +9,9 @@
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier nil))
+  (setq mac-option-modifier nil)
+
+  (set-face-attribute 'default nil :height 150))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
