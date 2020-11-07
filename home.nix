@@ -23,7 +23,7 @@ in
     allowUnfree = true;
 
     packageOverrides = pkgs: {
-      stable = import sources."nixpkgs-20.03" {};
+      stable = import sources."nixpkgs-stable" {};
       nur = import sources.NUR {
         inherit pkgs;
       };

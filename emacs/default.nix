@@ -3,6 +3,11 @@
 let
   sources = import ../nix/sources.nix;
   emacs-overlay = import sources.emacs-overlay;
+  emacs-darwin = import ./emacs-darwin.nix { inherit pkgs; };
+
+  emacs = if pkgs.stdenv.isDarwin
+          then emacs-darwin
+          else pkgs.emacsGcc;
 in
 {
   nixpkgs.overlays = [ emacs-overlay ];
@@ -16,7 +21,7 @@ in
   programs.emacs = {
     enable = true;
     package = pkgs.emacsWithPackagesFromUsePackage {
-      package = import ./emacs-darwin.nix { inherit pkgs; };
+      package = emacs;
       config = ./init.el;
     };
   };

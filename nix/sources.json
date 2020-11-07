@@ -59,7 +59,7 @@
         "url": "https://github.com/nmattia/niv/archive/9d35b9e4837ab88517210b1701127612c260eccf.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "nixpkgs": {
+    "nixpkgs-darwin": {
         "branch": "nixpkgs-20.09-darwin",
         "description": "Nix Packages collection",
         "homepage": "",
@@ -69,6 +69,18 @@
         "sha256": "06nl01b144snj6rky8f08plqjdvqi77xb0qn94mc30dw35kp3n8n",
         "type": "tarball",
         "url": "https://github.com/nixos/nixpkgs/archive/cfe2c01e86d88938fc9fc7b26c8f1ba568244bcb.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-stable": {
+        "branch": "nixos-20.09",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "d105075a1fd870b1d1617a6008cb38b443e65433",
+        "sha256": "1jcs44wn0s6mlf2jps25bvcai1rij9b2dil6zcj8zqwf2i8xmqjh",
+        "type": "tarball",
+        "url": "https://github.com/nixos/nixpkgs/archive/d105075a1fd870b1d1617a6008cb38b443e65433.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

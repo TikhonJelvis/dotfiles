@@ -1,4 +1,6 @@
-{ pkgs
+{ sources ? import ../nix/sources.nix
+, emacs-overlay ? import sources.emacs-overlay
+, pkgs ? import sources.nixpkgs-darwin { overlays = [ emacs-overlay ]; }
 , ...
 }:
 
