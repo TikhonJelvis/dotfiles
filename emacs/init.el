@@ -377,7 +377,10 @@ This uses the `buffer-face' minor mode."
 (use-package dap-mode
   :ensure t
   :init
-  (setq gud-key-prefix (kbd "C-c C-s")))
+  (setq gud-key-prefix (kbd "C-c C-s"))
+
+  :config
+  (require 'dap-python))
 
                                         ; MAGIT
 (use-package magit
