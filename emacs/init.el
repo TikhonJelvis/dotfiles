@@ -11,8 +11,7 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil)
 
-  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen)
-  (set-face-attribute 'default nil :height 150))
+  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -774,14 +773,15 @@ prompt to name>."
   (:map python-mode-map
    ("M-S" . python-pytest-dispatch)))
 
-(defun my-python-lsp-hook ()
-  (require 'lsp-python-ms)
-  (lsp))
-(use-package lsp-python-ms
-  :ensure t
-  :hook (python-mode . my-python-lsp-hook)
-  :init
-  (setq lsp-python-ms-executable (executable-find "python-language-server")))
+(unless (eq system-type 'darwin)
+  (defun my-python-lsp-hook ()
+    (require 'lsp-python-ms)
+    (lsp))
+  (use-package lsp-python-ms
+    :ensure t
+    :hook (python-mode . my-python-lsp-hook)
+    :init
+    (setq lsp-python-ms-executable (executable-find "python-language-server"))))
 
 (defun my-flycheck-pycheckers-hook ()
   (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
