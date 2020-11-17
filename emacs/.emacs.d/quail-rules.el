@@ -5,7 +5,8 @@
                       ("\\To" ?⇒)
                       ("\\::" ?∷)
                       ("''" ?`)
-                      ("\\x" ?×))
+                      ("\\x" ?×)
+                      ("\\tm" ?™))
 
   ;; Use ; in place of \
   (quail-defrule ";" (quail-lookup-key "\\")))
