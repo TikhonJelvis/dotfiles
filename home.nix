@@ -12,7 +12,7 @@ let
   # Different kinds of packages I use
   packages = with pkgs;
     let
-      applications = [ slack spectacle synergy zoom-us ];
+      applications = [ krita chromium gwenview slack spectacle synergy zoom-us ];
       development  = [ python3 ghc niv ];
       utils        = [ aspell-with-dicts unrar unzip ];
     in applications ++ development ++ utils;
