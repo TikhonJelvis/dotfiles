@@ -462,6 +462,7 @@ This uses the `buffer-face' minor mode."
 
   (setq org-default-notes-file (concat org-directory "/Notes.org"))
 
+  (require 'org-tempo)
   ;; Set up the templates I use (triggered by typing < followed by a
   ;; letter followed by <TAB>)
   (add-to-list 'org-structure-template-alist
@@ -549,7 +550,8 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 
   (setq org-agenda-files
         (list (concat org-directory "/Tasks.org")
-              (concat org-directory "/Books.org")))
+              (concat org-directory "/Books.org")
+              (concat org-directory "/Projects.org")))
 
 
   :config/el-patch
