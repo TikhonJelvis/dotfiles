@@ -466,12 +466,6 @@ This uses the `buffer-face' minor mode."
   (setq org-default-notes-file (concat org-directory "/Notes.org"))
 
   (require 'org-tempo)
-  ;; Set up the templates I use (triggered by typing < followed by a
-  ;; letter followed by <TAB>)
-  (add-to-list 'org-structure-template-alist
-               '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
-  (add-to-list 'org-structure-template-alist
-               '("p" ":PROPERTIES:\n:CREATED: ?\n:END:"))
 
   ;; Spellcheck my org mode files.
   (add-hook 'org-mode-hook 'flyspell-mode)
