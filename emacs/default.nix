@@ -7,9 +7,6 @@ in
 {
   nixpkgs.overlays = [ emacs-overlay ];
 
-  # External packages only needed for my Emacs setup:
-  home.packages = with pkgs; [ python-language-server ];
-
   services.emacs = {
     enable = true;
 

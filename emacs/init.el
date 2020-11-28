@@ -312,7 +312,10 @@ This uses the `buffer-face' minor mode."
   :ensure t
   :hook (python-mode . flycheck-mode)
   :custom
-  (flycheck-check-syntax-automatically '(save mode-enabled)))
+  (flycheck-check-syntax-automatically '(save mode-enabled))
+  :config
+  (setq flycheck-executable-find
+        (lambda (cmd) (direnv-update-environment default-directory) (executable-find cmd))))
 
 
                                         ; NIX
@@ -741,15 +744,19 @@ prompt to name>."
    ("M-S" . python-pytest-dispatch)))
 
 (defun my-python-lsp-hook ()
+  (direnv-update-environment default-directory)
+  (make-local-variable 'lsp-python-ms-executable)
+  (setq lsp-python-ms-executable (executable-find "python-language-server"))
   (require 'lsp-python-ms)
-  (lsp))
+  (lsp-deferred))
 (use-package lsp-python-ms
   :ensure t
   :hook (python-mode . my-python-lsp-hook)
   :init
-  (setq lsp-python-ms-executable (executable-find "python-language-server")))
+  (setq lsp-python-ms-executable "python-language-server"))
 
 (defun my-flycheck-pycheckers-hook ()
+  (direnv-update-environment)
   (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
 (use-package flycheck-pycheckers
   :ensure t
