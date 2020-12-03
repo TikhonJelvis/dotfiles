@@ -12,14 +12,13 @@ let
   # Different kinds of packages I use
   packages = with pkgs;
     let
-      applications = [ krita chromium gwenview slack spectacle synergy ];
-      video        = [ guvcview obs-ndi obs-studio zoom-us ];
+      applications = [ krita chromium gwenview slack spectacle synergy zoom-us ];
       development  = [ python3 ghc niv ];
       utils        = [ aspell-with-dicts unrar unzip ];
-    in applications ++ video ++ development ++ utils;
+    in applications ++ development ++ utils;
 in
 {
-  imports = [ ./emacs ./firefox ./xmonad ];
+  imports = [ ./emacs ./firefox ./xmonad ./video ];
 
   nixpkgs.config = {
     allowUnfree = true;
