@@ -212,6 +212,12 @@ interface and inserts it at point."
   :ensure t)
 (load-file "~/.emacs.d/mode-line.el")
 
+
+;; Make visual-line-mode configurable to fill-column. Not great, but
+;; gets the job done...
+(use-package visual-fill-column
+  :ensure t)
+
                                         ; KEY REBINDINGS
 ;; Do nothing on C-x C-c:
 (global-unset-key (kbd "C-x C-c"))
