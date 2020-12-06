@@ -111,12 +111,14 @@ interface and inserts it at point."
          ("M-F" . windmove-right)))
 
 (use-package ido
-  :config
-  (ido-mode t)
+  :demand t
 
   ;; Set C-x C-b to switching buffer—for some reason, I always hit by
   ;; accident. It's annoying!
   :bind ("C-x C-b" . ido-switch-buffer)
+
+  :config
+  (ido-mode t)
 
   :custom
   (ido-default-buffer-method 'selected-window)
@@ -413,7 +415,8 @@ This uses the `buffer-face' minor mode."
   (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook))
 
                                         ; ORG-MODE
-(use-package prog-mode)
+(use-package prog-mode
+  :demand t)
 
 (defun org-mode-prettify-hook ()
   "Configure prettify-symbols to replace todo/consider/done with
@@ -482,17 +485,20 @@ This uses the `buffer-face' minor mode."
   (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
   (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components))
 
+(use-package htmlize
+  :ensure t)
+
 (use-package ox-reveal
   :ensure t
+  :after org htmlize
+  :demand t
   :bind (:map org-mode-map
          ("M-S" . org-reveal-export-current-subtree)
          ("M-R" . org-reveal-export-to-html))
   :config
   ;; Configuring title page formatting with #+OPTION is too fiddly, so
   ;; we want to override the elisp variable instead
-  (put 'org-reveal-title-slide 'safe-local-variable 'stringp)
-  (add-to-list 'org-structure-template-alist
-               '("f" "#+ATTR_REVEAL: :frag roll-in")))
+  (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
 (use-package el-patch
   :ensure t
