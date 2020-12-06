@@ -318,6 +318,7 @@ This uses the `buffer-face' minor mode."
                                         ; FLYCHECK
 (use-package flycheck
   :ensure t
+  :demand t
   :hook (python-mode . flycheck-mode)
   :custom
   (flycheck-check-syntax-automatically '(save mode-enabled))
@@ -371,19 +372,24 @@ This uses the `buffer-face' minor mode."
                                         ; LSP
 (use-package lsp-mode
   :ensure t
+  :demand t
   :custom
   (lsp-eldoc-hook nil)
-  (lsp-ui-doc-show-with-cursor nil)
-  (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-alignment 'window)
+  (lsp-diagnostics-provider :flycheck)
+  :config
+  (lsp-diagnostics-mode 1)
   :bind
   (:map lsp-mode-map
-   ("C-c C-d" . lsp-ui-doc-show)))
+        ("C-c C-d" . lsp-ui-doc-show)))
 
 (use-package lsp-ui
   :ensure t
   :custom
-  (lsp-ui-sideline-enable nil))
+  (lsp-ui-sideline-enable nil)
+
+  (lsp-ui-doc-show-with-cursor nil)
+  (lsp-ui-doc-position 'top)
+  (lsp-ui-doc-alignment 'window))
 
 (use-package dap-mode
   :ensure t
@@ -749,27 +755,30 @@ prompt to name>."
   (:map python-mode-map
    ("M-S" . python-pytest-dispatch)))
 
-(defun my-python-lsp-hook ()
+(use-package flycheck-pycheckers
+  :ensure t
+  :after flycheck)
+
+(defun my-python-hook ()
   (direnv-update-environment default-directory)
   (make-local-variable 'lsp-python-ms-executable)
   (setq lsp-python-ms-executable (executable-find "python-language-server"))
+
   (require 'lsp-python-ms)
-  (lsp-deferred))
+  (lsp-deferred)
+
+  (unless (member 'python-pycheckers flycheck-checkers)
+    (flycheck-pycheckers-setup))
+  (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
+
 (use-package lsp-python-ms
   :ensure t
-  :hook (python-mode . my-python-lsp-hook)
-  :init
-  (setq lsp-python-ms-executable "python-language-server"))
+  :after lsp-mode flycheck-pycheckers
 
-(defun my-flycheck-pycheckers-hook ()
-  (direnv-update-environment)
-  (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
-(use-package flycheck-pycheckers
-  :ensure t
-  :after lsp-python-ms
-  :hook
-  (flycheck-mode . flycheck-pycheckers-setup)
-  (python-mode . my-flycheck-pycheckers-hook))
+  :init
+  (setq lsp-python-ms-executable "python-language-server")
+
+  :hook (python-mode . my-python-hook))
 
                                         ; THETA
 
