@@ -68,6 +68,10 @@ in
         if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi
         if [ -e $HOME/local/etc/ssl/certs/tgt-ca-bundle.crt ]; then
           export NIX_SSL_CERT_FILE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt;
+          export SSL_CERT_FILE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
+          export REQUESTS_CA_BUNDLE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
+          export TGT_CA_BUNDLE_PATH=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
+          export AWS_CA_BUNDLE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
         fi
       '';
     };
