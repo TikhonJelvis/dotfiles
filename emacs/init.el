@@ -113,6 +113,8 @@ interface and inserts it at point."
          ("M-F" . windmove-right)))
 
 (use-package ido
+  :demand t
+
   :config
   (ido-mode t)
 
