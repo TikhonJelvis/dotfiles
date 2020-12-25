@@ -255,7 +255,7 @@ interface and inserts it at point."
 (toggle-input-method)
 
 ;; My quail customizations
-(load-file ".emacs.d/quail-rules.el")
+(load-file "~/.emacs.d/quail-rules.el")
 
 					; DIRED
 ;; Has to be above JABBER settings because it has a conflicting

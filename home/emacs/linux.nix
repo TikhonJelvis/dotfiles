@@ -2,7 +2,7 @@
 {
   imports = [ ./default.nix ];
 
-  emacs = pkgs.emacs;
+  emacs = pkgs.emacsGcc;
 
   services.emacs = {
     enable = true;

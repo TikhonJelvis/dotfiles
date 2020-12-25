@@ -11,7 +11,9 @@
    (quote
     ((python-shell-interpreter . "bin/nix-aware-python")
      (python-shell-interpreter . "nix-shell"))))
- '(send-mail-function (quote sendmail-send-it)))
+ '(send-mail-function (quote sendmail-send-it))
+ '(warning-suppress-log-types '((comp) (comp)))
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
