@@ -9,7 +9,7 @@ let
 
   packages = with pkgs;
     let
-      development  = [ python3 ghc niv ];
+      development  = [ ghc lorri niv python3 ];
       utils        = [ aspell-with-dicts ];
     in development ++ utils;
 in
@@ -27,9 +27,27 @@ in
     };
   };
 
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+
+    ## use lorri if available
+    stdlib = ''
+      eval "`declare -f use_nix | sed '1s/.*/_&/'`"
+      use_nix() {
+        if type lorri &>/dev/null; then
+          echo "direnv: using lorri from PATH ($(type -p lorri))"
+          eval "$(lorri direnv)"
+        else
+          _use_nix
+        fi
+      }
+    '';
+  };
+
   home = {
     inherit packages sessionVariables;
- 
+
     file = {
       "." = {
         source = ../files;
@@ -58,9 +76,9 @@ in
       inherit sessionVariables;
 
       initExtra = ''
-        if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ] 
-        then 
-          . $HOME/.nix-profile/etc/profile.d/nix.sh 
+        if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]
+        then
+          . $HOME/.nix-profile/etc/profile.d/nix.sh
         fi
       '';
     };

@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
 let
-  emacs-src = config.sources.emacs-nativcomp;
+  emacs-src = config.sources.emacs-nativecomp;
   emacs-darwin-base = pkgs.emacsGcc.override {
     srcRepo = true;
     nativeComp = true;
@@ -40,5 +40,5 @@ in
       chmod +x $out/bin/run-emacs.sh
       ln -snf $out/bin/run-emacs.sh $out/bin/emacs
     '';
-  })
+  });
 }
