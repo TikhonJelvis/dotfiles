@@ -53,6 +53,9 @@ in
         source = ../files;
         recursive = true;
       };
+      ".aspell.conf" = ''
+        ${config.homeDirectory}/.nix-profile/lib/aspell
+      '';
     };
 
     # This value determines the Home Manager release that your

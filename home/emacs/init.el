@@ -300,6 +300,8 @@ This uses the `buffer-face' minor mode."
 ;;   2. Is aspell installed to your Nix user profile? Run home-manager
 ;;   switch to make sure.
 (use-package flyspell
+  :demand t
+
   :init
   (defun flyspell-color-hook ()
     (set-face-attribute 'flyspell-duplicate nil
@@ -315,7 +317,8 @@ This uses the `buffer-face' minor mode."
   (ispell-personal-dictionary "~/Programming/dotfiles/.aspell.en.pws")
 
   :config
-  (add-hook 'flyspell-mode-hook 'flyspell-color-hook))
+  (add-hook 'flyspell-mode-hook 'flyspell-color-hook)
+  (ispell-start-process))
 
                                         ; FLYCHECK
 (use-package flycheck
