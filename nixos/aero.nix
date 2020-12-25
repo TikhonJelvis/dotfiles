@@ -14,6 +14,21 @@
 
   users.users.tikhon.extraGroups = [ "networkmanager" ];
 
+  hardware = {
+    bluetooth = {
+      enable = true;
+
+      config.General.Enable = "Source,Sink,Media,Socket";
+    };
+
+    pulseaudio = {
+      enable = true;
+
+      package = pkgs.pulseaudioFull;
+      extraModules = [ pkgs.pulseaudio-modules-bt ];
+    };
+  };
+
   # Trying to fix 1:30 (!) stop job during boot
   #
   # See: https://github.com/NixOS/nixpkgs/issues/60900
