@@ -11,8 +11,11 @@ pkgs.mkShell rec {
   NIX_PATH = pkgs.lib.concatStringsSep ":"
     ([ "nixpkgs=${pkgs-source}"
        "home-manager=${sources.home-manager}"
-     ] ++ pkgs.lib.optional (!pkgs.stdenv.isDarwin)
-       "nixos-config=/etc/nixos/configuration.nix"
+     ] ++ pkgs.lib.optionals (!pkgs.stdenv.isDarwin)
+       [
+         "nixos-config=/etc/nixos/configuration.nix"
+         "nixpkgs/nixos=${sources.nixos-stable}"
+       ]
     );
   HOME_MANAGER_CONFIG =
     if pkgs.stdenv.isDarwin
