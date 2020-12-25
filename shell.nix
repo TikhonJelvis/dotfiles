@@ -8,8 +8,12 @@ pkgs.mkShell rec {
   name = "home-manager-shell";
   buildInputs = [ pkgs.cachix pkgs.niv home-manager ];
 
-  NIX_PATH =
-    "nixpkgs=${pkgs-source}:home-manager=${sources.home-manager}";
+  NIX_PATH = pkgs.lib.concatStringsSep ":"
+    ([ "nixpkgs=${pkgs-source}"
+       "home-manager=${sources.home-manager}"
+     ] ++ pkgs.lib.optional (!pkgs.stdenv.isDarwin)
+       "nixos-config=/etc/nixos/configuration.nix"
+    );
   HOME_MANAGER_CONFIG =
     if pkgs.stdenv.isDarwin
     then "home/target-macbook.nix"
