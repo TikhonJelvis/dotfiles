@@ -53,8 +53,6 @@ in
   news.display = "silent";
 
   programs = {
-    home-manager.enable = true;
-
     bash = {
       enable = true;
       inherit sessionVariables;
