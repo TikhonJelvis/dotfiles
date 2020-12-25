@@ -1,8 +1,0 @@
-#! /usr/bin/env nix-shell
-#! nix-shell -i bash
-if "$DARWIN"
-then
-    home-manager -f ./home/target-macbook.nix "$@"
-else
-    home-manager -f ./home/linux.nix "$@"
-fi
