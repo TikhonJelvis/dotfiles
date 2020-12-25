@@ -426,8 +426,6 @@ This uses the `buffer-face' minor mode."
          :map magit-file-section-map
          ("RET" . magit-diff-visit-file-other-window))
 
-
-
   :custom
   (magit-commit-ask-to-stage 'stage)
   (magit-clone-set-remote.pushDefault t)
