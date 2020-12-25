@@ -9,7 +9,9 @@
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier nil))
+  (setq mac-option-modifier nil)
+
+  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -328,6 +330,19 @@ This uses the `buffer-face' minor mode."
 
 
                                         ; NIX
+;; Make sure Emacs sees executables from Nix correctly.
+(use-package exec-path-from-shell
+  :ensure t
+  :custom
+  (exec-path-from-shell-check-startup-files nil)
+  :config
+  (let ((nix-vars '("NIX_LINK"
+                    "NIX_PATH"
+                    "NIX_SSL_CERT_FILE"
+                    "SSL_CERT_FILE")))
+    (exec-path-from-shell-initialize) ; $PATH, $MANPATH and set exec-path
+    (mapcar 'exec-path-from-shell-copy-env nix-vars)))
+
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
@@ -403,7 +418,12 @@ This uses the `buffer-face' minor mode."
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)
-         ("C-c g" . magit-clone))
+         ("C-c g" . magit-clone)
+
+         :map magit-file-section-map
+         ("RET" . magit-diff-visit-file-other-window))
+
+
 
   :custom
   (magit-commit-ask-to-stage 'stage)
@@ -489,7 +509,11 @@ This uses the `buffer-face' minor mode."
   ;; Allow markup in the middle of words.
   (setcar org-emphasis-regexp-components " \t('\"{[:alpha:]")
   (setcar (nthcdr 1 org-emphasis-regexp-components) "[:alpha:]- \t.,:!?;'\")}\\")
-  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components))
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
+  ;; Configuring title page formatting with #+OPTION is too fiddly, so
+  ;; we want to override the elisp variable instead
+  (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
 (use-package htmlize
   :ensure t)
@@ -658,6 +682,29 @@ really common name like 'src' or 'bin'."
           (find-useful-directory-name up)
         base)))
 
+  (defun shell-prompt (name directory)
+    "Returns a shell prompt string for the given shell name and
+directory in the format that the PS1 environment variable
+expects.
+
+This function makes it easy to have different prompts in
+different context (eg explicitly mark out remote shells vs local
+ones)."
+    (setq name (format-shell-name name))
+    (if (file-remote-p directory)
+        (concat "\\033[35m" "ssh"
+                "\\033[37m" ":"
+                "\\033[31m" name
+                "\\033[37m" ":"
+                "\\033[32m" "\\W"
+                "\\033[37m" ">"
+                "\\033[0m")
+      (concat "\\033[31m" name
+              "\\033[37m" ":"
+              "\\033[32m" "\\W"
+              "\\033[37m" ">"
+              "\\033[0m")))
+
   (defun new-shell (name)
     "Opens a new shell buffer with the given name in
 asterisks (*name*) in the current directory with and changes the
@@ -665,31 +712,20 @@ prompt to name>."
     (interactive "sName: ")
     (when (equal name "")
       (setq name (find-useful-directory-name default-directory)))
-    (setq name (format-shell-name name))
     (pop-to-buffer (concat "<*" name "*>"))
-    (unless (eq major-mode 'shell-mode)
+    (unless (get-buffer-process (current-buffer))
       (shell (current-buffer))
+      (let* ((process (get-buffer-process (current-buffer)))
+             (remote (file-remote-p default-directory)))
+        (defun send (str) (comint-simple-send process str))
+        (send "export TERM='xterm-256color'")
+        (unless remote
+          (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))))
+        (send (concat "export PS1=\"" (shell-prompt name default-directory) "\""))
 
-      (comint-simple-send
-       (get-buffer-process (current-buffer))
-       "export TERM='xterm-256color'")
-      (comint-simple-send
-       (get-buffer-process (current-buffer))
-       (format "export PAGER=%s"
-               (expand-file-name "~/local/bin/epage")))
-      (comint-simple-send
-       (get-buffer-process (current-buffer))
-       (concat "export PS1='"
-               "\033[31m" name
-               "\033[37m" ":"
-               "\033[32m" "\\W"
-               "\033[37m" ">"
-               "\033[0m"
-               "'"))
-
-      (sleep-for 0 200)
-      (comint-send-input)
-      (comint-clear-buffer))))
+        (sleep-for 0 200)
+        (comint-send-input)
+        (comint-clear-buffer)))))
 
 (use-package xterm-color
   :ensure t
@@ -703,7 +739,7 @@ prompt to name>."
           ,(from-face 'font-lock-variable-name-face)
           ,(from-face 'font-lock-constant-face)
           ,(from-face 'font-lock-string-face)
-          ,(from-face 'font-lock-function-name-face)
+          ,(from-face 'font-lock-warning-face)
           ,(from-face 'font-lock-keyword-face)
           ,(from-face 'font-lock-preprocessor-face)
           ])
@@ -755,30 +791,31 @@ prompt to name>."
   (:map python-mode-map
    ("M-S" . python-pytest-dispatch)))
 
-(use-package flycheck-pycheckers
-  :ensure t
-  :after flycheck)
+(unless (eq system-type 'darwin)
+  (use-package flycheck-pycheckers
+    :ensure t
+    :after flycheck)
 
-(defun my-python-hook ()
-  (direnv-update-environment default-directory)
-  (make-local-variable 'lsp-python-ms-executable)
-  (setq lsp-python-ms-executable (executable-find "python-language-server"))
+  (defun my-python-hook ()
+    (direnv-update-environment default-directory)
+    (make-local-variable 'lsp-python-ms-executable)
+    (setq lsp-python-ms-executable (executable-find "python-language-server"))
 
-  (require 'lsp-python-ms)
-  (lsp-deferred)
+    (require 'lsp-python-ms)
+    (lsp-deferred)
 
-  (unless (member 'python-pycheckers flycheck-checkers)
-    (flycheck-pycheckers-setup))
-  (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
+    (unless (member 'python-pycheckers flycheck-checkers)
+      (flycheck-pycheckers-setup))
+    (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
 
-(use-package lsp-python-ms
-  :ensure t
-  :after lsp-mode flycheck-pycheckers
+  (use-package lsp-python-ms
+    :ensure t
+    :after lsp-mode flycheck-pycheckers
 
-  :init
-  (setq lsp-python-ms-executable "python-language-server")
+    :init
+    (setq lsp-python-ms-executable "python-language-server")
 
-  :hook (python-mode . my-python-hook))
+    :hook (python-mode . my-python-hook)))
 
                                         ; THETA
 
@@ -887,8 +924,12 @@ the current file."
   :custom (array-forth-trim-markers t))
 
                                         ; MARKDOWN
+(use-package visual-fill-column
+  :ensure t)
+
 (use-package markdown-mode
   :ensure t
+  :after visual-fill-column
   :mode "\\.md\\'"
 
   :custom

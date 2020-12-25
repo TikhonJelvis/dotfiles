@@ -1,7 +1,5 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, ...}:
 let
-  sources = import ./nix/sources.nix;
   sessionVariables = {
     EDITOR = "emacsclient --create-frame --alternate-editor emacs";
     PS1    = "λ x → \W>";
@@ -9,23 +7,21 @@ let
 
   aspell-with-dicts = pkgs.aspellWithDicts (d: [d.en d.ru]);
 
-  # Different kinds of packages I use
   packages = with pkgs;
     let
-      applications = [ krita chromium gwenview slack spectacle synergy zoom-us ];
       development  = [ python3 ghc niv ];
-      utils        = [ aspell-with-dicts unrar unzip ];
-    in applications ++ development ++ utils;
+      utils        = [ aspell-with-dicts ];
+    in development ++ utils;
 in
 {
-  imports = [ ./emacs ./firefox ./xmonad ./video ];
+  imports = [ ./sources.nix ];
 
   nixpkgs.config = {
     allowUnfree = true;
 
     packageOverrides = pkgs: {
-      stable = import sources."nixpkgs-20.03" {};
-      nur = import sources.NUR {
+      stable = import config.sources."nixpkgs-stable" {};
+      nur = import config.sources.NUR {
         inherit pkgs;
       };
     };
@@ -33,13 +29,10 @@ in
 
   home = {
     inherit packages sessionVariables;
-
-    username = "tikhon";
-    homeDirectory = "/home/tikhon";
-
+ 
     file = {
       "." = {
-        source = ./home;
+        source = ../files;
         recursive = true;
       };
     };
@@ -65,23 +58,12 @@ in
     bash = {
       enable = true;
       inherit sessionVariables;
-    };
 
-    direnv = {
-      enable = true;
-      enableBashIntegration = true;
-
-      ## use lorri if available
-      stdlib = ''
-        eval "`declare -f use_nix | sed '1s/.*/_&/'`"
-        use_nix() {
-          if type lorri &>/dev/null; then
-            echo "direnv: using lorri from PATH ($(type -p lorri))"
-            eval "$(lorri direnv)"
-          else
-            _use_nix
-          fi
-        }
+      initExtra = ''
+        if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ] 
+        then 
+          . $HOME/.nix-profile/etc/profile.d/nix.sh 
+        fi
       '';
     };
 
@@ -90,7 +72,6 @@ in
       ignores = [ "*~" ];
 
       userName = "Tikhon Jelvis";
-      userEmail = "tikhon@jelv.is";
 
       extraConfig = {
         ui.color = "always";
@@ -98,14 +79,5 @@ in
         core.fileMode = false;
       };
     };
-  };
-
-  services = {
-    dropbox = {
-      enable = true;
-      path = "${config.home.homeDirectory}/Dropbox";
-    };
-
-    lorri.enable = true;
   };
 }

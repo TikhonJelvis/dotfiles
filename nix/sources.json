@@ -5,10 +5,22 @@
         "homepage": "",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "cc6a6951d086fa06fd777abfda635093caa9dba5",
-        "sha256": "1w7da8qgpgm57ig10a78rxy59ii7pzxk0mgv7mdcbnmflb7z0pba",
+        "rev": "c72aeb2ac8421632609f444b8a60897ad3753a7d",
+        "sha256": "1vzw3pgvvxv80v9wfpqs07z62i7xz371aip1ifyi95c2bh41wqhf",
         "type": "tarball",
-        "url": "https://github.com/nix-community/NUR/archive/cc6a6951d086fa06fd777abfda635093caa9dba5.tar.gz",
+        "url": "https://github.com/nix-community/NUR/archive/c72aeb2ac8421632609f444b8a60897ad3753a7d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "emacs-nativecomp": {
+        "branch": "feature/native-comp",
+        "description": "Mirror of GNU Emacs",
+        "homepage": "http://www.gnu.org/software/emacs/",
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "rev": "f8505fd3d43dd95492855eac88922b5b27201e7a",
+        "sha256": "13ig9sa9nf4xgw7kx3hrbf7917h0zb54lnbykwbxfbgyx84mhrk6",
+        "type": "tarball",
+        "url": "https://github.com/emacs-mirror/emacs/archive/f8505fd3d43dd95492855eac88922b5b27201e7a.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "emacs-overlay": {
@@ -17,10 +29,22 @@
         "homepage": "",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "7bca73804e0deffb84dd71dd3f2ef61d7bc07b2c",
-        "sha256": "1srnp3q4i3bmigzdq51awai557lm84pwpgrzc4jv6a5c38nl4l6i",
+        "rev": "c57bba0fcc6386dc95ff92f0b7b192135725bd07",
+        "sha256": "163x244gpzx48nk5drwjncfq26m02f9p1wbvg6fllf6bys9i72dx",
         "type": "tarball",
-        "url": "https://github.com/nix-community/emacs-overlay/archive/7bca73804e0deffb84dd71dd3f2ef61d7bc07b2c.tar.gz",
+        "url": "https://github.com/nix-community/emacs-overlay/archive/c57bba0fcc6386dc95ff92f0b7b192135725bd07.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "home-manager": {
+        "branch": "release-20.09",
+        "description": "Manage a user environment using Nix  [maintainer=@rycee] ",
+        "homepage": "https://nix-community.github.io/home-manager/",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "abaebf3b346c4bef500c5bd2fdebbed109261a0c",
+        "sha256": "1gcv2ni4nsicpmi4ain568msvgxch8cj04fxf6qgvhdklmh2y84k",
+        "type": "tarball",
+        "url": "https://github.com/nix-community/home-manager/archive/abaebf3b346c4bef500c5bd2fdebbed109261a0c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -29,22 +53,34 @@
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
         "repo": "niv",
-        "rev": "29ddaaf4e099c3ac0647f5b652469dfc79cd3b53",
-        "sha256": "1va6myp07gkspgxfch8z3rs9nyvys6jmgzkys6a2c4j09qxp1bs0",
+        "rev": "9d35b9e4837ab88517210b1701127612c260eccf",
+        "sha256": "0q50xhnm8g2yfyakrh0nly4swyygxpi0a8cb9gp65wcakcgvzvdh",
         "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/29ddaaf4e099c3ac0647f5b652469dfc79cd3b53.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/9d35b9e4837ab88517210b1701127612c260eccf.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "nixpkgs": {
-        "branch": "release-20.03",
+    "nixpkgs-darwin": {
+        "branch": "nixpkgs-20.09-darwin",
         "description": "Nix Packages collection",
-        "homepage": null,
-        "owner": "NixOS",
+        "homepage": "",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a6f277f9ffb24fb091c091bf46927b837becb2c2",
-        "sha256": "1v8smkl0mdzjxkmd6sxqrmwcadjanz8r75v0hz18zrzz291x5mg8",
+        "rev": "cfe2c01e86d88938fc9fc7b26c8f1ba568244bcb",
+        "sha256": "06nl01b144snj6rky8f08plqjdvqi77xb0qn94mc30dw35kp3n8n",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/a6f277f9ffb24fb091c091bf46927b837becb2c2.tar.gz",
+        "url": "https://github.com/nixos/nixpkgs/archive/cfe2c01e86d88938fc9fc7b26c8f1ba568244bcb.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-stable": {
+        "branch": "nixos-20.09",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "d105075a1fd870b1d1617a6008cb38b443e65433",
+        "sha256": "1jcs44wn0s6mlf2jps25bvcai1rij9b2dil6zcj8zqwf2i8xmqjh",
+        "type": "tarball",
+        "url": "https://github.com/nixos/nixpkgs/archive/d105075a1fd870b1d1617a6008cb38b443e65433.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
