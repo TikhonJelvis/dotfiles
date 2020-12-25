@@ -473,8 +473,8 @@ This uses the `buffer-face' minor mode."
          ("C-c c" . org-capture)
 
          :map org-mode-map
-         ("M-{" . outline-previous-visible-heading)
-         ("M-}" . outline-next-visible-heading)
+         ("C-M-n" . outline-previous-visible-heading)
+         ("C-M-p" . outline-next-visible-heading)
          ("C-c C-," . org-promote-subtree)
          ("C-c C-." . org-demote-subtree))
 
@@ -816,6 +816,10 @@ prompt to name>."
     (setq lsp-python-ms-executable "python-language-server")
 
     :hook (python-mode . my-python-hook)))
+
+                                        ; R
+(use-package ess
+  :ensure t)
 
                                         ; THETA
 
