@@ -7,14 +7,13 @@
    (quote
     (name old-name general-category decomposition uppercase lowercase titlecase)))
  '(magit-commit-ask-to-stage (quote stage))
- '(package-selected-packages
-   (quote
-    (el-patch js2-mode use-package flycheck-mypy org-bullets all-the-icons all-the-icons-dired visual-fill-column lorem-ipsum groovy-mode elpy kotlin-mode ox-reveal 0blayout direnv haskell-mode rust-mode magit htmlize vagrant-tramp json-mode powerline wgrep yaml-mode paredit nix-mode markdown-mode jabber exec-path-from-shell elm-mode bash-completion typescript-mode mmm-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((python-shell-interpreter . "bin/nix-aware-python")
      (python-shell-interpreter . "nix-shell"))))
- '(send-mail-function (quote sendmail-send-it)))
+ '(send-mail-function (quote sendmail-send-it))
+ '(warning-suppress-log-types '((comp) (comp)))
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

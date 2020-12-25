@@ -115,12 +115,12 @@ interface and inserts it at point."
 (use-package ido
   :demand t
 
-  :config
-  (ido-mode t)
-
   ;; Set C-x C-b to switching buffer—for some reason, I always hit by
   ;; accident. It's annoying!
   :bind ("C-x C-b" . ido-switch-buffer)
+
+  :config
+  (ido-mode t)
 
   :custom
   (ido-default-buffer-method 'selected-window)
@@ -216,6 +216,12 @@ interface and inserts it at point."
   :ensure t)
 (load-file "~/.emacs.d/mode-line.el")
 
+
+;; Make visual-line-mode configurable to fill-column. Not great, but
+;; gets the job done...
+(use-package visual-fill-column
+  :ensure t)
+
                                         ; KEY REBINDINGS
 ;; Do nothing on C-x C-c:
 (global-unset-key (kbd "C-x C-c"))
@@ -249,7 +255,7 @@ interface and inserts it at point."
 (toggle-input-method)
 
 ;; My quail customizations
-(load-file ".emacs.d/quail-rules.el")
+(load-file "~/.emacs.d/quail-rules.el")
 
 					; DIRED
 ;; Has to be above JABBER settings because it has a conflicting
@@ -314,9 +320,13 @@ This uses the `buffer-face' minor mode."
                                         ; FLYCHECK
 (use-package flycheck
   :ensure t
+  :demand t
   :hook (python-mode . flycheck-mode)
   :custom
-  (flycheck-check-syntax-automatically '(save mode-enabled)))
+  (flycheck-check-syntax-automatically '(save mode-enabled))
+  :config
+  (setq flycheck-executable-find
+        (lambda (cmd) (direnv-update-environment default-directory) (executable-find cmd))))
 
 
                                         ; NIX
@@ -377,24 +387,32 @@ This uses the `buffer-face' minor mode."
                                         ; LSP
 (use-package lsp-mode
   :ensure t
+  :demand t
   :custom
   (lsp-eldoc-hook nil)
-  (lsp-ui-doc-show-with-cursor nil)
-  (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-alignment 'window)
+  (lsp-diagnostics-provider :flycheck)
+  :config
+  (lsp-diagnostics-mode 1)
   :bind
   (:map lsp-mode-map
-   ("C-c C-d" . lsp-ui-doc-show)))
+        ("C-c C-d" . lsp-ui-doc-show)))
 
 (use-package lsp-ui
   :ensure t
   :custom
-  (lsp-ui-sideline-enable nil))
+  (lsp-ui-sideline-enable nil)
+
+  (lsp-ui-doc-show-with-cursor nil)
+  (lsp-ui-doc-position 'top)
+  (lsp-ui-doc-alignment 'window))
 
 (use-package dap-mode
   :ensure t
   :init
-  (setq gud-key-prefix (kbd "C-c C-s")))
+  (setq gud-key-prefix (kbd "C-c C-s"))
+
+  :config
+  (require 'dap-python))
 
                                         ; MAGIT
 (use-package magit
@@ -423,7 +441,8 @@ This uses the `buffer-face' minor mode."
   (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook))
 
                                         ; ORG-MODE
-(use-package prog-mode)
+(use-package prog-mode
+  :demand t)
 
 (defun org-mode-prettify-hook ()
   "Configure prettify-symbols to replace todo/consider/done with
@@ -481,14 +500,7 @@ This uses the `buffer-face' minor mode."
 
   (setq org-default-notes-file (concat org-directory "/Notes.org"))
 
-  ;; Set up the templates I use (triggered by typing < followed by a
-  ;; letter followed by <TAB>)
-  (add-to-list 'org-structure-template-alist
-               '("h" "#+BEGIN_SRC haskell\n?\n#+END_SRC"))
-  (add-to-list 'org-structure-template-alist
-               '("f" "#+ATTR_REVEAL: :frag roll-in"))
-  (add-to-list 'org-structure-template-alist
-               '("p" ":PROPERTIES:\n:CREATED: ?\n:END:"))
+  (require 'org-tempo)
 
   ;; Spellcheck my org mode files.
   (add-hook 'org-mode-hook 'flyspell-mode)
@@ -503,17 +515,20 @@ This uses the `buffer-face' minor mode."
   ;; we want to override the elisp variable instead
   (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
+(use-package htmlize
+  :ensure t)
+
 (use-package ox-reveal
   :ensure t
+  :after org htmlize
+  :demand t
   :bind (:map org-mode-map
          ("M-S" . org-reveal-export-current-subtree)
          ("M-R" . org-reveal-export-to-html))
   :config
   ;; Configuring title page formatting with #+OPTION is too fiddly, so
   ;; we want to override the elisp variable instead
-  (put 'org-reveal-title-slide 'safe-local-variable 'stringp)
-  (add-to-list 'org-structure-template-alist
-               '("f" "#+ATTR_REVEAL: :frag roll-in")))
+  (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
 (use-package el-patch
   :ensure t
@@ -574,7 +589,8 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 
   (setq org-agenda-files
         (list (concat org-directory "/Tasks.org")
-              (concat org-directory "/Books.org")))
+              (concat org-directory "/Books.org")
+              (concat org-directory "/Projects.org")))
 
 
   :config/el-patch
@@ -776,23 +792,30 @@ prompt to name>."
    ("M-S" . python-pytest-dispatch)))
 
 (unless (eq system-type 'darwin)
-  (defun my-python-lsp-hook ()
+  (use-package flycheck-pycheckers
+    :ensure t
+    :after flycheck)
+
+  (defun my-python-hook ()
+    (direnv-update-environment default-directory)
+    (make-local-variable 'lsp-python-ms-executable)
+    (setq lsp-python-ms-executable (executable-find "python-language-server"))
+
     (require 'lsp-python-ms)
-    (lsp))
+    (lsp-deferred)
+
+    (unless (member 'python-pycheckers flycheck-checkers)
+      (flycheck-pycheckers-setup))
+    (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
+
   (use-package lsp-python-ms
     :ensure t
-    :hook (python-mode . my-python-lsp-hook)
-    :init
-    (setq lsp-python-ms-executable (executable-find "python-language-server"))))
+    :after lsp-mode flycheck-pycheckers
 
-(defun my-flycheck-pycheckers-hook ()
-  (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
-(use-package flycheck-pycheckers
-  :ensure t
-  :after lsp-python-ms
-  :hook
-  (flycheck-mode . flycheck-pycheckers-setup)
-  (python-mode . my-flycheck-pycheckers-hook))
+    :init
+    (setq lsp-python-ms-executable "python-language-server")
+
+    :hook (python-mode . my-python-hook)))
 
                                         ; THETA
 

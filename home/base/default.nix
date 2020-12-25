@@ -1,7 +1,5 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, ...}:
 let
-  sources = import ./nix/sources.nix;
   sessionVariables = {
     EDITOR = "emacsclient --create-frame --alternate-editor emacs";
     PS1    = "λ x → \W>";
@@ -9,7 +7,6 @@ let
 
   aspell-with-dicts = pkgs.aspellWithDicts (d: [d.en d.ru]);
 
-  # Different kinds of packages I use
   packages = with pkgs;
     let
       development  = [ python3 ghc niv ];
@@ -17,14 +14,14 @@ let
     in development ++ utils;
 in
 {
-  imports = [ ./emacs ];
+  imports = [ ./sources.nix ];
 
   nixpkgs.config = {
     allowUnfree = true;
 
     packageOverrides = pkgs: {
-      stable = import sources."nixpkgs-stable" {};
-      nur = import sources.NUR {
+      stable = import config.sources."nixpkgs-stable" {};
+      nur = import config.sources.NUR {
         inherit pkgs;
       };
     };
@@ -32,13 +29,10 @@ in
 
   home = {
     inherit packages sessionVariables;
-
-    username = "z0028sn";
-    homeDirectory = "/Users/z0028sn";
-
+ 
     file = {
       "." = {
-        source = ./home;
+        source = ../files;
         recursive = true;
       };
     };
@@ -59,38 +53,15 @@ in
   news.display = "silent";
 
   programs = {
-    home-manager.enable = true;
-
     bash = {
       enable = true;
       inherit sessionVariables;
+
       initExtra = ''
-        if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then . $HOME/.nix-profile/etc/profile.d/nix.sh; fi
-        if [ -e $HOME/local/etc/ssl/certs/tgt-ca-bundle.crt ]; then
-          export NIX_SSL_CERT_FILE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt;
-          export SSL_CERT_FILE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
-          export REQUESTS_CA_BUNDLE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
-          export TGT_CA_BUNDLE_PATH=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
-          export AWS_CA_BUNDLE=/Users/z0028sn/local/etc/ssl/certs/tgt-ca-bundle.crt
+        if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ] 
+        then 
+          . $HOME/.nix-profile/etc/profile.d/nix.sh 
         fi
-      '';
-    };
-
-    direnv = {
-      enable = true;
-      enableBashIntegration = true;
-
-      ## use lorri if available
-      stdlib = ''
-        eval "`declare -f use_nix | sed '1s/.*/_&/'`"
-        use_nix() {
-          if type lorri &>/dev/null; then
-            echo "direnv: using lorri from PATH ($(type -p lorri))"
-            eval "$(lorri direnv)"
-          else
-            _use_nix
-          fi
-        }
       '';
     };
 
@@ -99,7 +70,6 @@ in
       ignores = [ "*~" ];
 
       userName = "Tikhon Jelvis";
-      userEmail = "tikhon@jelv.is";
 
       extraConfig = {
         ui.color = "always";
