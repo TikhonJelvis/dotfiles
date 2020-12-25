@@ -54,7 +54,7 @@ in
         recursive = true;
       };
       ".aspell.conf" = ''
-        ${config.homeDirectory}/.nix-profile/lib/aspell
+        ${config.home.homeDirectory}/.nix-profile/lib/aspell
       '';
     };
 
