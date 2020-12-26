@@ -474,8 +474,10 @@ This uses the `buffer-face' minor mode."
          ("C-c c" . org-capture)
 
          :map org-mode-map
-         ("C-M-n" . outline-previous-visible-heading)
-         ("C-M-p" . outline-next-visible-heading)
+         ("C-M-n" . outline-next-visible-heading)
+         ("C-M-p" . outline-previous-visible-heading)
+         ("M-}" . forward-paragraph)
+         ("M-{" . backward-paragraph)
          ("C-c C-," . org-promote-subtree)
          ("C-c C-." . org-demote-subtree))
 

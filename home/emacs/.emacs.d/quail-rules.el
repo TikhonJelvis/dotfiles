@@ -6,7 +6,9 @@
                       ("\\::" ?∷)
                       ("''" ?`)
                       ("\\x" ?×)
-                      ("\\tm" ?™))
+                      ("\\tm" ?™)
+                      ("\\grad" ?∇)
+                      ("\\inc" ?∆))
 
   ;; Use ; in place of \
   (quail-defrule ";" (quail-lookup-key "\\")))
