@@ -1,52 +1,38 @@
-{ config, pkgs, ...}:
-let
-  sessionVariables = {
-    EDITOR = "emacsclient --create-frame --alternate-editor emacs";
-    PS1    = "λ x → \W>";
-  };
-
-  aspell-with-dicts = pkgs.aspellWithDicts (d: [d.en d.ru]);
-
-  packages = with pkgs;
-    let
-      development  = [ ghc lorri niv python3 ];
-      utils        = [ aspell-with-dicts ];
-    in development ++ utils;
-in
+{ config, pkgs, lib, ...}:
 {
   imports = [ ./sources.nix ];
 
-  nixpkgs.config = {
-    allowUnfree = true;
-
-    packageOverrides = pkgs: {
-      stable = import config.sources."nixpkgs-stable" {};
-      nur = import config.sources.NUR {
-        inherit pkgs;
-      };
-    };
-  };
-
-  programs.direnv = {
-    enable = true;
-    enableBashIntegration = true;
-
-    ## use lorri if available
-    stdlib = ''
-      eval "`declare -f use_nix | sed '1s/.*/_&/'`"
-      use_nix() {
-        if type lorri &>/dev/null; then
-          echo "direnv: using lorri from PATH ($(type -p lorri))"
-          eval "$(lorri direnv)"
-        else
-          _use_nix
-        fi
-      }
-    '';
-  };
-
   home = {
-    inherit packages sessionVariables;
+    packages = with pkgs;
+      let
+        development  = [ ghc lorri niv python3 ];
+        aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
+      in development ++ [ aspell ];
+
+    sessionVariables = {
+      EDITOR = "emacsclient --create-frame --alternate-editor emacs";
+      PS1    = "λ x → \\W>";
+
+      PATH = lib.makeBinPath [
+        "$HOME/.nix-profile"
+        "$HOME/local"
+
+        "/nix/var/nix/profiles/default"
+        "/run/current-system/sw"
+        "/run/wrappers"
+      ];
+      MANPATH = "$HOME/.nix-profile/share/man";
+
+      NIX_PROFILES = "/nix/var/nix/profiles/default $HOME/.nix-profile";
+
+      NIX_PATH = lib.concatStringsSep ":" [
+        "nixpkgs=${config.sources.nixpkgs}"
+        "home-manager=${config.sources.home-manager}"
+
+        "nixos-config=/etc/nixos/configuration.nix"
+        "nixpkgs/nixos=${config.sources.nixpkgs}"
+      ];
+    };
 
     file = {
       "." = {
@@ -56,6 +42,7 @@ in
       ".aspell.conf" = {
         source = pkgs.writeText ".aspell.conf" ''
           data-dir ${config.home.homeDirectory}/.nix-profile/lib/aspell
+          personal ${toString ../.aspell.en.pws} 
         '';
       };
     };
@@ -71,20 +58,45 @@ in
     stateVersion = "20.09";
   };
 
+  nixpkgs.config = {
+    allowUnfree = true;
+
+    packageOverrides = pkgs: {
+      stable = import config.sources.nixpkgs-darwin {};
+      nur = import config.sources.NUR {
+        inherit pkgs;
+      };
+    };
+  };
+
   fonts.fontconfig.enable = true;
 
   news.display = "silent";
 
   programs = {
+    home-manager.enable = true;
+
     bash = {
       enable = true;
-      inherit sessionVariables;
 
-      initExtra = ''
-        if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]
-        then
-          . $HOME/.nix-profile/etc/profile.d/nix.sh
-        fi
+      sessionVariables = config.home.sessionVariables;
+    };
+
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+
+      ## use lorri if available
+      stdlib = ''
+       eval "`declare -f use_nix | sed '1s/.*/_&/'`"
+        use_nix() {
+          if type lorri &>/dev/null; then
+            echo "direnv: using lorri from PATH ($(type -p lorri))"
+            eval "$(lorri direnv)"
+          else
+            _use_nix
+          fi
+        }
       '';
     };
 
