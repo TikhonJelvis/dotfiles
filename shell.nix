@@ -1,11 +1,8 @@
 { sources ? import ./nix/sources.nix
 , pkgs    ? import sources.nixpkgs {}
 }:
-let
-  home-manager = (import sources.home-manager { inherit pkgs; }).home-manager;
-in
 pkgs.mkShell rec {
-  buildInputs = [ pkgs.cachix pkgs.niv home-manager ];
+  buildInputs = [ pkgs.cachix pkgs.niv ];
 
   HOME_MANAGER_CONFIG =
     if pkgs.stdenv.isDarwin
