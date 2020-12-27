@@ -18,12 +18,16 @@
     };
 
     home.file = {
-      ".emacs.d" = {
-        source = ./.emacs.d;
-        recursive = true;
-      };
       ".emacs" = {
-        source = ./init.el;
+        text = ''
+          (defun dotfile (file)
+            "Return an absolute path to the given relative path within
+          the dotfiles directory that was used to generate this
+          config."
+            (expand-file-name file "${toString ./..}"))
+
+          (load "${toString ./init.el}")
+        '';
       };
     };
   };

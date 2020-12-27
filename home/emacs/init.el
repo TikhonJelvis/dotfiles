@@ -1,10 +1,9 @@
                                         ; CUSTOM-SET
-;; Put custom-set variables in a different file:
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file (dotfile "emacs/custom.el"))
 (load custom-file)
 
                                         ; PERSONAL PACKAGES
-(add-to-list 'load-path "~/.emacs.d/packages")
+(add-to-list 'load-path (dotfile "emacs/packages"))
 
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
@@ -154,7 +153,7 @@ interface and inserts it at point."
 (setq-default truncate-lines t)
 
 ;; For enabling color themes:
-(setq custom-theme-directory "~/.emacs.d/themes/")
+(setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
 (load-theme 'blackboard t)
 
@@ -214,7 +213,7 @@ interface and inserts it at point."
 ;; Prettier mode line
 (use-package powerline
   :ensure t)
-(load-file "~/.emacs.d/mode-line.el")
+(load-file (dotfile "emacs/mode-line.el"))
 
 
 ;; Make visual-line-mode configurable to fill-column. Not great, but
@@ -255,7 +254,7 @@ interface and inserts it at point."
 (toggle-input-method)
 
 ;; My quail customizations
-(load-file "~/.emacs.d/quail-rules.el")
+(load-file (dotfile "emacs/quail-rules.el"))
 
 					; DIRED
 ;; Has to be above JABBER settings because it has a conflicting
@@ -314,7 +313,7 @@ This uses the `buffer-face' minor mode."
                         :bold nil))
   :custom
   (ispell-program-name "~/.nix-profile/bin/aspell")
-  (ispell-personal-dictionary "~/Programming/dotfiles/.aspell.en.pws")
+  (ispell-personal-dictionary (dotfile ".aspell.en.pws"))
 
   :config
   (add-hook 'flyspell-mode-hook 'flyspell-color-hook)
