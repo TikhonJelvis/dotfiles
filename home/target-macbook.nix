@@ -9,8 +9,19 @@
     username = "z0028sn";
     homeDirectory = "/Users/z0028sn";
 
+    sessionPath = [
+      "/usr/bin"
+      "/usr/local/bin"
+
+      "/sbin"
+      "/usr/local/sbin"
+
+      "/Library/Application Support/CDM/bin"
+      "/usr/local/munki"
+    ];
+
     sessionVariables = let
-      tgt-ca-bundle = "$HOME/local/etc/ssl/certs/tgt-ca-bundle.crt"
+      tgt-ca-bundle = "$HOME/local/etc/ssl/certs/tgt-ca-bundle.crt";
     in {
       NIX_SSL_CERT_FILE  = tgt-ca-bundle;
       SSL_CERT_FILE      = tgt-ca-bundle;
