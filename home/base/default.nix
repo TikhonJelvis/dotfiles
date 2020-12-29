@@ -2,6 +2,16 @@
 {
   imports = [ ./sources.nix ];
 
+  nixpkgs = {
+    config   = import ./config.nix;
+    overlays = import ./overlays.nix;
+  };
+
+  xdg.configFile = {
+    "nixpkgs/config.nix".source   = ./config.nix;
+    "nixpkgs/overlays.nix".source = ./overlays.nix;
+  };
+  
   home = {
     packages = with pkgs;
       let
@@ -56,17 +66,6 @@
     # Home Manager release notes for a list of state version changes
     # in each release.
     stateVersion = "20.09";
-  };
-
-  nixpkgs.config = {
-    allowUnfree = true;
-
-    packageOverrides = pkgs: {
-      stable = import config.sources.nixpkgs-darwin {};
-      nur = import config.sources.NUR {
-        inherit pkgs;
-      };
-    };
   };
 
   fonts.fontconfig.enable = true;
