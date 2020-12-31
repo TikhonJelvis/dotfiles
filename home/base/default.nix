@@ -19,18 +19,18 @@
         aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
       in development ++ [ aspell ];
 
+    sessionPath = [
+      "$HOME/.nix-profile"
+      "$HOME/local/bin"
+
+      "/nix/var/nix/profiles/default"
+      "/run/current-system/sw"
+      "/run/wrappers"
+    ];
+
     sessionVariables = {
       EDITOR = "emacsclient --create-frame --alternate-editor emacs";
       PS1    = "λ x → \\W>";
-
-      PATH = lib.makeBinPath [
-        "$HOME/.nix-profile"
-        "$HOME/local"
-
-        "/nix/var/nix/profiles/default"
-        "/run/current-system/sw"
-        "/run/wrappers"
-      ];
       MANPATH = "$HOME/.nix-profile/share/man";
 
       NIX_PROFILES = "/nix/var/nix/profiles/default $HOME/.nix-profile";

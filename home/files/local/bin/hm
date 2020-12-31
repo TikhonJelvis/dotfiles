@@ -33,7 +33,7 @@ function setWorkDir() {
     fi
 }
 
-function doBuildAttr() {
+function buildAttr() {
     local extraArgs=("$@")
 
     for p in "${EXTRA_NIX_PATH[@]}"; do
@@ -46,45 +46,52 @@ function doBuildAttr() {
 
     nix-build \
         "<home-manager/home-manager/home-manager.nix>" \
-        "${extraArgs[@]}" \
-        "${PASSTHROUGH_OPTS[@]}" \
-        --argstr confPath "$HOME_MANAGER_CONFIG" \
-        --argstr confAttr "$HOME_MANAGER_CONFIG_ATTRIBUTE"
+        "${extraargs[@]}" \
+        "${passthrough_opts[@]}" \
+        --argstr confpath "$home_manager_config" \
+        --argstr confattr "$home_manager_config_attribute"
 }
 
-function doBuild() {
+function dobuild() {
     if [[ ! -w . ]]; then
-        errorEcho "Cannot run build in read-only directory";
+        errorecho "cannot run build in read-only directory";
         return 1
     fi
 
-    setWorkDir
+    setworkdir
 
-    doBuildAttr --attr activationPackage
+    echo "building:"
+    time buildattr --attr activationpackage
 }
 
-function doSwitch () {
-    setWorkDir
+function buildgeneration () {
+    setworkdir
 
-    # Build the generation and run the activate script. Note, we
-    # specify an output link so that it is treated as a GC root. This
-    # prevents an unfortunately timed GC from removing the generation
+    # build the generation and run the activate script. note, we
+    # specify an output link so that it is treated as a gc root. this
+    # prevents an unfortunately timed gc from removing the generation
     # before activation completes.
     local generation
-    generation="$WORK_DIR/generation"
+    generation="$work_dir/generation"
 
-    doBuildAttr --out-link "$generation" \
-                --attr activationPackage \
-        && "$generation/activate"
+    echo "building generation $generation"
+
+    buildattr --out-link "$generation" --attr activationpackage
 }
-function doHelp() {
-    echo "Usage: $0 [OPTION] COMMAND"
+
+function doswitch () {
+    time buildgeneration
+    "$generation/activate"
+}
+
+function dohelp() {
+    echo "usage: $0 [option] command"
     echo
-    echo "Options"
+    echo "options"
     echo
-    echo "  -f FILE      The home configuration file."
-    echo "               Default is '~/.config/nixpkgs/home.nix'."
-    echo "  -A ATTRIBUTE Optional attribute that selects a configuration"
+    echo "  -f file      the home configuration file."
+    echo "               default is '~/.config/nixpkgs/home.nix'."
+    echo "  -a attribute optional attribute that selects a configuration"
     echo "               expression in the configuration file."
     echo "  -I PATH      Add a path to the Nix expression search path."
     echo "  -b EXT       Move existing files to new path rather than fail."
