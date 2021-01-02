@@ -391,7 +391,10 @@ This uses the `buffer-face' minor mode."
 
                                         ; YASNIPPET
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :demand t
+
+  :hook (python-mode . yas-minor-mode))
 
                                         ; PROJECTILE
 (use-package projectile
@@ -802,7 +805,11 @@ prompt to name>."
   :ensure t
   :bind
   (:map python-mode-map
-   ("M-S" . python-pytest-dispatch)))
+        ("M-S" . python-pytest-dispatch)))
+
+(use-package python-black
+  :ensure t
+  :after python)
 
 (unless (eq system-type 'darwin)
   (use-package flycheck-pycheckers
