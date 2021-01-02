@@ -24,8 +24,8 @@
       "$HOME/local/bin"
 
       "/nix/var/nix/profiles/default"
-      "/run/current-system/sw"
       "/run/wrappers"
+      "/run/current-system/sw"
     ];
 
     sessionVariables = {
