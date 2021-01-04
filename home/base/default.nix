@@ -24,8 +24,8 @@
       "$HOME/local/bin"
 
       "/nix/var/nix/profiles/default"
-      "/run/current-system/sw"
       "/run/wrappers"
+      "/run/current-system/sw"
     ];
 
     sessionVariables = {
@@ -37,6 +37,7 @@
 
       NIX_PATH = lib.concatStringsSep ":" [
         "nixpkgs=${config.sources.nixpkgs}"
+        "unstable=${config.sources.nixpkgs-unstable}"
         "home-manager=${config.sources.home-manager}"
 
         "nixos-config=/etc/nixos/configuration.nix"

@@ -82,35 +82,6 @@ interface and inserts it at point."
 ;; frames :/
 (setq inhibit-x-resources t)
 
-(use-package windmove
-  :init
-  ;; Better commands for window management:
-  ;; swap-with taken from emacsd-tile 0.1 by marius a. eriksen
-  ;; (https://gist.github.com/287633)
-  (defun swap-with (dir)
-    (interactive)
-    (let ((other-window (windmove-find-other-window dir)))
-      (when other-window
-        (let* ((this-window  (selected-window))
-               (this-buffer  (window-buffer this-window))
-               (other-buffer (window-buffer other-window))
-               (this-start   (window-start this-window))
-               (other-start  (window-start other-window)))
-          (set-window-buffer this-window  other-buffer)
-          (set-window-buffer other-window this-buffer)
-          (set-window-start  this-window  other-start)
-          (set-window-start  other-window this-start)))))
-
-  :bind (("C-M-S-N" . (lambda () (interactive) (swap-with 'down)))
-         ("C-M-S-P" . (lambda () (interactive) (swap-with 'up)))
-         ("C-M-S-B" . (lambda () (interactive) (swap-with 'left)))
-         ("C-M-S-F" . (lambda () (interactive) (swap-with 'right)))
-
-         ("M-N" . windmove-down)
-         ("M-P" . windmove-up)
-         ("M-B" . windmove-left)
-         ("M-F" . windmove-right)))
-
 (use-package ido
   :demand t
 
@@ -249,6 +220,46 @@ interface and inserts it at point."
 ;; incredibly annoying:
 (global-unset-key (kbd "<f2>"))
 
+                                        ; WINDOW MANAGEMENT
+(use-package windmove
+  :init
+  ;; Better commands for window management:
+  ;; swap-with taken from emacsd-tile 0.1 by marius a. eriksen
+  ;; (https://gist.github.com/287633)
+  (defun swap-with (dir)
+    (interactive)
+    (let ((other-window (windmove-find-other-window dir)))
+      (when other-window
+        (let* ((this-window  (selected-window))
+               (this-buffer  (window-buffer this-window))
+               (other-buffer (window-buffer other-window))
+               (this-start   (window-start this-window))
+               (other-start  (window-start other-window)))
+          (set-window-buffer this-window  other-buffer)
+          (set-window-buffer other-window this-buffer)
+          (set-window-start  this-window  other-start)
+          (set-window-start  other-window this-start)))))
+
+  :bind (("C-M-S-N" . (lambda () (interactive) (swap-with 'down)))
+         ("C-M-S-P" . (lambda () (interactive) (swap-with 'up)))
+         ("C-M-S-B" . (lambda () (interactive) (swap-with 'left)))
+         ("C-M-S-F" . (lambda () (interactive) (swap-with 'right)))
+
+         ("M-N" . windmove-down)
+         ("M-P" . windmove-up)
+         ("M-B" . windmove-left)
+         ("M-F" . windmove-right)))
+
+(defun my-balance-windows-advice (window)
+  "Advice that runs after a function, balances the windows, and
+returns the same value as the function."
+  (balance-windows)
+  window)
+
+;; Automatically rebalance windows whenever a new window is created.
+(advice-add 'split-window :filter-return #'my-balance-windows-advice)
+(advice-add 'delete-window :filter-return #'my-balance-windows-advice)
+
                                         ; INPUT MODES
 (setq default-input-method "TeX")
 (toggle-input-method)
@@ -380,7 +391,10 @@ This uses the `buffer-face' minor mode."
 
                                         ; YASNIPPET
 (use-package yasnippet
-  :ensure t)
+  :ensure t
+  :demand t
+
+  :hook (python-mode . yas-minor-mode))
 
                                         ; PROJECTILE
 (use-package projectile
@@ -791,7 +805,11 @@ prompt to name>."
   :ensure t
   :bind
   (:map python-mode-map
-   ("M-S" . python-pytest-dispatch)))
+        ("M-S" . python-pytest-dispatch)))
+
+(use-package python-black
+  :ensure t
+  :after python)
 
 (unless (eq system-type 'darwin)
   (use-package flycheck-pycheckers
