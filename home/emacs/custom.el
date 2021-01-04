@@ -4,14 +4,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(describe-char-unidata-list
-   (quote
-    (name old-name general-category decomposition uppercase lowercase titlecase)))
- '(magit-commit-ask-to-stage (quote stage))
+   '(name old-name general-category decomposition uppercase lowercase titlecase))
+ '(magit-commit-ask-to-stage 'stage t)
+ '(package-selected-packages
+   '(htmlize yasnippet yaml-mode xterm-color visual-fill-column use-package python-pytest python-docstring powerline paredit ox-reveal org-bullets nix-mode magit lsp-ui lsp-python-ms json-mode js2-mode jenkinsfile-mode haskell-mode flycheck-rust flycheck-pycheckers exec-path-from-shell ess el-patch direnv dap-mode company-box cargo auto-virtualenv all-the-icons-dired))
  '(safe-local-variable-values
-   (quote
-    ((python-shell-interpreter . "bin/nix-aware-python")
-     (python-shell-interpreter . "nix-shell"))))
- '(send-mail-function (quote sendmail-send-it))
+   '((python-shell-interpreter . "bin/nix-aware-python")
+     (python-shell-interpreter . "nix-shell")))
+ '(send-mail-function 'sendmail-send-it)
  '(warning-suppress-log-types '((comp) (comp)))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
@@ -19,7 +19,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- `(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height ,(if (eq system-type 'darwin) 150 122) :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 150 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
  '(company-scrollbar-bg ((t (:background "#19b3224446ac"))))
  '(company-scrollbar-fg ((t (:background "#12df192a33e6"))))
  '(company-tooltip ((t (:inherit default :background "#0ec713b428a3"))))
