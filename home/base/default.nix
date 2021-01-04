@@ -20,12 +20,12 @@
       in development ++ [ aspell ];
 
     sessionPath = [
-      "$HOME/.nix-profile"
+      "$HOME/.nix-profile/bin"
       "$HOME/local/bin"
 
-      "/nix/var/nix/profiles/default"
-      "/run/wrappers"
-      "/run/current-system/sw"
+      "/nix/var/nix/profiles/default/bin"
+      "/run/wrappers/bin"
+      "/run/current-system/sw/bin"
     ];
 
     sessionVariables = {
