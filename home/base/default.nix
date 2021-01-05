@@ -43,6 +43,8 @@
         "nixos-config=/etc/nixos/configuration.nix"
         "nixpkgs/nixos=${config.sources.nixpkgs}"
       ];
+
+      PATH = lib.concatStringsSep ":" config.home.sessionPath;
     };
 
     file = {

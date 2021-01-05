@@ -10,10 +10,12 @@
     homeDirectory = "/Users/z0028sn";
 
     sessionPath = [
+      "/bin"
       "/usr/bin"
       "/usr/local/bin"
 
       "/sbin"
+      "/usr/sbin"
       "/usr/local/sbin"
 
       "/Library/Application Support/CDM/bin"
