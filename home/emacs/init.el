@@ -811,31 +811,25 @@ prompt to name>."
   :ensure t
   :after python)
 
-(unless (eq system-type 'darwin)
-  (use-package flycheck-pycheckers
-    :ensure t
-    :after flycheck)
+(use-package flycheck-pycheckers
+  :ensure t
+  :after flycheck)
 
-  (defun my-python-hook ()
-    (direnv-update-environment default-directory)
-    (make-local-variable 'lsp-python-ms-executable)
-    (setq lsp-python-ms-executable (executable-find "python-language-server"))
+(defun my-python-hook ()
+  (direnv-update-environment default-directory)
 
-    (require 'lsp-python-ms)
-    (lsp-deferred)
+  (require 'lsp-pyright)
+  (lsp-deferred)
 
-    (unless (member 'python-pycheckers flycheck-checkers)
-      (flycheck-pycheckers-setup))
-    (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
+  (unless (member 'python-pycheckers flycheck-checkers)
+    (flycheck-pycheckers-setup))
+  (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
 
-  (use-package lsp-python-ms
-    :ensure t
-    :after lsp-mode flycheck-pycheckers
+(use-package lsp-pyright
+  :ensure t
+  :after lsp-mode flycheck-pycheckers
 
-    :init
-    (setq lsp-python-ms-executable "python-language-server")
-
-    :hook (python-mode . my-python-hook)))
+  :hook (python-mode . my-python-hook))
 
                                         ; R
 (use-package ess

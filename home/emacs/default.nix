@@ -17,6 +17,9 @@
       };
     };
 
+    home.packages = with pkgs;
+      [ nodePackages.pyright ];
+
     home.file = {
       ".emacs" = {
         text = ''
