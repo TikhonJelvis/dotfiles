@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+path_var=${1:-PATH}
+echo ${!path_var} | tr ':' '\n'
