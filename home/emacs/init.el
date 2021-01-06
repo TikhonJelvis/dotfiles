@@ -275,6 +275,8 @@ returns the same value as the function."
   ;; with M-o.)
   :hook (dired-mode . dired-omit-mode))
 
+(setq dired-dwim-target t)
+
 ;; Simplify the dired view by hiding permissions, users, date
 ;; modified... etc
 (setq dired-hide-details-hide-symlink-targets nil)
