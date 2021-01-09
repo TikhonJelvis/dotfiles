@@ -2,7 +2,7 @@
 # my machines.
 #
 # Configurations for each machine import this file and overwrite any
-# machine-specific options they need. At minimum, this requires:
+# machine-specific options they need. At minimum, they set:
 #
 #  * networking.hostName
 
@@ -56,22 +56,18 @@
     };
   };
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
-  # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # Enable the X11 windowing system.
+  # Services
+
+  virtualisation.docker.enable = true;
+
+  services.openssh.enable = true;
+
   services.xserver = {
     enable = true;
     layout = "us";
@@ -95,6 +91,7 @@
       isNormalUser = true;
       extraGroups = [
         "wheel" # Enable ‘sudo’ for the user.
+        "docker"
       ];
     };
   };
