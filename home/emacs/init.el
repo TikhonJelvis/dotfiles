@@ -418,6 +418,9 @@ This uses the `buffer-face' minor mode."
   :custom
   (lsp-eldoc-hook nil)
   (lsp-diagnostics-provider :flycheck)
+  :custom-face
+  (lsp-lsp-flycheck-info-unnecessary-face
+   ((t (:underline (:color "#3366FF" :style line)))))
   :config
   (lsp-diagnostics-mode 1)
   :bind
