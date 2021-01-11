@@ -10,7 +10,8 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil)
 
-  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen))
+  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen)
+  (set-face-attribute 'default nil :height 150))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -303,6 +304,14 @@ This uses the `buffer-face' minor mode."
   (set-buffer-background "#cadbf2"))
 (add-hook 'image-mode-hook 'image-preview-set-background-color)
 
+                                        ; PDF
+(global-auto-revert-mode t)
+(use-package pdf-tools
+  :ensure t
+  :magic ("%PDF" . pdf-view-mode)
+  :config
+  (pdf-tools-install :no-query))
+
                                         ; FLYSPELL
 ;; If the aspell executable is not available, check two things:
 ;;
@@ -413,6 +422,9 @@ This uses the `buffer-face' minor mode."
   :custom
   (lsp-eldoc-hook nil)
   (lsp-diagnostics-provider :flycheck)
+  :custom-face
+  (lsp-lsp-flycheck-info-unnecessary-face
+   ((t (:underline (:color "#3366FF" :style line)))))
   :config
   (lsp-diagnostics-mode 1)
   :bind
@@ -977,16 +989,6 @@ the current file."
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
   (add-hook 'LaTeX-mode-hook 'autofill-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode))
-
-(global-auto-revert-mode t)
-(use-package doc-view
-  :custom (doc-view-continuous 1)
-  :config
-  (defun my-doc-view-hook ()
-    "Make documents refresh faster."
-    (set (make-local-variable 'auto-revert-interval) 0.5)
-    (auto-revert-set-timer))
-  (add-hook 'doc-view-mode-hook 'my-doc-view-hook))
 
                                         ; CFDG
 (use-package cfdg-mode :mode "\\.cfdg\\'")
