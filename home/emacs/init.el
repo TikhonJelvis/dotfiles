@@ -391,6 +391,10 @@ This uses the `buffer-face' minor mode."
 (use-package yaml-mode
   :ensure t)
 
+                                        ; DOCKER
+(use-package docker-compose-mode
+  :ensure t)
+
                                         ; YASNIPPET
 (use-package yasnippet
   :ensure t
