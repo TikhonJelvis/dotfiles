@@ -7,7 +7,7 @@
    '(name old-name general-category decomposition uppercase lowercase titlecase))
  '(magit-commit-ask-to-stage 'stage t)
  '(package-selected-packages
-   '(lsp-pyright htmlize yasnippet yaml-mode xterm-color visual-fill-column use-package python-pytest python-docstring powerline paredit ox-reveal org-bullets nix-mode magit lsp-ui lsp-python-ms json-mode js2-mode jenkinsfile-mode haskell-mode flycheck-rust flycheck-pycheckers exec-path-from-shell ess el-patch direnv dap-mode company-box cargo auto-virtualenv all-the-icons-dired))
+   '(dockerfile-mode lsp-pyright htmlize yasnippet yaml-mode xterm-color visual-fill-column use-package python-pytest python-docstring powerline paredit ox-reveal org-bullets nix-mode magit lsp-ui lsp-python-ms json-mode js2-mode jenkinsfile-mode haskell-mode flycheck-rust flycheck-pycheckers exec-path-from-shell ess el-patch direnv dap-mode company-box cargo auto-virtualenv all-the-icons-dired))
  '(safe-local-variable-values
    '((python-shell-interpreter . "bin/nix-aware-python")
      (python-shell-interpreter . "nix-shell")))
@@ -32,4 +32,5 @@
  '(flycheck-warning ((t (:underline "darkorange"))))
  '(flymake-error ((t (:background "#00000000" :underline "red"))))
  '(flymake-warning ((t (:background "#00000000" :underline "dark orange"))))
+ '(lsp-lsp-flycheck-info-unnecessary-face ((t (:underline (:color "#3366FF" :style line)))))
  '(sgml-namespace ((t (:inherit font-lock-builtin-face)))))
