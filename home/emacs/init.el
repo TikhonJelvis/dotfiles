@@ -834,6 +834,8 @@ prompt to name>."
   (require 'lsp-pyright)
   (lsp-deferred)
 
+  (python-black-on-save-mode)
+
   (unless (member 'python-pycheckers flycheck-checkers)
     (flycheck-pycheckers-setup))
   (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
