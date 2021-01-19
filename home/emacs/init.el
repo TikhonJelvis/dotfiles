@@ -811,14 +811,6 @@ prompt to name>."
   :mode "Jenkinsfile\\'")
 
                                         ; PYTHON
-(use-package pyvenv
-  :ensure t)
-
-(use-package auto-virtualenv
-  :ensure t
-  :after pyvenv
-  :hook (python-mode . auto-virtualenv-set-virtualenv))
-
 (use-package python-docstring
   :ensure t)
 
