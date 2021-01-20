@@ -15,7 +15,7 @@
   home = {
     packages = with pkgs;
       let
-        development  = [ ghc lorri niv python3 ];
+        development  = [ ghc lorri niv python3 jupyter ];
         aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
       in development ++ [ aspell ];
 
