@@ -80,6 +80,11 @@
       enable = true;
 
       sessionVariables = config.home.sessionVariables;
+
+      initExtra = ''
+        unset __HM_SESS_VARS_SOURCED
+        source "/Users/z0028sn/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      '';
     };
 
     direnv = {

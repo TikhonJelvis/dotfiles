@@ -31,7 +31,7 @@
       TGT_CA_BUNDLE_PATH = tgt-ca-bundle;
       AWS_CA_BUNDLE      = tgt-ca-bundle;
 
-      HOME_MANAGER_CONFIG = toString ./target-macbook.nix;
+      HOME_MANAGER_CONFIG = "${toString ./target-macbook.nix}";
     };
   };
 
