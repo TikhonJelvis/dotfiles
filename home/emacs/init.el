@@ -742,27 +742,39 @@ ones)."
               "\\033[37m" ">"
               "\\033[0m")))
 
-  (defun new-shell (name)
+  (defun new-shell (prefix name)
     "Opens a new shell buffer with the given name in
 asterisks (*name*) in the current directory with and changes the
-prompt to name>."
-    (interactive "sName: ")
+prompt to name:directory> or ssh:name:directory> as approrpiate.
+
+If the buffer already exists, pops to that buffer without
+restarting the process. With a numeric argument, starts a new
+process regardless."
+    (interactive "P\nsName: ")
     (when (equal name "")
       (setq name (find-useful-directory-name default-directory)))
     (pop-to-buffer (concat "<*" name "*>"))
-    (unless (get-buffer-process (current-buffer))
+    (unless (and (not prefix) (get-buffer-process (current-buffer)))
       (shell (current-buffer))
       (let* ((process (get-buffer-process (current-buffer)))
              (remote (file-remote-p default-directory)))
-        (defun send (str) (comint-simple-send process str))
-        (send "export TERM='xterm-256color'")
-        (unless remote
-          (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))))
-        (send (concat "export PS1=\"" (shell-prompt name default-directory) "\""))
+        (defun send (str) )
 
-        (sleep-for 0 200)
-        (comint-send-input)
-        (comint-clear-buffer)))))
+        (require 'cl-lib)
+        (cl-flet ((send (str) (comint-simple-send process str)))
+          ;; XXX Hack for BR
+          (when remote (send "source ~/.bash_profile"))
+
+          (send "export TERM='xterm-256color'")
+          (send "export IN_EMACS=true")
+          (send (concat "export PS1=\"" (shell-prompt name default-directory) "\""))
+
+          (unless remote
+            (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))))
+
+          (if remote (sleep-for 1 0) (sleep-for 0 200))
+          (comint-send-input)
+          (comint-clear-buffer))))))
 
 (use-package xterm-color
   :ensure t
