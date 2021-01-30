@@ -475,6 +475,10 @@ This uses the `buffer-face' minor mode."
   (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
   (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook))
 
+(use-package smerge-mode
+  :custom
+  (smerge-command-prefix (kbd "M-C")))
+
                                         ; ORG-MODE
 (use-package prog-mode
   :demand t)
