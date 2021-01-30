@@ -15,9 +15,10 @@
   home = {
     packages = with pkgs;
       let
+        utils        = [ pandoc ];
         development  = [ ghc lorri niv python3 jupyter ];
         aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
-      in development ++ [ aspell ];
+      in utils ++ development ++ [ aspell ];
 
     sessionPath = [
       "$HOME/.nix-profile/bin"

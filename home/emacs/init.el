@@ -995,6 +995,16 @@ the current file."
     (local-unset-key (kbd "C-M-f")))
   (add-hook 'markdown-mode-hook 'my-markdown-hook))
 
+(defun copy-markdown-formatted ()
+  "Copy a region or buffer in Markdown as RTF—convenient way to
+get Markdown-formatted text into email/Word/etc."
+  (interactive)
+  (pcase-let ((`(,start ,end)
+               (if (use-region-p)
+                   (list (region-beginning) (region-end))
+                 '(nil 0))))
+      (call-process-region start end "formatted-copy")))
+
                                         ; LATEX
 
 (use-package tex-mode
