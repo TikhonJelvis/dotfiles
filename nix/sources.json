@@ -24,15 +24,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "emacs-overlay": {
-        "branch": "master",
+        "branch": "revert-package-el-changes",
         "description": "Bleeding edge emacs overlay [maintainer=@adisbladis] ",
         "homepage": "",
-        "owner": "nix-community",
+        "owner": "collares",
         "repo": "emacs-overlay",
-        "rev": "88d77bca47d0e8e6fc4fe5585df1e368852e640a",
-        "sha256": "14kg9c7ivfa999byrsp8mv01c8f9qn6vkbq0sba2cyd4v0zg6h97",
+        "rev": "e30b9c2bc98307a1f1b76d926768d96c7a56be9d",
+        "sha256": "0c4linx2jqkxlpvik2jnq1njrckf4wfxbqsviwk1spy3mkdr85ws",
         "type": "tarball",
-        "url": "https://github.com/nix-community/emacs-overlay/archive/88d77bca47d0e8e6fc4fe5585df1e368852e640a.tar.gz",
+        "url": "https://github.com/collares/emacs-overlay/archive/e30b9c2bc98307a1f1b76d926768d96c7a56be9d.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "home-manager": {

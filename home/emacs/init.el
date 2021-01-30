@@ -1,3 +1,5 @@
+(setq comp-deferred-compilation nil)
+
                                         ; CUSTOM-SET
 (setq custom-file (dotfile "emacs/custom.el"))
 (load custom-file)
