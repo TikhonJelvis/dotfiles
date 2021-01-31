@@ -84,7 +84,7 @@
 
       initExtra = ''
         unset __HM_SESS_VARS_SOURCED
-        source "/Users/z0028sn/.nix-profile/etc/profile.d/hm-session-vars.sh"
+        source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
       '';
     };
 
