@@ -475,6 +475,12 @@ This uses the `buffer-face' minor mode."
   (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
   (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook))
 
+(use-package forge
+  :ensure t
+  :after magit
+  :config
+  (add-to-list 'forge-alist '("git.target.com" "git.target.com/api/v3" "target" forge-github-repository)))
+
 (use-package smerge-mode
   :custom
   (smerge-command-prefix (kbd "M-C")))
