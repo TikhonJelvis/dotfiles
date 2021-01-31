@@ -12,15 +12,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "emacs-nativecomp": {
-        "branch": "feature/native-comp",
+        "branch": "revert-package-el-changes",
         "description": "Mirror of GNU Emacs",
         "homepage": "http://www.gnu.org/software/emacs/",
-        "owner": "emacs-mirror",
+        "owner": "collares",
         "repo": "emacs",
-        "rev": "a8b8d220b4fccaa812e85f9b2b3715593dc285ac",
-        "sha256": "1wr4kjqa1nlyasdzp3d4d9dgcswb0k18lnyfmyzagjjinp3m2lyb",
+        "rev": "996129c651b30c9a6b260e9332bac11e3ddb97d5",
+        "sha256": "1klflfd4jrvvsgf01zcz6mn13w554pif3qmp16hdn982nkzkb62d",
         "type": "tarball",
-        "url": "https://github.com/emacs-mirror/emacs/archive/a8b8d220b4fccaa812e85f9b2b3715593dc285ac.tar.gz",
+        "url": "https://github.com/collares/emacs/archive/996129c651b30c9a6b260e9332bac11e3ddb97d5.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "emacs-overlay": {
