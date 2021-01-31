@@ -430,11 +430,16 @@ This uses the `buffer-face' minor mode."
   :custom-face
   (lsp-lsp-flycheck-info-unnecessary-face
    ((t (:underline (:color "#3366FF" :style line)))))
-  :config
-  (lsp-diagnostics-mode 1)
   :bind
   (:map lsp-mode-map
-        ("C-c C-d" . lsp-ui-doc-show)))
+        ("C-c C-d" . lsp-ui-doc-show))
+  :config
+  (lsp-diagnostics-mode 1)
+  (let ((patterns '("[/\\\\]\\.venv\\'"
+                    "[/\\\\]\\.mypy_cache\\'"
+                    "[/\\\\]\\.pytest_cache\\'")))
+    (dolist (p patterns)
+      (add-to-list 'lsp-file-watch-ignored-directories p))))
 
 (use-package lsp-ui
   :ensure t
