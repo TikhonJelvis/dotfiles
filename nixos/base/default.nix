@@ -41,6 +41,11 @@
     '';
   };
 
+  boot = {
+    extraModulePackages = [ pkgs.linuxPackages.v4l2loopback ];
+    kernelModules = [ "v4l2loopback" ];
+  };
+
   networking = {
     nameservers = ["1.1.1.1" "8.8.8.8"];
 
