@@ -1,4 +1,14 @@
+                                        ; PERFORMANCE
+;; I precompile my packages with Nix, so deferred compilation is
+;; unnecessary and can be a bit buggy.
 (setq comp-deferred-compilation nil)
+
+;; This settings *seems* to make Org Agenda commands faster, but I did
+;; not measure it very carefully.
+;;
+;; In profiling, it reduced GC from 53% to 22% for some *quick* tests:
+;; opening an agenda and moving back and forth between the weeks.
+(setq gc-cons-percentage 0.5)
 
                                         ; CUSTOM-SET
 (setq custom-file (dotfile "emacs/custom.el"))
@@ -630,6 +640,10 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
   (org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
 
   (org-agenda-window-setup 'other-window)
+
+  ;; I don't use blocked tasks (yet?), so disabling this should
+  ;; improve performance of agenda commands.
+  (org-agenda-dim-blocked-tasks nil)
 
   :config
   (defun org-agenda-custom-date-format (date)
