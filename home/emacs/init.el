@@ -805,7 +805,8 @@ process regardless."
           (send (concat "export PS1=\"" (shell-prompt name default-directory) "\""))
 
           (unless remote
-            (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))))
+            (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage")))
+            (send "direnv allow 2> /dev/null"))
 
           (if remote (sleep-for 1 0) (sleep-for 0 200))
           (comint-send-input)
