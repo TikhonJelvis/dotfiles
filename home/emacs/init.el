@@ -316,6 +316,10 @@ This uses the `buffer-face' minor mode."
   (set-buffer-background "#cadbf2"))
 (add-hook 'image-mode-hook 'image-preview-set-background-color)
 
+                                        ; REST
+(use-package restclient
+  :ensure t)
+
                                         ; PDF
 (global-auto-revert-mode t)
 (use-package pdf-tools
