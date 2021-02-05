@@ -317,6 +317,10 @@ This uses the `buffer-face' minor mode."
   (set-buffer-background "#cadbf2"))
 (add-hook 'image-mode-hook 'image-preview-set-background-color)
 
+                                        ; REST
+(use-package restclient
+  :ensure t)
+
                                         ; PDF
 (global-auto-revert-mode t)
 (use-package pdf-tools
@@ -802,7 +806,8 @@ process regardless."
           (send (concat "export PS1=\"" (shell-prompt name default-directory) "\""))
 
           (unless remote
-            (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))))
+            (send (format "export PAGER=%s" (expand-file-name "~/local/bin/epage")))
+            (send "direnv allow 2> /dev/null"))
 
           (if remote (sleep-for 1 0) (sleep-for 0 200))
           (comint-send-input)
