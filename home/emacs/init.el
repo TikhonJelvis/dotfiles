@@ -15,6 +15,7 @@
 (load custom-file)
 
                                         ; PERSONAL PACKAGES
+(add-to-list 'load-path "~/.emacs.d/packages")
 (add-to-list 'load-path (dotfile "emacs/packages"))
 
                                         ; MAC-SPECIFIC SETTINGS

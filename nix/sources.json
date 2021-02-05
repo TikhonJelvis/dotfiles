@@ -82,5 +82,17 @@
         "type": "tarball",
         "url": "https://github.com/nixos/nixpkgs/archive/e5ce05cc1eee0b8d890726e9826791ef95c51793.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "screenshot-el": {
+        "branch": "master",
+        "description": "Swiftly grab pretty images of your code ",
+        "homepage": "",
+        "owner": "tecosaur",
+        "repo": "screenshot",
+        "rev": "7a4d77e6005cd10d85a7949e7b737b3f5c0ee8d6",
+        "sha256": "0k9lk59s15zpwr6z0fxma9g8qk6jfizfq8xj70ak1vrbidzd3crw",
+        "type": "tarball",
+        "url": "https://github.com/tecosaur/screenshot/archive/7a4d77e6005cd10d85a7949e7b737b3f5c0ee8d6.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
