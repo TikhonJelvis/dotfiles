@@ -871,28 +871,17 @@ process regardless."
 
 (use-package python-black
   :ensure t
-  :after python)
-
-(use-package flycheck-pycheckers
-  :ensure t
-  :after flycheck)
+  :after python
+  :hook (python-mode . python-black-on-save-mode))
 
 (defun my-python-hook ()
   (direnv-update-environment default-directory)
 
   (require 'lsp-pyright)
-  (lsp-deferred)
-
-  (python-black-on-save-mode)
-
-  (unless (member 'python-pycheckers flycheck-checkers)
-    (flycheck-pycheckers-setup))
-  (flycheck-add-next-checker 'lsp '(t . python-pycheckers)))
+  (lsp))
 
 (use-package lsp-pyright
   :ensure t
-  :after lsp-mode flycheck-pycheckers
-
   :hook (python-mode . my-python-hook))
 
                                         ; R
