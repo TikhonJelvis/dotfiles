@@ -58,6 +58,13 @@
       allowedTCPPorts = [
         24800 # Synergy
       ];
+      allowedUDPPorts = [
+        5353 # mDNS for NDI
+
+        5960 # NDI communication
+
+        5961 5962 5963 5964 # NDI Channels
+      ];
     };
   };
 
