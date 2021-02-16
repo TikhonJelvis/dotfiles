@@ -18,6 +18,16 @@
     ];
   };
 
+  services.openssh = {
+    enable = true;
+    allowSFTP = false;
+    listenAddresses = [ { addr = "192.168.0.37"; port = 22; } ];
+
+    passwordAuthentication = false;
+    challengeResponseAuthentication = false;
+    banner = "tikhon-berkeley-nixos";
+  };
+
   boot = {
     loader = {
       systemd-boot.enable = true;
