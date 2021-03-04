@@ -15,7 +15,7 @@
   home = {
     packages = with pkgs;
       let
-        utils        = [ pandoc unzip vlc zip ];
+        utils        = [ pandoc unzip zip ];
         development  = [ ghc lorri niv python3 jupyter ];
         aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
       in utils ++ development ++ [ aspell ];
