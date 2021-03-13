@@ -905,10 +905,7 @@ process regardless."
   (haskell-font-lock-symbols nil)
 
   ;; Wrap haskell-mode's comamnds in a nix-shell by default:
-  (haskell-process-wrapper-function
-   (lambda (argv)
-     (append (list "nix-shell" "-I" "." "--command")
-             (list (mapconcat 'identity argv " ")))))
+  (haskell-process-wrapper-function 'identity)
 
   :bind  (:map haskell-mode-map
           ("C-c C-s" . haskell-save-and-format)
