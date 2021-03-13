@@ -899,8 +899,8 @@ process regardless."
 (use-package haskell-mode
   :ensure t
   :custom
-  (haskell-process-type 'cabal-new-repl)
-  (haskell-process-args-cabal-new-repl '("--ghc-option=-ferror-spans"))
+  (haskell-process-type 'cabal-repl)
+  (haskell-process-args-cabal-repl '("--ghc-option=-ferror-spans"))
 
   (haskell-font-lock-symbols nil)
 
