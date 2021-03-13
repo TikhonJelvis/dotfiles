@@ -15,7 +15,7 @@
     homeDirectory = "/home/tikhon";
 
     packages = with pkgs;
-      [ krita chromium gwenview slack spectacle synergy zoom-us ];
+      [ krita chromium gwenview slack spectacle synergy vlc zoom-us ];
 
     sessionVariables = {
       NIX_SSL_CERT_FILE   = "/etc/ssl/certs/ca-certificates.crt";
