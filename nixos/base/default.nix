@@ -78,6 +78,16 @@
 
   virtualisation.docker.enable = true;
 
+  services.avahi = {
+    enable = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      domain = true;
+      workstation = true;
+    };
+  };
+
   services.openssh.enable = true;
 
   services.xserver = {
