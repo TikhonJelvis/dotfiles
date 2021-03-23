@@ -76,7 +76,10 @@
 
   # Services
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
+  };
 
   services.avahi = {
     enable = true;
