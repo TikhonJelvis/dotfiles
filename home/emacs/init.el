@@ -908,10 +908,35 @@ process regardless."
   (haskell-process-wrapper-function 'identity)
 
   :bind  (:map haskell-mode-map
+          ("C-M-;" . haskell-doc-comment)
           ("C-c C-s" . haskell-save-and-format)
           ("C-c C-r" . my-haskell-load-and-run))
 
   :init
+  (defun insert-at-start (str)
+    "Insert the given string at the beginning of the line the point is on,
+collapsing any extra spaces after the inserted string."
+    (save-excursion
+      (beginning-of-line)
+      (insert str)
+      (just-one-space)))
+
+  (defun haskell-doc-comment ()
+    "Insert the first line of a Haddock documentation
+comment (--|). If the region is active, comment the entire region
+as a documentation comment."
+    (interactive)
+    (if (use-region-p)
+        (let ((end-line (line-number-at-pos (- (region-end) 1))))
+          (save-excursion
+            (goto-char (region-beginning))
+            (insert-at-start "-- | ")
+            (next-line)
+            (while (<= (line-number-at-pos (point)) end-line)
+              (insert-at-start "-- ")
+              (next-line))))
+      (insert-at-start "-- | ")))
+
   (defun haskell-save-and-format ()
     "Formats the import statements using haskell-stylish and saves
 the current file."
