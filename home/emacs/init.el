@@ -198,6 +198,7 @@ interface and inserts it at point."
 ;; I'm phasing C-x o out:
 (global-set-key (kbd "C-x o") 'other-frame)
 
+(global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-S-b") 'list-buffers)
 
 ;; Make complete tag not be alt-tab!

@@ -1,20 +1,24 @@
 ;;; Defines a menu of common locations for me to quickly jump to: home
 ;;; directory, downloads, key org files, programming projects... etc.
 
-(defun core-shortcuts ()
+(defun shortcuts-core ()
   "Return “core” shortcuts like ~, ~/Downloads... etc.
 
 Entries are pairs (NAME . PATH) where PATH is the path to jump to
 and NAME is a display name to show in the menu."
 
-  '(("Home" . "~") ("Downloads" . "~/Downloads") ("Documents" . "~/Documents") ("Programming" . "~/Programming")))
+  '(("Home" . "~") ("Downloads" . "~/Downloads") ("Documents" . "~/Documents") ("Programming" . "~/Programming") ("init.el" . "~/Programming/dotfiles/home/emacs/init.el")))
 
-(defun programming-projects ()
+(defun shortcuts-programming-projects ()
   "Return a list of directories in ~/Programming."
   (let ((files (cddr (directory-files "~/Programming"))))
     (mapcar (lambda (f) (cons f (format "~/Programming/%s" f))) files)))
 
-(defcustom shortcut-sources '(core-shortcuts programming-projects)
+(defun shortcuts-org-agenda-files ()
+  "Return shortcuts for every configured Org agenda file."
+  (mapcar (lambda (f) (cons (file-name-nondirectory f) f)) org-agenda-files))
+
+(defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects shortcuts-org-agenda-files)
   "Sources for shortcut locations to jump to.
 
 This should be a list where each entry is a function that takes
@@ -25,7 +29,7 @@ to.")
 (defun shortcuts ()
   "Return a list with all of the configured shortcut locations I
 can jump to."
-  (apply #'append (mapcar #'funcall shortcut-sources)))
+  (apply #'append (mapcar #'funcall shortcuts-sources)))
 
 (defun center-completing-read (prompt completions)
   "A version of completing-read that sets Selectrum to display a
