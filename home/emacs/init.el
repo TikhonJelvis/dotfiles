@@ -279,7 +279,7 @@ returns the same value as the function."
     (frame-root-window
      (posframe-show buffer
                     :min-height 10
-                    :min-width (or width 20)
+                    :min-width (or width 50)
 
                     :poshandler handler
 
@@ -292,7 +292,7 @@ returns the same value as the function."
     (display-posframe 'posframe-poshandler-frame-bottom-left-corner (frame-width)))
 
   (defun display-posframe-center (buffer _alist)
-    (display-posframe 'posframe-poshandler-frame-center)))
+    (display-posframe 'posframe-poshandler-window-center)))
 
 (use-package selectrum
   :ensure t
@@ -305,6 +305,9 @@ returns the same value as the function."
   :config
   (selectrum-mode 't)
   (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
+
+  (load-file (dotfile "emacs/jump-shortcuts.el"))
+  (global-set-key (kbd "C-x j") 'jump-to-shortcut)
 
   ;; Make find-file behave similarly to how it does with ido-mode: RET
   ;; enters directories, DEL goes up a level.
@@ -344,7 +347,6 @@ returns the same value as the function."
             (t
              (selectrum-select-current-candidate)))))
 
-
   (define-key selectrum-minibuffer-map (kbd "RET") 'selectrum-fido-ret)
   (define-key selectrum-minibuffer-map (kbd "DEL") 'selectrum-fido-backward-updir)
   (define-key selectrum-minibuffer-map (kbd "C-d") 'selectrum-fido-delete-char))
@@ -359,7 +361,7 @@ returns the same value as the function."
 
 (use-package marginalia
   :ensure t
-  :bind (("M-A" . marginalia-cycle)
+  :bind (("M-A" . marginalia-cycle))
 
   :init
   (marginalia-mode)
@@ -368,7 +370,7 @@ returns the same value as the function."
    :after
    (lambda ()
      (when (bound-and-true-p selectrum-mode)
-       (selectrum-exhibit 'keep-selected))))))
+       (selectrum-exhibit 'keep-selected)))))
 
 
                                         ; INPUT MODES
