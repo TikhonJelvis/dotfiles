@@ -96,20 +96,6 @@ interface and inserts it at point."
 ;; frames :/
 (setq inhibit-x-resources t)
 
-(use-package ido
-  :demand t
-
-  ;; Set C-x C-b to switching buffer—for some reason, I always hit by
-  ;; accident. It's annoying!
-  :bind ("C-x C-b" . ido-switch-buffer)
-
-  :config
-  (ido-mode t)
-
-  :custom
-  (ido-default-buffer-method 'selected-window)
-  (ido-auto-merge-work-directories-length -1))
-
 ;; I don't like tabs very much:
 (setq-default indent-tabs-mode nil)
 
@@ -273,6 +259,117 @@ returns the same value as the function."
 ;; Automatically rebalance windows whenever a new window is created.
 (advice-add 'split-window :filter-return #'my-balance-windows-advice)
 (advice-add 'delete-window :filter-return #'my-balance-windows-advice)
+
+                                        ; COMPLETION AND NAVIGATION
+(use-package consult
+  :ensure t)
+
+(use-package posframe
+  :ensure t
+  :demand t
+
+  :init
+  (defun posframe-background-color ()
+    (let ((bg (face-attribute 'default :background)))
+      (color-lighten-name bg 10)))
+  (defun posframe-border-color ()
+    (face-attribute 'default :foreground))
+
+  (defun display-posframe (handler &optional width)
+    (frame-root-window
+     (posframe-show buffer
+                    :min-height 10
+                    :min-width (or width 20)
+
+                    :poshandler handler
+
+                    :background-color (posframe-background-color)
+
+                    :internal-border-width 1
+                    :internal-border-color (posframe-border-color))))
+
+  (defun display-posframe-bottom (buffer _alist)
+    (display-posframe 'posframe-poshandler-frame-bottom-left-corner (frame-width)))
+
+  (defun display-posframe-center (buffer _alist)
+    (display-posframe 'posframe-poshandler-frame-center)))
+
+(use-package selectrum
+  :ensure t
+  :demand t
+  :requires posframe
+
+  :custom
+  (selectrum-display-action '(display-posframe-bottom))
+
+  :config
+  (selectrum-mode 't)
+  (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
+
+  ;; Make find-file behave similarly to how it does with ido-mode: RET
+  ;; enters directories, DEL goes up a level.
+  ;;
+  ;; See Selectrum GitHub for more details:
+  ;; https://github.com/raxod502/selectrum/wiki/Ido,-icomplete(fido)-emulation
+  (defun selectrum-fido-backward-updir ()
+    "Delete char before or go up directory, like `ido-mode'."
+    (interactive)
+    (if (and (eq (char-before) ?/)
+             (eq (selectrum--get-meta 'category) 'file))
+        (save-excursion
+          (goto-char (1- (point)))
+          (when (search-backward "/" (point-min) t)
+            (delete-region (1+ (point)) (point-max))))
+      (call-interactively 'backward-delete-char)))
+
+  (defun selectrum-fido-delete-char ()
+    "Delete char or maybe call `dired', like `ido-mode'."
+    (interactive)
+    (let ((end (point-max)))
+      (if (or (< (point) end) (not (eq (selectrum--get-meta 'category) 'file)))
+          (call-interactively 'delete-char)
+        (dired (file-name-directory (minibuffer-contents)))
+        (exit-minibuffer))))
+
+  (defun selectrum-fido-ret ()
+    "Exit minibuffer or enter directory, like `ido-mode'."
+    (interactive)
+    (let* ((dir (and (eq (selectrum--get-meta 'category) 'file)
+                     (file-name-directory (minibuffer-contents))))
+           (current (selectrum-get-current-candidate))
+           (probe (and dir current
+                       (expand-file-name (directory-file-name current) dir))))
+      (cond ((and probe (file-directory-p probe) (not (string= current "./")))
+             (selectrum-insert-current-candidate))
+            (t
+             (selectrum-select-current-candidate)))))
+
+
+  (define-key selectrum-minibuffer-map (kbd "RET") 'selectrum-fido-ret)
+  (define-key selectrum-minibuffer-map (kbd "DEL") 'selectrum-fido-backward-updir)
+  (define-key selectrum-minibuffer-map (kbd "C-d") 'selectrum-fido-delete-char))
+
+(use-package selectrum-prescient
+  :ensure t
+  :demand t
+
+  :config
+  (selectrum-prescient-mode 't)
+  (prescient-persist-mode 't))
+
+(use-package marginalia
+  :ensure t
+  :bind (("M-A" . marginalia-cycle)
+
+  :init
+  (marginalia-mode)
+  (advice-add
+   #'marginalia-cycle
+   :after
+   (lambda ()
+     (when (bound-and-true-p selectrum-mode)
+       (selectrum-exhibit 'keep-selected))))))
+
 
                                         ; INPUT MODES
 (setq default-input-method "TeX")
