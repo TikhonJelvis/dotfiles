@@ -18,7 +18,7 @@ and NAME is a display name to show in the menu."
   "Return shortcuts for every configured Org agenda file."
   (mapcar (lambda (f) (cons (file-name-nondirectory f) f)) org-agenda-files))
 
-(defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects shortcuts-org-agenda-files)
+(defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects)
   "Sources for shortcut locations to jump to.
 
 This should be a list where each entry is a function that takes

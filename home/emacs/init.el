@@ -279,7 +279,7 @@ returns the same value as the function."
   (defun display-posframe (handler &optional width)
     (frame-root-window
      (posframe-show buffer
-                    :min-height 10
+                    :min-height 15
                     :min-width (or width 50)
 
                     :poshandler handler
@@ -290,7 +290,7 @@ returns the same value as the function."
                     :internal-border-color (posframe-border-color))))
 
   (defun display-posframe-bottom (buffer _alist)
-    (display-posframe 'posframe-poshandler-frame-bottom-left-corner (frame-width)))
+    (display-posframe 'posframe-poshandler-frame-bottom-center (frame-width)))
 
   (defun display-posframe-center (buffer _alist)
     (display-posframe 'posframe-poshandler-window-center)))
@@ -308,6 +308,8 @@ returns the same value as the function."
   (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
 
   (load-file (dotfile "emacs/jump-shortcuts.el"))
+  (unless (eq system-type 'darwin)
+    (add-to-list 'shortcuts-sources 'shortcuts-org-agenda-files))
   (global-set-key (kbd "C-x j") 'jump-to-shortcut)
 
   ;; Make find-file behave similarly to how it does with ido-mode: RET
