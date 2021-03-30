@@ -350,6 +350,28 @@ returns the same value as the function."
             (t
              (selectrum-select-current-candidate)))))
 
+  ;; Fix how Selectrum completes org-mode tags
+  ;;
+  ;; See https://github.com/raxod502/selectrum/issues/139
+  (defun org-set-tags-command-multiple (orig &optional arg)
+    (cl-letf (((symbol-function #'completing-read)
+               (lambda (prompt collection &optional predicate require-match initial-input
+                               hist def inherit-input-method)
+                 (when initial-input
+                   (setq initial-input
+                         (replace-regexp-in-string
+                          ":" ","
+                          (replace-regexp-in-string
+                           "\\`:" "" initial-input))))
+                 (let ((res (completing-read-multiple
+                             prompt collection predicate require-match initial-input
+                             hist def inherit-input-method)))
+                   (mapconcat #'identity res ":")))))
+      (let ((current-prefix-arg arg))
+        (call-interactively orig))))
+
+  (advice-add #'org-set-tags-command :around #'org-set-tags-command-multiple)
+
   (define-key selectrum-minibuffer-map (kbd "RET") 'selectrum-fido-ret)
   (define-key selectrum-minibuffer-map (kbd "DEL") 'selectrum-fido-backward-updir)
   (define-key selectrum-minibuffer-map (kbd "C-d") 'selectrum-fido-delete-char))
