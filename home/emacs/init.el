@@ -494,6 +494,14 @@ This uses the `buffer-face' minor mode."
         (lambda (cmd) (direnv-update-environment default-directory) (executable-find cmd))))
 
 
+                                        ; CODE FORMATTING
+(use-package format-all
+  :ensure t
+  :hook (prog-mode . format-all-mode)
+  :init
+  (put 'format-all-formatters 'safe-local-variable 'listp))
+
+
                                         ; NIX
 ;; Make sure Emacs sees executables from Nix correctly.
 (use-package exec-path-from-shell
