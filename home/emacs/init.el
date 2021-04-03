@@ -976,7 +976,8 @@ process regardless."
 (use-package elisp-mode)
 (use-package paredit
   :ensure t
-  :hook (emacs-lisp-mode . paredit-mode))
+  :hook (emacs-lisp-mode . paredit-mode)
+        (lisp-data-mode . paredit-mode))
 
                                         ; JENKINSFILES
 (use-package jenkinsfile-mode
