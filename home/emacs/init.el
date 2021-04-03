@@ -1047,7 +1047,7 @@ collapsing any extra spaces after the inserted string."
 
   (defun haskell-doc-comment ()
     "Insert the first line of a Haddock documentation
-comment (--|). If the region is active, comment the entire region
+comment (-- |). If the region is active, comment the entire region
 as a documentation comment."
     (interactive)
     (if (use-region-p)
@@ -1059,7 +1059,9 @@ as a documentation comment."
             (while (<= (line-number-at-pos (point)) end-line)
               (insert-at-start "-- ")
               (next-line))))
-      (insert-at-start "-- | ")))
+      (insert-at-start "-- | ")
+      (beginning-of-line)
+      (forward-char 5)))
 
   (defun haskell-save-and-format ()
     "Formats the import statements using haskell-stylish and saves
