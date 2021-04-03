@@ -649,6 +649,7 @@ This uses the `buffer-face' minor mode."
 
 (use-package org
   :after prog-mode
+  :demand t
 
   :custom
   (org-todo-keywords
