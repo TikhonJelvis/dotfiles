@@ -23,8 +23,7 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil)
 
-  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen)
-  (set-face-attribute 'default nil :height 150))
+  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -123,6 +122,30 @@ interface and inserts it at point."
 (setq mark-even-if-inactive t)
 (setq-default truncate-lines t)
 
+;; Change font size based on resolution
+;;
+;; Code based on
+;; https://www.reddit.com/r/emacs/comments/dpc2aj/readjusting_fontsize_according_to_monitor/f5uasez/
+(defun frame-pixel-density ()
+  "Return the pixel density (in px/mm) for the current frame's
+display."
+  (let* ((attrs (frame-monitor-attributes))
+         (mm (apply 'max (cdr (assoc 'mm-size attrs))))
+         (px (apply 'max (cdddr (assoc 'geometry attrs)))))
+    (/ (float px) mm)))
+
+(defun auto-adjust-font-size (frame)
+  "Automatically set the font size based on the resolution of the
+frame's current display.
+
+My 27” 1440p display has a pixel density of ≈4.29 and works well
+at a font size of 120, so I use that as my basis and change it
+proportionately."
+  (let* ((basis (/ 120 4.29))
+        (font-size (round (* (frame-pixel-density) basis))))
+    (set-face-attribute 'default (selected-frame) :height font-size)))
+
+(add-hook 'window-size-change-functions #'auto-adjust-font-size)
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
