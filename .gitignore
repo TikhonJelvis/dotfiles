@@ -4,3 +4,7 @@
 # Nix
 result
 result-*
+
+# Haskell
+dist
+dist-newstyle

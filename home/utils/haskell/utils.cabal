@@ -1,0 +1,27 @@
+cabal-version:       2.2
+
+name:                utils
+Version:             0.0.0.1
+Synopsis:            Haskell utility programs for personal use
+
+Author:              Tikhon Jelvis <tikhon@jelv.is>
+Maintainer:          Tikhon Jelvis <tikhon@jelv.is>
+
+Build-type:          Simple
+
+common shared
+  default-language:  Haskell2010
+  GHC-options:       -rtsopts -O1
+  Build-depends:     base
+
+                   , bytestring
+                   , containers
+                   , directory
+                   , optparse-applicative
+                   , process
+                   , text
+
+executable epage
+  import:            shared
+  hs-source-dirs:    .
+  main-is:           epage.hs

@@ -1,6 +1,6 @@
-#! /usr/bin/env runhaskell
 {-# LANGUAGE LambdaCase          #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+module Main where
 
 import           Data.Functor       ((<$))
 
