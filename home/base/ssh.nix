@@ -4,7 +4,7 @@
   
   programs.ssh.matchBlocks.haskell = {
     host = "haskell";
-    hostname = "www-combo-origin.haskell.org";
+    hostname = "www-combo-nix.haskell.org";
     user = "www";
   };
 }
