@@ -22,7 +22,7 @@ let
 in  
 {
   programs.firefox = {
-    enable = true;
+    enable = false;
     profiles = {
       tikhon = {
         settings = {
