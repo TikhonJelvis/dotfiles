@@ -201,7 +201,9 @@ proportionately."
 (use-package all-the-icons-dired
   :ensure t
   :after all-the-icons
-  :hook (dired-mode . all-the-icons-dired-mode))
+  :hook (dired-mode . all-the-icons-dired-mode)
+  :custom
+  (all-the-icons-dired-monochrome nil))
 
 
 ;; Prettier mode line
