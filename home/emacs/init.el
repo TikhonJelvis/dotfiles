@@ -23,8 +23,7 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil)
 
-  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen)
-  (set-face-attribute 'default nil :height 150))
+  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
@@ -123,6 +122,30 @@ interface and inserts it at point."
 (setq mark-even-if-inactive t)
 (setq-default truncate-lines t)
 
+;; Change font size based on resolution
+;;
+;; Code based on
+;; https://www.reddit.com/r/emacs/comments/dpc2aj/readjusting_fontsize_according_to_monitor/f5uasez/
+(defun frame-pixel-density ()
+  "Return the pixel density (in px/mm) for the current frame's
+display."
+  (let* ((attrs (frame-monitor-attributes))
+         (mm (apply 'max (cdr (assoc 'mm-size attrs))))
+         (px (apply 'max (cdddr (assoc 'geometry attrs)))))
+    (/ (float px) mm)))
+
+(defun auto-adjust-font-size (frame)
+  "Automatically set the font size based on the resolution of the
+frame's current display.
+
+My 27” 1440p display has a pixel density of ≈4.29 and works well
+at a font size of 120, so I use that as my basis and change it
+proportionately."
+  (let* ((basis (/ 120 4.29))
+        (font-size (round (* (frame-pixel-density) basis))))
+    (set-face-attribute 'default (selected-frame) :height font-size)))
+
+(add-hook 'window-size-change-functions #'auto-adjust-font-size)
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
@@ -178,7 +201,9 @@ interface and inserts it at point."
 (use-package all-the-icons-dired
   :ensure t
   :after all-the-icons
-  :hook (dired-mode . all-the-icons-dired-mode))
+  :hook (dired-mode . all-the-icons-dired-mode)
+  :custom
+  (all-the-icons-dired-monochrome nil))
 
 
 ;; Prettier mode line
@@ -355,6 +380,28 @@ returns the same value as the function."
             (t
              (selectrum-select-current-candidate)))))
 
+  ;; Fix how Selectrum completes org-mode tags
+  ;;
+  ;; See https://github.com/raxod502/selectrum/issues/139
+  (defun org-set-tags-command-multiple (orig &optional arg)
+    (cl-letf (((symbol-function #'completing-read)
+               (lambda (prompt collection &optional predicate require-match initial-input
+                               hist def inherit-input-method)
+                 (when initial-input
+                   (setq initial-input
+                         (replace-regexp-in-string
+                          ":" ","
+                          (replace-regexp-in-string
+                           "\\`:" "" initial-input))))
+                 (let ((res (completing-read-multiple
+                             prompt collection predicate require-match initial-input
+                             hist def inherit-input-method)))
+                   (mapconcat #'identity res ":")))))
+      (let ((current-prefix-arg arg))
+        (call-interactively orig))))
+
+  (advice-add #'org-set-tags-command :around #'org-set-tags-command-multiple)
+
   (define-key selectrum-minibuffer-map (kbd "RET") 'selectrum-fido-ret)
   (define-key selectrum-minibuffer-map (kbd "DEL") 'selectrum-fido-backward-updir)
   (define-key selectrum-minibuffer-map (kbd "C-d") 'selectrum-fido-delete-char))
@@ -475,6 +522,14 @@ This uses the `buffer-face' minor mode."
   :config
   (setq flycheck-executable-find
         (lambda (cmd) (direnv-update-environment default-directory) (executable-find cmd))))
+
+
+                                        ; CODE FORMATTING
+(use-package format-all
+  :ensure t
+  :hook (prog-mode . format-all-mode)
+  :init
+  (put 'format-all-formatters 'safe-local-variable 'listp))
 
 
                                         ; NIX
@@ -632,6 +687,7 @@ This uses the `buffer-face' minor mode."
 
 (use-package org
   :after prog-mode
+  :demand t
 
   :custom
   (org-todo-keywords
@@ -959,7 +1015,8 @@ process regardless."
 (use-package elisp-mode)
 (use-package paredit
   :ensure t
-  :hook (emacs-lisp-mode . paredit-mode))
+  :hook (emacs-lisp-mode . paredit-mode)
+        (lisp-data-mode . paredit-mode))
 
                                         ; JENKINSFILES
 (use-package jenkinsfile-mode
@@ -1032,7 +1089,7 @@ collapsing any extra spaces after the inserted string."
 
   (defun haskell-doc-comment ()
     "Insert the first line of a Haddock documentation
-comment (--|). If the region is active, comment the entire region
+comment (-- |). If the region is active, comment the entire region
 as a documentation comment."
     (interactive)
     (if (use-region-p)
@@ -1044,7 +1101,9 @@ as a documentation comment."
             (while (<= (line-number-at-pos (point)) end-line)
               (insert-at-start "-- ")
               (next-line))))
-      (insert-at-start "-- | ")))
+      (insert-at-start "-- | ")
+      (beginning-of-line)
+      (forward-char 5)))
 
   (defun haskell-save-and-format ()
     "Formats the import statements using haskell-stylish and saves
