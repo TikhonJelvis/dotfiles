@@ -9,6 +9,7 @@
 
 import qualified Data.Map as Map
 import Data.Map (Map)
+import qualified Data.Text as Text
 
 import Prelude hiding (FilePath)
 
@@ -36,9 +37,25 @@ build passthrough = do
         , attr = Just "activationPackage"
         }
 
-  nixBuild "<home-manager/home-manager/home-manager.nix>" nixOptions
+  src <- homeManagerSrc (fromText homeConfig)
+  nixBuild (src </> "home-manager" </> "home-manager.nix") nixOptions
 
--- * nix-build
+-- | Return the path to home-manager-src for the version of
+-- home-manager set in Niv. This lets us update the version of
+-- home-manager in Niv before rebuilding.
+--
+-- Under the hood, this evaluates evaluates
+-- @(<dotfiles>/nix/sources.nix).home-manager@ and returns its path in
+-- the Nix store.
+homeManagerSrc homeConfig = do
+  let dotfiles   = parent (directory homeConfig) </> "nix" </> "sources.nix"
+      expression = "(\"${(import " <> toText' dotfiles <> ").home-manager}\")"
+  path <- nix "eval" [expression]
+  pure $ decodeString $ read $ Text.unpack $ lineToText path
+
+-- * Nix commands
+
+nix command options = inproc "nix" (command : options) empty
 
 data NixOptions = NixOptions
   { includes ∷ [FilePath]
@@ -59,7 +76,7 @@ nixBuild target NixOptions {..} = do
   readonly ← not . _writable <$> getmod "."
   when readonly $ die "Cannot run in read-only directory."
 
-  proc "nix-build" (target : options) empty
+  proc "nix-build" (toText' target : options) empty
   where options =
           ["--show-trace" | verbose ] <> nixIncludes <> nixArgs <> nixOut
 

@@ -38,9 +38,6 @@
 
       NIX_PATH = lib.concatStringsSep ":" [
         "nixpkgs=${config.sources.nixpkgs}"
-        "unstable=${config.sources.nixpkgs-unstable}"
-        "home-manager=${config.sources.home-manager}"
-
         "nixos-config=/etc/nixos/configuration.nix"
         "nixpkgs/nixos=${config.sources.nixpkgs}"
       ];

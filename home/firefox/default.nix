@@ -22,7 +22,7 @@ let
 in  
 {
   programs.firefox = {
-    enable = false;
+    enable = true;
     profiles = {
       tikhon = {
         settings = {
@@ -30,12 +30,5 @@ in
         };
       };
     };
-    extensions =
-      with addons; [
-        https-everywhere
-        noscript
-        one-password
-        ublock-origin
-      ];
   };
 }

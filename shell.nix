@@ -2,7 +2,7 @@
 , pkgs    ? import sources.nixpkgs {}
 }:
 pkgs.mkShell rec {
-  buildInputs = [ pkgs.cachix pkgs.niv ];
+  buildInputs = [ pkgs.cachix pkgs.niv pkgs.home-manager ];
 
   HOME_MANAGER_CONFIG =
     if pkgs.stdenv.isDarwin
