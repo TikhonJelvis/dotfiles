@@ -5,6 +5,11 @@
 result
 result-*
 
+# Python
+.venv
+
+# Work files
+work-shortcuts.el
 # Haskell
 dist
 dist-newstyle

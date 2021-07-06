@@ -335,6 +335,11 @@ returns the same value as the function."
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
     (add-to-list 'shortcuts-sources 'shortcuts-org-agenda-files))
+
+  (when (eq system-type 'darwin)
+    (load-file (dotfile "emacs/work-shortcuts.el"))
+    (add-to-list 'shortcuts-sources 'big-red-locations))
+
   (global-set-key (kbd "C-x j") 'jump-to-shortcut)
 
   ;; Make find-file behave similarly to how it does with ido-mode: RET
@@ -1045,7 +1050,9 @@ process regardless."
 
                                         ; R
 (use-package ess
-  :ensure t)
+  :ensure t
+  :custom
+  (ess-indent-offset 2))
 
                                         ; THETA
 
