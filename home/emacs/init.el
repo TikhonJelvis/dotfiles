@@ -953,11 +953,12 @@ process regardless."
     (when (equal name "")
       (setq name (find-useful-directory-name default-directory)))
     (pop-to-buffer (concat "<*" name "*>"))
+
     (unless (and (not prefix) (get-buffer-process (current-buffer)))
       (shell (current-buffer))
+
       (let* ((process (get-buffer-process (current-buffer)))
              (remote (file-remote-p default-directory)))
-        (defun send (str) )
 
         (require 'cl-lib)
         (cl-flet ((send (str) (comint-simple-send process str)))

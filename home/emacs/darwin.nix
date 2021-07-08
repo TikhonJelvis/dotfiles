@@ -1,28 +1,10 @@
 { pkgs, config, ... }:
-let
-  emacs-src = config.sources.emacs-nativecomp;
-  emacs-darwin-base = pkgs.emacsGcc.override {
-    srcRepo = true;
-    nativeComp = true;
-  };
-in
 {
   imports = [ ./default.nix ];
 
-  emacs = emacs-darwin-base.overrideAttrs (old: {
+  emacs = pkgs.emacsGcc.overrideAttrs (old: {
     name = "emacs-darwin";
     version = "28.0.50";
-    src = pkgs.fetchFromGitHub {
-      inherit (emacs-src) owner repo rev sha256;
-    };
-
-    configureFlags = old.configureFlags ++ ["--with-ns"];
-
-    postPatch = old.postPatch + ''
-      substituteInPlace lisp/loadup.el \
-      --replace '(emacs-repository-get-version)' '"${emacs-src.rev}"' \
-      --replace '(emacs-repository-get-branch)' '"master"'
-    '';
 
     postInstall = let
       run-emacs = ''

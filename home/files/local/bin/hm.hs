@@ -22,36 +22,32 @@ main = sh $ join $
        subcommand "build"  "Build config without installing." (build <$> nixOptions)
    <|> subcommand "switch" "Build and install config."        (switch' <$> nixOptions)
 
+switch' :: NixOptions -> Shell ExitCode
 switch' passthrough = do
   work ← ensureDir "WORK_DIR"
   build passthrough { outLink = Just $ work </> "generation" }
   shell (toText' $ work </> "generation" </> "activate") empty
 
+build :: NixOptions -> Shell ExitCode
 build passthrough = do
   homeConfig ← need "HOME_MANAGER_CONFIG" >>= \case
     Just value → pure value
     Nothing    → die "HOME_MANAGER_CONFIG unset, stopping."
+  let homePath = fromText homeConfig
+
+  when (relative homePath) $
+    die $ "HOME_MANAGER_CONFIG is relative, should be absolute.\n\
+          \HOME_MANAGER_CONFIG=" <> homeConfig
 
   let nixOptions = passthrough
         { args = args passthrough <> [("confPath", homeConfig)]
         , attr = Just "activationPackage"
         }
 
-  src <- homeManagerSrc (fromText homeConfig)
-  nixBuild (src </> "home-manager" </> "home-manager.nix") nixOptions
-
--- | Return the path to home-manager-src for the version of
--- home-manager set in Niv. This lets us update the version of
--- home-manager in Niv before rebuilding.
---
--- Under the hood, this evaluates evaluates
--- @(<dotfiles>/nix/sources.nix).home-manager@ and returns its path in
--- the Nix store.
-homeManagerSrc homeConfig = do
-  let dotfiles   = parent (directory homeConfig) </> "nix" </> "sources.nix"
-      expression = "(\"${(import " <> toText' dotfiles <> ").home-manager}\")"
-  path <- nix "eval" [expression]
-  pure $ decodeString $ read $ Text.unpack $ lineToText path
+  -- dotfiles/home/home-manager.nix uses the version of nixpkgs and
+  -- home-manager from Niv rather than whatever is configured in
+  -- NIX_PATH
+  nixBuild (directory homePath </> "home-manager.nix") nixOptions
 
 -- * Nix commands
 
