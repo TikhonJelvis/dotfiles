@@ -145,7 +145,8 @@ proportionately."
         (font-size (round (* (frame-pixel-density) basis))))
     (set-face-attribute 'default (selected-frame) :height font-size)))
 
-(add-hook 'window-size-change-functions #'auto-adjust-font-size)
+(unless (eq system-type 'darwin)
+  (add-hook 'window-size-change-functions #'auto-adjust-font-size))
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
@@ -338,7 +339,7 @@ returns the same value as the function."
 
   (when (eq system-type 'darwin)
     (load-file (dotfile "emacs/work-shortcuts.el"))
-    (add-to-list 'shortcuts-sources 'big-red-locations))
+    (add-to-list 'shortcuts-sources #'work-shortcuts))
 
   (global-set-key (kbd "C-x j") 'jump-to-shortcut)
 
@@ -1026,7 +1027,8 @@ process regardless."
 
                                         ; PYTHON
 (use-package python-docstring
-  :ensure t)
+  :ensure t
+  :hook (python-mode . python-docstring-mode))
 
 (use-package python-pytest
   :ensure t
