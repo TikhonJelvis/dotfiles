@@ -16,7 +16,7 @@
     packages = with pkgs;
       let
         utils        = [ pandoc unzip zip ];
-        development  = [ ghc lorri niv python3 jupyter ];
+        development  = [ ghc lorri niv python3 jupyter poetry ];
         aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
       in utils ++ development ++ [ aspell ];
 
