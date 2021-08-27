@@ -78,12 +78,12 @@ into a TODO."
 
 (defun file-name-at-point (add-to-kill-ring)
   "Prompts the user for a file path using the standard C-x C-f
-interface and inserts it at point."
+interface and inserts it at point.
+
+Enters or returns the expanded absolute path to the chosen file."
   (interactive "P")
   (let ((action (if add-to-kill-ring 'kill-new 'insert))
-        (path (if ido-mode
-                  (ido-read-file-name "file path: ")
-                (read-file-name "file path: "))))
+        (path (expand-file-name (read-file-name "file path: "))))
     (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
