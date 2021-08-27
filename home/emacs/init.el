@@ -437,6 +437,10 @@ returns the same value as the function."
 (load-file (dotfile "emacs/quail-rules.el"))
 
 					; DIRED
+(use-package dired
+  :config
+  (add-to-list 'dired-compress-files-alist '("\\.tar\\'" . "tar -cf - %i > %o")))
+
 ;; Has to be above JABBER settings because it has a conflicting
 ;; keybinding :(.
 (use-package dired-x
