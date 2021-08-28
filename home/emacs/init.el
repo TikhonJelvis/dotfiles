@@ -78,12 +78,12 @@ into a TODO."
 
 (defun file-name-at-point (add-to-kill-ring)
   "Prompts the user for a file path using the standard C-x C-f
-interface and inserts it at point."
+interface and inserts it at point.
+
+Enters or returns the expanded absolute path to the chosen file."
   (interactive "P")
   (let ((action (if add-to-kill-ring 'kill-new 'insert))
-        (path (if ido-mode
-                  (ido-read-file-name "file path: ")
-                (read-file-name "file path: "))))
+        (path (expand-file-name (read-file-name "file path: "))))
     (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
@@ -145,7 +145,8 @@ proportionately."
         (font-size (round (* (frame-pixel-density) basis))))
     (set-face-attribute 'default (selected-frame) :height font-size)))
 
-(add-hook 'window-size-change-functions #'auto-adjust-font-size)
+(unless (eq system-type 'darwin)
+  (add-hook 'window-size-change-functions #'auto-adjust-font-size))
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
@@ -338,7 +339,7 @@ returns the same value as the function."
 
   (when (eq system-type 'darwin)
     (load-file (dotfile "emacs/work-shortcuts.el"))
-    (add-to-list 'shortcuts-sources 'big-red-locations))
+    (add-to-list 'shortcuts-sources #'work-shortcuts))
 
   (global-set-key (kbd "C-x j") 'jump-to-shortcut)
 
@@ -436,6 +437,10 @@ returns the same value as the function."
 (load-file (dotfile "emacs/quail-rules.el"))
 
 					; DIRED
+(use-package dired
+  :config
+  (add-to-list 'dired-compress-files-alist '("\\.tar\\'" . "tar -cf - %i > %o")))
+
 ;; Has to be above JABBER settings because it has a conflicting
 ;; keybinding :(.
 (use-package dired-x
@@ -1026,7 +1031,8 @@ process regardless."
 
                                         ; PYTHON
 (use-package python-docstring
-  :ensure t)
+  :ensure t
+  :hook (python-mode . python-docstring-mode))
 
 (use-package python-pytest
   :ensure t
