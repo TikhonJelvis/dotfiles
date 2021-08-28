@@ -1197,6 +1197,9 @@ the current file."
   :custom
   (markdown-enable-math t)
 
+  :bind
+  ("C-c C-;" . markdown-insert-gfm-code-block)
+
   :config
   (defun my-markdown-hook ()
     (message "My Markdown hook!")
