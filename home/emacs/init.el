@@ -152,26 +152,6 @@ proportionately."
 (setq custom-safe-themes t)
 (load-theme 'blackboard t)
 
-;; Change company-mode colors to match blackboard:
-(use-package company
-  :ensure t
-  :after color
-  :hook (emacs-lisp-mode . company-mode)
-  :config
-  (let ((bg (face-attribute 'default :background)))
-    (custom-set-faces
-     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
-     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
-     `(company-scrollbar-fg ((t (:background "DarkOrange"))))
-     `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
-     `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
-     `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face)))))))
-
-;; Adds icons to company popups.
-(use-package company-box
-  :ensure t
-  :hook (company-mode . company-box-mode))
-
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -226,9 +206,6 @@ proportionately."
 
 (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-S-b") 'list-buffers)
-
-;; Make complete tag not be alt-tab!
-(global-set-key (kbd "M-s-<return>") 'complete-tag)
 
 ;; Some nice keyboard shortcuts:
 (global-set-key (kbd "C-x 5 3") 'make-frame-command)
@@ -591,12 +568,38 @@ This uses the `buffer-face' minor mode."
 (use-package dockerfile-mode
   :ensure t)
 
+                                        ; COMPANY
+;; Change company-mode colors to match blackboard:
+(use-package company
+  :ensure t
+  :after color
+  :bind (:map lsp-mode-map
+              ("M-RET" . company-complete))
+  :hook
+  (emacs-lisp-mode . company-mode)
+  :config
+  (let ((bg (face-attribute 'default :background)))
+    (custom-set-faces
+     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
+     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
+     `(company-scrollbar-fg ((t (:background "DarkOrange"))))
+     `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
+     `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
+     `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face)))))))
+
+;; Adds icons to company popups.
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
+
                                         ; YASNIPPET
 (use-package yasnippet
   :ensure t
   :demand t
 
-  :hook (python-mode . yas-minor-mode))
+  :hook
+  (python-mode . yas-minor-mode)
+  (yaml-mode . yas-minor-mode))
 
                                         ; PROJECTILE
 (use-package projectile
