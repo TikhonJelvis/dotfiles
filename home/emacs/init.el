@@ -576,7 +576,7 @@ This uses the `buffer-face' minor mode."
   :init
   (defun json-indent-hook ()
     (make-local-variable 'js-indent-level)
-    (setq js-indent-level 4))
+    (setq js-indent-level 2))
   :config
   (add-hook 'json-mode-hook 'json-indent-hook))
 
