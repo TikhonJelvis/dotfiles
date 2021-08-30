@@ -1055,6 +1055,9 @@ process regardless."
   :ensure t
   :hook (python-mode . my-python-hook))
 
+                                        ; HIVE
+(add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
+
                                         ; R
 (use-package ess
   :ensure t
