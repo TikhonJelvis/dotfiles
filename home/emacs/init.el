@@ -414,7 +414,7 @@ returns the same value as the function."
 (load-file (dotfile "emacs/quail-rules.el"))
 
 					; DIRED
-(use-package dired
+(use-package dired-aux
   :config
   (add-to-list 'dired-compress-files-alist '("\\.tar\\'" . "tar -cf - %i > %o")))
 
@@ -545,17 +545,19 @@ This uses the `buffer-face' minor mode."
 
 
                                         ; JSON
-;; Set the indent level to 4 for JSON files, making it buffer local to not
-;; change .js files.
 (use-package json-mode
   :ensure t
   :mode "\\.json\\'"
+  :bind
+  (:map json-mode-map
+        ("C-." . hs-toggle-hiding))
   :init
   (defun json-indent-hook ()
     (make-local-variable 'js-indent-level)
     (setq js-indent-level 2))
   :config
-  (add-hook 'json-mode-hook 'json-indent-hook))
+  (add-hook 'json-mode-hook 'json-indent-hook)
+  (add-hook 'json-mode-hook 'hs-minor-mode))
 
                                         ; YAML
 (use-package yaml-mode
