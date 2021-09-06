@@ -87,6 +87,7 @@ Enters or returns the expanded absolute path to the chosen file."
     (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
+
 					; GENERAL STUFF
 ;; Have compile scroll to the end by default.
 (setq-default compilation-scroll-output 'foo-bar)
@@ -453,9 +454,56 @@ This uses the `buffer-face' minor mode."
   (set-buffer-background "#cadbf2"))
 (add-hook 'image-mode-hook 'image-preview-set-background-color)
 
-                                        ; REST
+                                        ; NETWORK REQUESTS
 (use-package restclient
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'restclient-content-type-modes '("application/json" . json-mode)))
+
+(use-package request
+  :ensure t
+  :config
+  (defun url-buffer-name (url-string)
+    "Return a buffer name based on the given URL.
+
+If the URL has a path to a file or directory, this uses the file
+or directory name. If it doesn't, it uses the entire URL."
+    (let* ((url (url-generic-parse-url url-string))
+           (path (url-filename url))
+           (filename (file-name-nondirectory path))
+           (dirname (file-name-nondirectory (directory-file-name path)))
+           (name
+            (cond ((member path '("" "/")) (url-domain url))
+                  ((equal filename "") dirname)
+                  (t filename))))
+      (concat "*" name "*")))
+
+  (defun guess-mode (response)
+    "Guess the Emacs mode to use when displaying the given HTTP
+response."
+    (let* ((content-type
+            (request-response-header response "content-type"))
+           (body
+            (request-response-data response))
+           (mode
+            (cdr (assoc-string content-type restclient-content-type-modes t)))
+           (guessed
+            (cond ((string-match "<\\?xml " body) 'xml-mode)
+                  ((string-match "{\\s-*\"" body) 'json-mode))))
+      (or mode guessed nil)))
+
+  (defun download-file (prefix url)
+    "Download the given URL asynchronously, popping open the
+content in a buffer once ready."
+    (interactive "P\nsURL: ")
+    (request url
+      :success (cl-function
+                (lambda (&key response &key data &allow-other-keys)
+                  (pop-to-buffer (url-buffer-name (request-response-url response)))
+                  (erase-buffer)
+                  (insert data)
+                  (let ((mode (guess-mode response)))
+                    (when mode (apply mode '()))))))))
 
                                         ; PDF
 (global-auto-revert-mode t)
