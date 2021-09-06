@@ -489,13 +489,18 @@ response."
             (cdr (assoc-string content-type restclient-content-type-modes t)))
            (guessed
             (cond ((string-match "<\\?xml " body) 'xml-mode)
-                  ((string-match "{\\s-*\"" body) 'json-mode))))
-      (or mode guessed nil)))
+                  ((string-match "{\\s-*\"" body) 'json-mode)
+                  ((string-match "<!DOCTYPE html>" body) 'html-mode))))
+      (or mode guessed)))
 
-  (defun download-file (prefix url)
+  (defun download-file (url)
     "Download the given URL asynchronously, popping open the
 content in a buffer once ready."
-    (interactive "P\nsURL: ")
+    (interactive
+     (list
+      (let ((url (thing-at-point 'url)))
+        (if url (read-string (format "url (%s): " url) nil nil url)
+          (read-string "url: ")))))
     (request url
       :success (cl-function
                 (lambda (&key response &key data &allow-other-keys)
