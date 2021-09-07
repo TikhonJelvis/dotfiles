@@ -458,7 +458,8 @@ This uses the `buffer-face' minor mode."
 (use-package restclient
   :ensure t
   :config
-  (add-to-list 'restclient-content-type-modes '("application/json" . json-mode)))
+  (add-to-list 'restclient-content-type-modes '("application/json" . json-mode))
+  (add-to-list 'restclient-content-type-modes '("text/html" . mhtml-mode)))
 
 (use-package request
   :ensure t
@@ -478,20 +479,13 @@ or directory name. If it doesn't, it uses the entire URL."
                   (t filename))))
       (concat "*" name "*")))
 
-  (defun guess-mode (response)
-    "Guess the Emacs mode to use when displaying the given HTTP
-response."
+  (defun content-type-mode (response)
+    "Choose a mode based on the response's content-type, if
+possible. This uses the modes defined in
+`restclient-content-type-modes'."
     (let* ((content-type
-            (request-response-header response "content-type"))
-           (body
-            (request-response-data response))
-           (mode
-            (cdr (assoc-string content-type restclient-content-type-modes t)))
-           (guessed
-            (cond ((string-match "<\\?xml " body) 'xml-mode)
-                  ((string-match "{\\s-*\"" body) 'json-mode)
-                  ((string-match "<!DOCTYPE html>" body) 'html-mode))))
-      (or mode guessed)))
+            (request-response-header response "content-type")))
+      (cdr (assoc-string content-type restclient-content-type-modes t))))
 
   (defun download-file (url)
     "Download the given URL asynchronously, popping open the
@@ -507,8 +501,8 @@ content in a buffer once ready."
                   (pop-to-buffer (url-buffer-name (request-response-url response)))
                   (erase-buffer)
                   (insert data)
-                  (let ((mode (guess-mode response)))
-                    (when mode (apply mode '()))))))))
+                  (let ((mode (content-type-mode response)))
+                    (if mode (apply mode '()) (normal-mode))))))))
 
                                         ; PDF
 (global-auto-revert-mode t)
