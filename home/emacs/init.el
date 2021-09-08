@@ -87,6 +87,7 @@ Enters or returns the expanded absolute path to the chosen file."
     (apply action (list path))))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
+
 					; GENERAL STUFF
 ;; Have compile scroll to the end by default.
 (setq-default compilation-scroll-output 'foo-bar)
@@ -152,26 +153,6 @@ proportionately."
 (setq custom-safe-themes t)
 (load-theme 'blackboard t)
 
-;; Change company-mode colors to match blackboard:
-(use-package company
-  :ensure t
-  :after color
-  :hook (emacs-lisp-mode . company-mode)
-  :config
-  (let ((bg (face-attribute 'default :background)))
-    (custom-set-faces
-     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
-     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
-     `(company-scrollbar-fg ((t (:background "DarkOrange"))))
-     `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
-     `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
-     `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face)))))))
-
-;; Adds icons to company popups.
-(use-package company-box
-  :ensure t
-  :hook (company-mode . company-box-mode))
-
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -226,9 +207,6 @@ proportionately."
 
 (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-S-b") 'list-buffers)
-
-;; Make complete tag not be alt-tab!
-(global-set-key (kbd "M-s-<return>") 'complete-tag)
 
 ;; Some nice keyboard shortcuts:
 (global-set-key (kbd "C-x 5 3") 'make-frame-command)
@@ -437,7 +415,7 @@ returns the same value as the function."
 (load-file (dotfile "emacs/quail-rules.el"))
 
 					; DIRED
-(use-package dired
+(use-package dired-aux
   :config
   (add-to-list 'dired-compress-files-alist '("\\.tar\\'" . "tar -cf - %i > %o")))
 
@@ -476,9 +454,55 @@ This uses the `buffer-face' minor mode."
   (set-buffer-background "#cadbf2"))
 (add-hook 'image-mode-hook 'image-preview-set-background-color)
 
-                                        ; REST
+                                        ; NETWORK REQUESTS
 (use-package restclient
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'restclient-content-type-modes '("application/json" . json-mode))
+  (add-to-list 'restclient-content-type-modes '("text/html" . mhtml-mode)))
+
+(use-package request
+  :ensure t
+  :config
+  (defun url-buffer-name (url-string)
+    "Return a buffer name based on the given URL.
+
+If the URL has a path to a file or directory, this uses the file
+or directory name. If it doesn't, it uses the entire URL."
+    (let* ((url (url-generic-parse-url url-string))
+           (path (url-filename url))
+           (filename (file-name-nondirectory path))
+           (dirname (file-name-nondirectory (directory-file-name path)))
+           (name
+            (cond ((member path '("" "/")) (url-domain url))
+                  ((equal filename "") dirname)
+                  (t filename))))
+      (concat "*" name "*")))
+
+  (defun content-type-mode (response)
+    "Choose a mode based on the response's content-type, if
+possible. This uses the modes defined in
+`restclient-content-type-modes'."
+    (let* ((content-type
+            (request-response-header response "content-type")))
+      (cdr (assoc-string content-type restclient-content-type-modes t))))
+
+  (defun download-file (url)
+    "Download the given URL asynchronously, popping open the
+content in a buffer once ready."
+    (interactive
+     (list
+      (let ((url (thing-at-point 'url)))
+        (if url (read-string (format "url (%s): " url) nil nil url)
+          (read-string "url: ")))))
+    (request url
+      :success (cl-function
+                (lambda (&key response &key data &allow-other-keys)
+                  (pop-to-buffer (url-buffer-name (request-response-url response)))
+                  (erase-buffer)
+                  (insert data)
+                  (let ((mode (content-type-mode response)))
+                    (if mode (apply mode '()) (normal-mode))))))))
 
                                         ; PDF
 (global-auto-revert-mode t)
@@ -568,17 +592,19 @@ This uses the `buffer-face' minor mode."
 
 
                                         ; JSON
-;; Set the indent level to 4 for JSON files, making it buffer local to not
-;; change .js files.
 (use-package json-mode
   :ensure t
   :mode "\\.json\\'"
+  :bind
+  (:map json-mode-map
+        ("C-." . hs-toggle-hiding))
   :init
   (defun json-indent-hook ()
     (make-local-variable 'js-indent-level)
-    (setq js-indent-level 4))
+    (setq js-indent-level 2))
   :config
-  (add-hook 'json-mode-hook 'json-indent-hook))
+  (add-hook 'json-mode-hook 'json-indent-hook)
+  (add-hook 'json-mode-hook 'hs-minor-mode))
 
                                         ; YAML
 (use-package yaml-mode
@@ -591,12 +617,38 @@ This uses the `buffer-face' minor mode."
 (use-package dockerfile-mode
   :ensure t)
 
+                                        ; COMPANY
+;; Change company-mode colors to match blackboard:
+(use-package company
+  :ensure t
+  :after color
+  :bind (:map lsp-mode-map
+              ("M-RET" . company-complete))
+  :hook
+  (emacs-lisp-mode . company-mode)
+  :config
+  (let ((bg (face-attribute 'default :background)))
+    (custom-set-faces
+     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
+     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
+     `(company-scrollbar-fg ((t (:background "DarkOrange"))))
+     `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
+     `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
+     `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face)))))))
+
+;; Adds icons to company popups.
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
+
                                         ; YASNIPPET
 (use-package yasnippet
   :ensure t
   :demand t
 
-  :hook (python-mode . yas-minor-mode))
+  :hook
+  (python-mode . yas-minor-mode)
+  (yaml-mode . yas-minor-mode))
 
                                         ; PROJECTILE
 (use-package projectile
@@ -1205,6 +1257,9 @@ the current file."
 
   :custom
   (markdown-enable-math t)
+
+  :bind
+  ("C-c C-;" . markdown-insert-gfm-code-block)
 
   :config
   (defun my-markdown-hook ()

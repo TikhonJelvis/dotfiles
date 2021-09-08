@@ -18,7 +18,7 @@
     };
 
     home.packages = with pkgs;
-      [ nodePackages.pyright ];
+      [ nodePackages.pyright yaml-language-server taplo-lsp ];
 
     home.file = {
       ".emacs" = {
