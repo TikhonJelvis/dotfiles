@@ -3,7 +3,7 @@
 ;; unnecessary and can be a bit buggy.
 (setq comp-deferred-compilation nil)
 
-;; This settings *seems* to make Org Agenda commands faster, but I did
+;; This setting *seems* to make Org Agenda commands faster, but I did
 ;; not measure it very carefully.
 ;;
 ;; In profiling, it reduced GC from 53% to 22% for some *quick* tests:
@@ -310,6 +310,14 @@ returns the same value as the function."
   :config
   (selectrum-mode 't)
   (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
+
+  ;; I've been getting an error related to the “ *selectrum*” buffer:
+  ;;
+  ;; Error in post-command-hook (selectrum--update): (error "No buffer named  *selectrum*")
+  ;;
+  ;; My first attempt to fix this is just making sure the buffer is
+  ;; created once selectrum is loaded.
+  (get-buffer-create selectrum--display-action-buffer)
 
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
