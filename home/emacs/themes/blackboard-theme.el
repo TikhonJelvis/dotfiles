@@ -1,4 +1,4 @@
-;; Blackboard Color Theme for Emacs.
+;; Modified Blackboard Color Theme for Emacs.
 ;;
 ;; MIT License Copyright (c) 2008 JD Huntington <jdhuntington at gmail dot com>
 ;;                       (c) 2020 Tikhon Jelvis <tikhon@jelv.is>
@@ -40,11 +40,16 @@ learnui.design/tools/data-color-picker.html + blackboard)."
 
 (custom-theme-set-faces
  `blackboard
+
  `(default ((t (:background "#0C1021" :foreground "#F8F8F8" ))))
+
  `(bold ((t (:bold t))))
  `(bold-italic ((t (:bold t))))
+
  `(border-glyph ((t (nil))))
+
  `(buffers-tab ((t (:background "#0C1021" :foreground "#F8F8F8"))))
+
  `(font-lock-builtin-face ((t (:foreground "#94bff3"))))
  `(font-lock-comment-face ((t (:italic t :foreground "#AEAEAE"))))
  `(font-lock-constant-face ((t (:foreground "#D8FA3C"))))
@@ -53,6 +58,10 @@ learnui.design/tools/data-color-picker.html + blackboard)."
  `(font-lock-keyword-face ((t (:foreground "#FBDE2D"))))
  `(font-lock-preprocessor-face ((t (:foreground "Aquamarine"))))
  `(font-lock-reference-face ((t (:foreground "SlateBlue"))))
+ `(font-lock-string-face ((t (:foreground "#61CE3C"))))
+ `(font-lock-type-face ((t (:foreground "#8DA6CE"))))
+ `(font-lock-variable-name-face ((t (:foreground "#FF6400"))))
+ `(font-lock-warning-face ((t (:bold t :foreground "pink"))))
 
  `(font-lock-regexp-grouping-backslash ((t (:foreground "#E9C062"))))
  `(font-lock-regexp-grouping-construct ((t (:foreground "red"))))
@@ -85,20 +94,17 @@ learnui.design/tools/data-color-picker.html + blackboard)."
  `(org-agenda-date-weekend ((t (:weight normal :foreground ,(org-color 2)))))
  `(org-agenda-date-today ((t (:weight bold :foreground ,(org-color 7)))))
 
- `(font-lock-string-face ((t (:foreground "#61CE3C"))))
- `(font-lock-type-face ((t (:foreground "#8DA6CE"))))
- `(font-lock-variable-name-face ((t (:foreground "#FF6400"))))
- `(font-lock-warning-face ((t (:bold t :foreground "pink"))))
  `(gui-element ((t (:background "#D4D0C8" :foreground "black"))))
  `(region ((t (:background "#253B76"))))
- `(mode-line ((t (:background "grey75" :foreground "black"))))
+ `(mode-line ((t (:background "DarkOrange" :foreground "black" :box nil))))
  `(highlight ((t (:background "#222222"))))
  `(highline-face ((t (:background "SeaGreen"))))
  `(italic ((t (nil))))
  `(left-margin ((t (nil))))
  `(text-cursor ((t (:background "yellow" :foreground "black"))))
  `(toolbar ((t (nil))))
- `(underline ((nil (:underline nil)))))
+ `(underline ((nil (:underline nil))))
+ `(fringe ((t (:background nil)))))
 
 (provide-theme 'blackboard)
 

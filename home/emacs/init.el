@@ -161,7 +161,7 @@ proportionately."
     (menu-bar-mode 1)
   (menu-bar-mode -1))
 
-(fringe-mode 0)
+(fringe-mode 12)
 
 ;; No $ displayed for truncated lines
 (set-display-table-slot standard-display-table 0 ?\ )
