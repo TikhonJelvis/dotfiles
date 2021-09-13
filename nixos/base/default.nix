@@ -57,7 +57,13 @@
     interfaces.wlp37s0.useDHCP = true;
 
     firewall = {
+      enable = true;
+
       allowedTCPPorts = [
+        5960 # NDI communication
+
+        5961 5962 5963 5964 # NDI Channels
+
         24800 # Synergy
       ];
       allowedUDPPorts = [
@@ -67,10 +73,6 @@
         # arbitrarily.
 
         5353 # mDNS for NDI
-
-        5960 # NDI communication
-
-        5961 5962 5963 5964 # NDI Channels
       ];
     };
   };
@@ -88,13 +90,12 @@
     enableOnBoot = false;
   };
 
+  # Avahi config needed to work with OBS-NDI
   services.avahi = {
     enable = true;
     publish = {
       enable = true;
-      addresses = true;
-      domain = true;
-      workstation = true;
+      userServices = true;
     };
   };
 
