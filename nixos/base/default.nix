@@ -61,6 +61,11 @@
         24800 # Synergy
       ];
       allowedUDPPorts = [
+        2142 # SRT
+        # As far as I can tell, SRT does not have a default port
+        # number that's used by convention, so I just chose one
+        # arbitrarily.
+
         5353 # mDNS for NDI
 
         5960 # NDI communication
