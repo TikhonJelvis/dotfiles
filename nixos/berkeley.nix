@@ -10,6 +10,10 @@
 
   services.xserver.wacom.enable = true;
 
+  # Propriatery NVIDIA drivers—hopefully works better than open source
+  # version
+  services.xserver.videoDrivers = [ "nvidia" ];
+
   networking = {
     hostName = "tikhon-nixos-berkeley";
 
