@@ -187,6 +187,10 @@ proportionately."
   :custom
   (all-the-icons-dired-monochrome nil))
 
+;; For debugging all-the-icons
+(use-package font-lock-studio
+  :ensure t)
+
 
 ;; Prettier mode line
 (use-package powerline
@@ -746,11 +750,11 @@ content in a buffer once ready."
   pretty Unicode characters."
   (push '("TODO" . "") prettify-symbols-alist)
   (push '("FOLLOW-UP" . "") prettify-symbols-alist)
-  (push '("CONSIDER" . "") prettify-symbols-alist)
+  (push '("CONSIDER" . "") prettify-symbols-alist)
   (push '("INVESTIGATE" . "") prettify-symbols-alist)
   (push '("DONE" . "✔") prettify-symbols-alist)
   (push '("CANCELED" . "") prettify-symbols-alist)
-  (push '("PROJECT" . "") prettify-symbols-alist)
+  (push '("PROJECT" . "") prettify-symbols-alist)
   (prettify-symbols-mode 1))
 
 (use-package org
@@ -866,7 +870,7 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
          ("k" . org-capture))
 
   :custom
-  (org-agenda-scheduled-leaders '("" " %2d×"))
+  (org-agenda-scheduled-leaders '("" " %2d×"))
   (org-agenda-prefix-format
    '((agenda . " %i %-7t% s")
      (todo . " %i %-12:c")
