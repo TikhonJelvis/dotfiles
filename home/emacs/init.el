@@ -520,6 +520,9 @@ content in a buffer once ready."
   :config
   (pdf-tools-install :no-query))
 
+                                        ; SCREENSHOT
+(unless (eq system-type 'darwin) (use-package screenshot))
+
                                         ; FLYSPELL
 ;; If the aspell executable is not available, check two things:
 ;;
