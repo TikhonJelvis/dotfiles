@@ -187,10 +187,6 @@ proportionately."
   :custom
   (all-the-icons-dired-monochrome nil))
 
-;; For debugging all-the-icons
-(use-package font-lock-studio
-  :ensure t)
-
 
 ;; Prettier mode line
 (use-package powerline

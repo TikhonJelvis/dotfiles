@@ -77,10 +77,10 @@
         "homepage": "",
         "owner": "tecosaur",
         "repo": "screenshot",
-        "rev": "3b03bdea89b5c77dff04089be5bd1e9f55b3d525",
-        "sha256": "1p0p8qazakjfw8c4ql5s2fal6yl9vh7q7gvssmdn0shyr3z3mipc",
+        "rev": "6faa48a98896e170657820109184f7f55c1a339b",
+        "sha256": "1n3fydlh0j9h2qyfbx0gkvpc3ss4ldynxm830kqvmakfnc4h5cry",
         "type": "tarball",
-        "url": "https://github.com/tecosaur/screenshot/archive/3b03bdea89b5c77dff04089be5bd1e9f55b3d525.tar.gz",
+        "url": "https://github.com/tecosaur/screenshot/archive/6faa48a98896e170657820109184f7f55c1a339b.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
