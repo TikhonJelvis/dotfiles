@@ -13,7 +13,20 @@
     [./fonts.nix
     ];
 
+  i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = "America/Los_Angeles";
+
+  programs.steam.enable = true;
+
   nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.overlays = [
+    (self: super: {
+      steam = super.steam.override {
+        extraPkgs = pkgs: with pkgs; [ pango harfbuzz libthai ];
+      };
+    })
+  ];
 
   nix = {
     binaryCaches = [
@@ -77,19 +90,6 @@
     };
   };
 
-  i18n.defaultLocale = "en_US.UTF-8";
-  time.timeZone = "America/Los_Angeles";
-
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
-  # Services
-
-  virtualisation.docker = {
-    enable = true;
-    enableOnBoot = false;
-  };
-
   # Avahi config needed to work with OBS-NDI
   services.avahi = {
     enable = true;
@@ -99,7 +99,15 @@
     };
   };
 
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = false;
+  };
+
   services.openssh.enable = true;
+
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
 
   services.xserver = {
     enable = true;
