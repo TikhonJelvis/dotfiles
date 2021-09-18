@@ -300,7 +300,8 @@ returns the same value as the function."
                     :internal-border-color (posframe-border-color))))
 
   (defun display-posframe-bottom (buffer _alist)
-    (display-posframe 'posframe-poshandler-frame-bottom-center (frame-width)))
+    (display-posframe 'posframe-poshandler-frame-bottom-center
+                      (round (* 0.9 (frame-width)))))
 
   (defun display-posframe-center (buffer _alist)
     (display-posframe 'posframe-poshandler-window-center)))
