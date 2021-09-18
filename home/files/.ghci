@@ -1,5 +1,6 @@
 :set -fdefer-type-errors
 :set -Wno-unused-imports
 :set -fshow-loaded-modules
+:set -haddock
 
 :set prompt "λ> "
