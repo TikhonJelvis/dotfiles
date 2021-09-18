@@ -135,7 +135,7 @@ display."
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
 
-(defvar basis-font-size 90
+(defvar basis-font-size 80
   "The font size that works well on my 27” 1440p display (with a
 pixel density of ≈4.29). Resolution-based font-size adjustment
 will try to keep the actual font size the same across different
@@ -286,7 +286,10 @@ returns the same value as the function."
   (defun posframe-border-color ()
     (face-attribute 'default :foreground))
 
-  (defun display-posframe (handler &optional width)
+  ;;; Without explicitly passing in (face-attribute 'default :font),
+  ;;; posframe windows were not working correctly with my
+  ;;; auto-adjust-font-size function.
+  (defun display-posframe (handler font &optional width)
     (frame-root-window
      (posframe-show buffer
                     :min-height 15
@@ -294,17 +297,24 @@ returns the same value as the function."
 
                     :poshandler handler
 
+                    :left-fringe (frame-parameter (selected-frame) 'left-fringe)
+                    :right-fringe (frame-parameter (selected-frame) 'right-fringe)
+
+                    :font font
                     :background-color (posframe-background-color)
 
                     :internal-border-width 1
                     :internal-border-color (posframe-border-color))))
 
   (defun display-posframe-bottom (buffer _alist)
-    (display-posframe 'posframe-poshandler-frame-bottom-center
-                      (round (* 0.9 (frame-width)))))
+    (display-posframe
+     #'posframe-poshandler-frame-bottom-center
+     (face-attribute 'default :font)
+     (frame-width)))
 
   (defun display-posframe-center (buffer _alist)
-    (display-posframe 'posframe-poshandler-window-center)))
+    (display-posframe #'posframe-poshandler-window-center
+     (face-attribute 'default :font))))
 
 (use-package selectrum
   :ensure t
