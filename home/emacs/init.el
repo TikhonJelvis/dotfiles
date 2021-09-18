@@ -135,14 +135,20 @@ display."
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
 
+(defvar basis-font-size 90
+  "The font size that works well on my 27” 1440p display (with a
+pixel density of ≈4.29). Resolution-based font-size adjustment
+will try to keep the actual font size the same across different
+screens.")
+
 (defun auto-adjust-font-size (frame)
   "Automatically set the font size based on the resolution of the
 frame's current display.
 
 My 27” 1440p display has a pixel density of ≈4.29 and works well
-at a font size of 120, so I use that as my basis and change it
+at the basis font size, so I use that as my basis and change it
 proportionately."
-  (let* ((basis (/ 120 4.29))
+  (let* ((basis (/ basis-font-size 4.29))
         (font-size (round (* (frame-pixel-density) basis))))
     (set-face-attribute 'default (selected-frame) :height font-size)))
 
