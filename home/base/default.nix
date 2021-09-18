@@ -15,10 +15,11 @@
   home = {
     packages = with pkgs;
       let
+        apps         = [ discord ];
         utils        = [ drive pandoc unzip zip ];
         development  = [ ghc lorri niv python3 jupyter poetry ];
         aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
-      in utils ++ development ++ [ aspell ];
+      in apps ++ utils ++ development ++ [ aspell ];
 
     sessionPath = [
       "$HOME/.nix-profile/bin"
