@@ -23,6 +23,8 @@
     };
   };
 
+  xdg.enable = true;
+
   programs.git.userEmail = "tikhon@jelv.is";
 
   services.lorri.enable = true;

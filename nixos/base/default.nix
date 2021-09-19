@@ -23,6 +23,7 @@
   nixpkgs.overlays = [
     (self: super: {
       steam = super.steam.override {
+        # Temporary (?) fix for Steam bug
         extraPkgs = pkgs: with pkgs; [ pango harfbuzz libthai ];
       };
     })
@@ -106,9 +107,21 @@
 
   services.openssh.enable = true;
 
+  # Sound
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  # Scanning
+  hardware.sane = {
+    enable = true;
+
+    disabledDefaultBackends = [
+      "net" # not using any network scanners right now...
+      "v4l" # webcam—not useful as scanner and slows down scanimage -L
+    ];
+  };
+
+  # X
   services.xserver = {
     enable = true;
     layout = "us";
@@ -131,8 +144,10 @@
     tikhon = {
       isNormalUser = true;
       extraGroups = [
-        "wheel" # Enable ‘sudo’ for the user.
+        "wheel"   # Enable ‘sudo’ for the user.
         "docker"
+        "scanner" # sane
+        "lp"      # sane
       ];
     };
   };
