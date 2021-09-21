@@ -14,8 +14,18 @@
     username = "tikhon";
     homeDirectory = "/home/tikhon";
 
-    packages = with pkgs;
-      [ file krita chromium gwenview slack spectacle synergy vlc zoom-us ];
+    packages = with pkgs; [
+      chromium
+      discord
+      file
+      gwenview
+      krita
+      slack
+      spectacle
+      synergy
+      vlc
+      zoom-us
+    ];
 
     sessionVariables = {
       NIX_SSL_CERT_FILE   = "/etc/ssl/certs/ca-certificates.crt";
