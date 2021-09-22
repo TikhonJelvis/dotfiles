@@ -800,15 +800,19 @@ content in a buffer once ready."
 (use-package lsp-mode
   :ensure t
   :demand t
+
   :custom
   (lsp-eldoc-hook nil)
   (lsp-diagnostics-provider :flycheck)
+
   :custom-face
   (lsp-lsp-flycheck-info-unnecessary-face
    ((t (:underline (:color "#3366FF" :style line)))))
+
   :bind
   (:map lsp-mode-map
         ("C-c C-d" . lsp-ui-doc-show))
+
   :config
   (lsp-diagnostics-mode 1)
   (let ((patterns '("[/\\\\]\\.venv\\'"
@@ -1370,6 +1374,19 @@ the current file."
   :ensure t
   :after rust-mode
   :hook (rust-mode . flycheck-rust-setup))
+
+                                        ; SCALA
+(use-package scala-mode
+  :ensure t
+  :mode "\\.\\(scala\\|sbt\\)$"
+  :hook (scala-mode . lsp))
+
+(use-package sbt-mode
+  :ensure t
+  :commands sbt-start sbt-command)
+
+(use-package lsp-metals
+  :ensure t)
 
                                         ; SKETCH
 (use-package sketch-mode
