@@ -1,6 +1,6 @@
                                         ; PERFORMANCE
 ;; I precompile my packages with Nix, so deferred compilation is
-;; unnecessary and can be a bit buggy.
+;; unnecessary and can be slow/buggy.
 (setq comp-deferred-compilation nil)
 
 ;; This setting *seems* to make Org Agenda commands faster, but I did
@@ -9,6 +9,19 @@
 ;; In profiling, it reduced GC from 53% to 22% for some *quick* tests:
 ;; opening an agenda and moving back and forth between the weeks.
 (setq gc-cons-percentage 0.5)
+
+;; LSP mode suggests increasing gc-cons-threshold. Not 100% how this
+;; interact with gc-cons-percentage, but seems like the worst case is
+;; that the larger of the two settings always dominates, which should
+;; be fine for performance.
+;;
+;; Unlike gc-cons-percentage, I haven't done any measurements *or*
+;; benchmarks with setting.
+(setq gc-cons-threshold 100000000)
+
+;; Some LSP server processes send large (1–3M) responses. This setting
+;; lets Emacs process responses up to 3M at a time.
+(setq read-process-output-max (* 3 1024 1024))
 
                                         ; CUSTOM-SET
 (setq custom-file (dotfile "emacs/custom.el"))
