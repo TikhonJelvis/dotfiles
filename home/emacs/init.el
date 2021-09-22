@@ -135,7 +135,7 @@ display."
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
 
-(defvar basis-font-size 80
+(defvar basis-font-size 120
   "The font size that works well on my 27” 1440p display (with a
 pixel density of ≈4.29). Resolution-based font-size adjustment
 will try to keep the actual font size the same across different
@@ -152,8 +152,8 @@ proportionately."
         (font-size (round (* (frame-pixel-density) basis))))
     (set-face-attribute 'default (selected-frame) :height font-size)))
 
-(unless (eq system-type 'darwin)
-  (add-hook 'window-size-change-functions #'auto-adjust-font-size))
+(add-hook 'window-size-change-functions #'auto-adjust-font-size)
+
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
@@ -331,13 +331,8 @@ returns the same value as the function."
   (selectrum-mode 't)
   (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
 
-  ;; I've been getting an error related to the “ *selectrum*” buffer:
-  ;;
-  ;; Error in post-command-hook (selectrum--update): (error "No buffer named  *selectrum*")
-  ;;
-  ;; My first attempt to fix this is just making sure the buffer is
-  ;; created once selectrum is loaded.
-  (get-buffer-create selectrum--display-action-buffer)
+  ;; When there are no candidates, selectrum displays an error in the
+  ;; minibuffer because the " *selectrum*" buffer doesn't exist.
 
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
@@ -386,6 +381,122 @@ returns the same value as the function."
              (selectrum-insert-current-candidate))
             (t
              (selectrum-select-current-candidate)))))
+
+  ;; Change selectrum so that menus wrap around.
+  (defun selectrum--wrap (x lower upper)
+    (cond ((< x lower) upper)
+          ((> x upper) lower)
+          ('t x)))
+
+  (defun selectrum-next-candidate (&optional arg)
+    "Move selection ARG candidates down, stopping at the end."
+    (interactive "p")
+    (when selectrum--current-candidate-index
+      (setq selectrum--current-candidate-index
+            (selectrum--wrap
+             (+ selectrum--current-candidate-index (or arg 1))
+             (if (and (selectrum--match-strictly-required-p)
+                      (cond (minibuffer-completing-file-name
+                             (not (selectrum--at-existing-prompt-path-p)))
+                            (t
+                             (not (string-empty-p selectrum--virtual-input)))))
+                 0
+               -1)
+             (1- (length selectrum--refined-candidates))))))
+
+  ;; TODO: Remove once PR is merged!
+  ;;
+  ;; Modification to selectrum--update that fixes the missing-buffer
+  ;; error when Selectrum has no candidates (eg calling find-file from
+  ;; an empty directory).
+  ;;
+  ;; I opened an issue and PR[1] about this on GitHub, so hopefully I
+  ;; won't need to keep this in my init.el for long :).
+  ;;
+  ;; [1]: https://github.com/raxod502/selectrum/pull/572
+  (defun selectrum--update (&optional keep-selected)
+    "Update state.
+KEEP-SELECTED can be a candidate which should stay selected after
+the update."
+    ;; Stay within input area.
+    (goto-char (max (point) (minibuffer-prompt-end)))
+    ;; Scroll the minibuffer when current prompt exceeds window width.
+    (let* ((width (window-width)))
+      (if (< (point) (- width (/ width 3)))
+          (set-window-hscroll nil 0)
+        (set-window-hscroll nil (- (point) (/ width 3)))))
+    ;; For some reason this resets and thus can't be set in setup hook.
+    (setq-local truncate-lines t)
+    (let ((inhibit-read-only t)
+          ;; Don't record undo information while messing with the
+          ;; minibuffer, as per
+          ;; <https://github.com/raxod502/selectrum/issues/31>.
+          (buffer-undo-list t)
+          (input (buffer-substring (minibuffer-prompt-end)
+                                   (point-max)))
+          (keep-mark-active (not deactivate-mark)))
+      (unless (equal input selectrum--previous-input-string)
+        (selectrum--update-input-changed input keep-selected))
+      ;; Handle prompt selection.
+      (if (and selectrum--current-candidate-index
+               (< selectrum--current-candidate-index 0))
+          (add-text-properties
+           (minibuffer-prompt-end) (point-max)
+           '(face selectrum-current-candidate))
+        (remove-text-properties
+         (minibuffer-prompt-end) (point-max)
+         '(face selectrum-current-candidate)))
+      (let* ((count-info (selectrum--count-info))
+             (window (if selectrum-display-action
+                         (selectrum--get-display-window)
+                       (active-minibuffer-window)))
+             (minibuf-after-string (or (selectrum--format-default) " "))
+             (inserted-res
+              (selectrum--insert-candidates
+               window
+               selectrum--virtual-input
+               ;; FIXME: This only takes our count overlay into
+               ;; account there might be other overlays prefixing the
+               ;; prompt.
+               (length count-info)))
+             (horizp (car inserted-res))
+             (inserted-string (cadddr inserted-res)))
+        (setq-local selectrum--actual-num-candidates-displayed
+                    (cadr inserted-res))
+        (setq-local selectrum--first-index-displayed
+                    (caddr inserted-res))
+        (if selectrum-display-action
+            ;; Insert candidates into action buffer.
+            (with-current-buffer selectrum--display-action-buffer
+              (erase-buffer)
+              (insert inserted-string))
+          ;; Candidates are shown in minibuffer, act accordingly.
+          ;; Add padding for scrolled prompt.
+          (unless (or horizp (zerop (window-hscroll window)))
+            (setq inserted-string
+                  (replace-regexp-in-string
+                   "^" (make-string (window-hscroll window) ?\s)
+                   inserted-string)))
+          ;; Add candidates to minibuffer string.
+          (unless (or (zerop selectrum--actual-num-candidates-displayed)
+                      (not selectrum--refined-candidates))
+            (setq minibuf-after-string
+                  (concat minibuf-after-string inserted-string))))
+        (move-overlay selectrum--candidates-overlay
+                      (point-max) (point-max))
+        (put-text-property 0 1 'cursor t minibuf-after-string)
+        (overlay-put selectrum--candidates-overlay
+                     'after-string minibuf-after-string)
+        (overlay-put selectrum--count-overlay
+                     'before-string count-info)
+        (overlay-put selectrum--count-overlay
+                     'priority 1)
+        (when window
+          (selectrum--update-window-height
+           window (not horizp)))
+        (when keep-mark-active
+          (setq deactivate-mark nil))
+        (setq-local selectrum--is-initializing nil))))
 
   ;; Fix how Selectrum completes org-mode tags
   ;;
