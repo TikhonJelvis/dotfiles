@@ -1392,7 +1392,15 @@ the current file."
 
   :hook
   (scala-mode . lsp)
-  (scala-mode . yas-minor-mode))
+  (scala-mode . yas-minor-mode)
+
+  :config
+  (defun scala-auto-format ()
+    "Turn on format-all mode if scalafmt is in the path in this
+buffer."
+    (when (executable-find "scalafmt")
+      (format-all-mode t)))
+  (add-hook 'scala-mode-hook #'scala-auto-format))
 
 (use-package sbt-mode
   :ensure t
