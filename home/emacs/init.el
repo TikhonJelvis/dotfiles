@@ -344,9 +344,6 @@ returns the same value as the function."
   (selectrum-mode 't)
   (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
 
-  ;; When there are no candidates, selectrum displays an error in the
-  ;; minibuffer because the " *selectrum*" buffer doesn't exist.
-
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
     (add-to-list 'shortcuts-sources 'shortcuts-org-agenda-files))
@@ -1392,7 +1389,10 @@ the current file."
 (use-package scala-mode
   :ensure t
   :mode "\\.\\(scala\\|sbt\\)$"
-  :hook (scala-mode . lsp))
+
+  :hook
+  (scala-mode . lsp)
+  (scala-mode . yas-minor-mode))
 
 (use-package sbt-mode
   :ensure t
