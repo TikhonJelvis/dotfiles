@@ -1,6 +1,6 @@
                                         ; PERFORMANCE
 ;; I precompile my packages with Nix, so deferred compilation is
-;; unnecessary and can be a bit buggy.
+;; unnecessary and can be slow/buggy.
 (setq comp-deferred-compilation nil)
 
 ;; This setting *seems* to make Org Agenda commands faster, but I did
@@ -9,6 +9,19 @@
 ;; In profiling, it reduced GC from 53% to 22% for some *quick* tests:
 ;; opening an agenda and moving back and forth between the weeks.
 (setq gc-cons-percentage 0.5)
+
+;; LSP mode suggests increasing gc-cons-threshold. Not 100% how this
+;; interact with gc-cons-percentage, but seems like the worst case is
+;; that the larger of the two settings always dominates, which should
+;; be fine for performance.
+;;
+;; Unlike gc-cons-percentage, I haven't done any measurements *or*
+;; benchmarks with setting.
+(setq gc-cons-threshold 100000000)
+
+;; Some LSP server processes send large (1–3M) responses. This setting
+;; lets Emacs process responses up to 3M at a time.
+(setq read-process-output-max (* 3 1024 1024))
 
                                         ; CUSTOM-SET
 (setq custom-file (dotfile "emacs/custom.el"))
@@ -135,7 +148,7 @@ display."
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
 
-(defvar basis-font-size 80
+(defvar basis-font-size 120
   "The font size that works well on my 27” 1440p display (with a
 pixel density of ≈4.29). Resolution-based font-size adjustment
 will try to keep the actual font size the same across different
@@ -152,8 +165,13 @@ proportionately."
         (font-size (round (* (frame-pixel-density) basis))))
     (set-face-attribute 'default (selected-frame) :height font-size)))
 
+;; For some reason, my font size adjusting code was pretty
+;; inconsistent on macOS, and I don't feel like debugging it. I just
+;; end up adjusting the size manually when I hook my macbook up to a
+;; new display anyway...
 (unless (eq system-type 'darwin)
   (add-hook 'window-size-change-functions #'auto-adjust-font-size))
+
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
@@ -331,14 +349,6 @@ returns the same value as the function."
   (selectrum-mode 't)
   (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
 
-  ;; I've been getting an error related to the “ *selectrum*” buffer:
-  ;;
-  ;; Error in post-command-hook (selectrum--update): (error "No buffer named  *selectrum*")
-  ;;
-  ;; My first attempt to fix this is just making sure the buffer is
-  ;; created once selectrum is loaded.
-  (get-buffer-create selectrum--display-action-buffer)
-
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
     (add-to-list 'shortcuts-sources 'shortcuts-org-agenda-files))
@@ -386,6 +396,122 @@ returns the same value as the function."
              (selectrum-insert-current-candidate))
             (t
              (selectrum-select-current-candidate)))))
+
+  ;; Change selectrum so that menus wrap around.
+  (defun selectrum--wrap (x lower upper)
+    (cond ((< x lower) upper)
+          ((> x upper) lower)
+          ('t x)))
+
+  (defun selectrum-next-candidate (&optional arg)
+    "Move selection ARG candidates down, stopping at the end."
+    (interactive "p")
+    (when selectrum--current-candidate-index
+      (setq selectrum--current-candidate-index
+            (selectrum--wrap
+             (+ selectrum--current-candidate-index (or arg 1))
+             (if (and (selectrum--match-strictly-required-p)
+                      (cond (minibuffer-completing-file-name
+                             (not (selectrum--at-existing-prompt-path-p)))
+                            (t
+                             (not (string-empty-p selectrum--virtual-input)))))
+                 0
+               -1)
+             (1- (length selectrum--refined-candidates))))))
+
+  ;; TODO: Remove once PR is merged!
+  ;;
+  ;; Modification to selectrum--update that fixes the missing-buffer
+  ;; error when Selectrum has no candidates (eg calling find-file from
+  ;; an empty directory).
+  ;;
+  ;; I opened an issue and PR[1] about this on GitHub, so hopefully I
+  ;; won't need to keep this in my init.el for long :).
+  ;;
+  ;; [1]: https://github.com/raxod502/selectrum/pull/572
+  (defun selectrum--update (&optional keep-selected)
+    "Update state.
+KEEP-SELECTED can be a candidate which should stay selected after
+the update."
+    ;; Stay within input area.
+    (goto-char (max (point) (minibuffer-prompt-end)))
+    ;; Scroll the minibuffer when current prompt exceeds window width.
+    (let* ((width (window-width)))
+      (if (< (point) (- width (/ width 3)))
+          (set-window-hscroll nil 0)
+        (set-window-hscroll nil (- (point) (/ width 3)))))
+    ;; For some reason this resets and thus can't be set in setup hook.
+    (setq-local truncate-lines t)
+    (let ((inhibit-read-only t)
+          ;; Don't record undo information while messing with the
+          ;; minibuffer, as per
+          ;; <https://github.com/raxod502/selectrum/issues/31>.
+          (buffer-undo-list t)
+          (input (buffer-substring (minibuffer-prompt-end)
+                                   (point-max)))
+          (keep-mark-active (not deactivate-mark)))
+      (unless (equal input selectrum--previous-input-string)
+        (selectrum--update-input-changed input keep-selected))
+      ;; Handle prompt selection.
+      (if (and selectrum--current-candidate-index
+               (< selectrum--current-candidate-index 0))
+          (add-text-properties
+           (minibuffer-prompt-end) (point-max)
+           '(face selectrum-current-candidate))
+        (remove-text-properties
+         (minibuffer-prompt-end) (point-max)
+         '(face selectrum-current-candidate)))
+      (let* ((count-info (selectrum--count-info))
+             (window (if selectrum-display-action
+                         (selectrum--get-display-window)
+                       (active-minibuffer-window)))
+             (minibuf-after-string (or (selectrum--format-default) " "))
+             (inserted-res
+              (selectrum--insert-candidates
+               window
+               selectrum--virtual-input
+               ;; FIXME: This only takes our count overlay into
+               ;; account there might be other overlays prefixing the
+               ;; prompt.
+               (length count-info)))
+             (horizp (car inserted-res))
+             (inserted-string (cadddr inserted-res)))
+        (setq-local selectrum--actual-num-candidates-displayed
+                    (cadr inserted-res))
+        (setq-local selectrum--first-index-displayed
+                    (caddr inserted-res))
+        (if selectrum-display-action
+            ;; Insert candidates into action buffer.
+            (with-current-buffer selectrum--display-action-buffer
+              (erase-buffer)
+              (insert inserted-string))
+          ;; Candidates are shown in minibuffer, act accordingly.
+          ;; Add padding for scrolled prompt.
+          (unless (or horizp (zerop (window-hscroll window)))
+            (setq inserted-string
+                  (replace-regexp-in-string
+                   "^" (make-string (window-hscroll window) ?\s)
+                   inserted-string)))
+          ;; Add candidates to minibuffer string.
+          (unless (or (zerop selectrum--actual-num-candidates-displayed)
+                      (not selectrum--refined-candidates))
+            (setq minibuf-after-string
+                  (concat minibuf-after-string inserted-string))))
+        (move-overlay selectrum--candidates-overlay
+                      (point-max) (point-max))
+        (put-text-property 0 1 'cursor t minibuf-after-string)
+        (overlay-put selectrum--candidates-overlay
+                     'after-string minibuf-after-string)
+        (overlay-put selectrum--count-overlay
+                     'before-string count-info)
+        (overlay-put selectrum--count-overlay
+                     'priority 1)
+        (when window
+          (selectrum--update-window-height
+           window (not horizp)))
+        (when keep-mark-active
+          (setq deactivate-mark nil))
+        (setq-local selectrum--is-initializing nil))))
 
   ;; Fix how Selectrum completes org-mode tags
   ;;
@@ -689,15 +815,19 @@ content in a buffer once ready."
 (use-package lsp-mode
   :ensure t
   :demand t
+
   :custom
   (lsp-eldoc-hook nil)
   (lsp-diagnostics-provider :flycheck)
+
   :custom-face
   (lsp-lsp-flycheck-info-unnecessary-face
    ((t (:underline (:color "#3366FF" :style line)))))
+
   :bind
   (:map lsp-mode-map
         ("C-c C-d" . lsp-ui-doc-show))
+
   :config
   (lsp-diagnostics-mode 1)
   (let ((patterns '("[/\\\\]\\.venv\\'"
@@ -1259,6 +1389,63 @@ the current file."
   :ensure t
   :after rust-mode
   :hook (rust-mode . flycheck-rust-setup))
+
+                                        ; SCALA
+(use-package scala-mode
+  :ensure t
+  :mode "\\.\\(scala\\|sbt\\)$"
+
+  :hook
+  (scala-mode . yas-minor-mode)
+
+  :config
+  (defun scala-lsp-maybe ()
+    "Turns on LSP mode if a metals executable is available.
+
+I like to manage tools on a per-project basis with Nix + direnv
+rather than installing them globally. If a project isn't set up
+with an LSP server available, lsp-mode prompts me to install it,
+which I don't want to do. This hook avoids that problem."
+    (when (executable-find "metals") (lsp)))
+  (add-hook 'scala-mode-hook #'scala-lsp-maybe)
+
+  (defun scala-auto-format ()
+    "Turn on format-all mode if scalafmt is in the path in this
+buffer."
+    (when (executable-find "scalafmt")
+      (format-all-mode t)))
+  (add-hook 'scala-mode-hook #'scala-auto-format)
+
+  ;; Basic scaladoc highlighting (eg @param foo gets highlighted
+  ;; specially).
+  ;;
+  ;; List of keywords is not exhaustive (for now?)
+  (let* ((no-args
+          (rx (: "@"
+                 (| "author"
+                    "constructor"
+                    "deprecated"
+                    "example"
+                    "note"
+                    "return"
+                    "see"
+                    "since"
+                    "version"))))
+         (args
+          (rx (: (group (: "@" (| "param" "throws")))
+                 (1+ blank)
+                 (group (: (| letter "_") (0+ word)))))))
+    (font-lock-add-keywords 'scala-mode
+                            `((,no-args 0 font-lock-keyword-face t)
+                              (,args 1 font-lock-keyword-face t)
+                              (,args 2 font-lock-variable-name-face t)))))
+
+(use-package sbt-mode
+  :ensure t
+  :commands sbt-start sbt-command)
+
+(use-package lsp-metals
+  :ensure t)
 
                                         ; SKETCH
 (use-package sketch-mode
