@@ -1414,7 +1414,31 @@ which I don't want to do. This hook avoids that problem."
 buffer."
     (when (executable-find "scalafmt")
       (format-all-mode t)))
-  (add-hook 'scala-mode-hook #'scala-auto-format))
+  (add-hook 'scala-mode-hook #'scala-auto-format)
+
+  ;; Basic scaladoc highlighting (eg @param foo gets highlighted
+  ;; specially).
+  ;;
+  ;; List of keywords is not exhaustive (for now?)
+  (let* ((no-args
+          (rx (: "@"
+                 (| "author"
+                    "constructor"
+                    "deprecated"
+                    "example"
+                    "note"
+                    "return"
+                    "see"
+                    "since"
+                    "version"))))
+         (args
+          (rx (: (group (: "@" (| "param" "throws")))
+                 (1+ blank)
+                 (group (: (| letter "_") (0+ word)))))))
+    (font-lock-add-keywords 'scala-mode
+                            `((,no-args 0 font-lock-keyword-face t)
+                              (,args 1 font-lock-keyword-face t)
+                              (,args 2 font-lock-variable-name-face t)))))
 
 (use-package sbt-mode
   :ensure t

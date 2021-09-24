@@ -104,7 +104,10 @@ learnui.design/tools/data-color-picker.html + blackboard)."
  `(text-cursor ((t (:background "yellow" :foreground "black"))))
  `(toolbar ((t (nil))))
  `(underline ((nil (:underline nil))))
- `(fringe ((t (:background nil)))))
+ `(fringe ((t (:background nil))))
+
+ ;; Language-specific tweaks
+ `(scala-font-lock:var-face ((t (:inherit font-lock-variable-name-face :bold t)))))
 
 (provide-theme 'blackboard)
 
