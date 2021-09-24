@@ -165,7 +165,12 @@ proportionately."
         (font-size (round (* (frame-pixel-density) basis))))
     (set-face-attribute 'default (selected-frame) :height font-size)))
 
-(add-hook 'window-size-change-functions #'auto-adjust-font-size)
+;; For some reason, my font size adjusting code was pretty
+;; inconsistent on macOS, and I don't feel like debugging it. I just
+;; end up adjusting the size manually when I hook my macbook up to a
+;; new display anyway...
+(unless (eq system-type 'darwin)
+  (add-hook 'window-size-change-functions #'auto-adjust-font-size))
 
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
