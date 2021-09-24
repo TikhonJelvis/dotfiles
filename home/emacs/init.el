@@ -1291,6 +1291,7 @@ the current file."
 
   :bind
   ("C-c C-;" . markdown-insert-gfm-code-block)
+  ("C-M-;" . markdown-insert-code)
 
   :config
   (defun my-markdown-hook ()
