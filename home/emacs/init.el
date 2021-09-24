@@ -1396,10 +1396,19 @@ the current file."
   :mode "\\.\\(scala\\|sbt\\)$"
 
   :hook
-  (scala-mode . lsp)
   (scala-mode . yas-minor-mode)
 
   :config
+  (defun scala-lsp-maybe ()
+    "Turns on LSP mode if a metals executable is available.
+
+I like to manage tools on a per-project basis with Nix + direnv
+rather than installing them globally. If a project isn't set up
+with an LSP server available, lsp-mode prompts me to install it,
+which I don't want to do. This hook avoids that problem."
+    (when (executable-find "metals") (lsp)))
+  (add-hook 'scala-mode-hook #'scala-lsp-maybe)
+
   (defun scala-auto-format ()
     "Turn on format-all mode if scalafmt is in the path in this
 buffer."
