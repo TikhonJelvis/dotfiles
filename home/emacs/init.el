@@ -140,10 +140,11 @@ Enters or returns the expanded absolute path to the chosen file."
 ;;
 ;; Code based on
 ;; https://www.reddit.com/r/emacs/comments/dpc2aj/readjusting_fontsize_according_to_monitor/f5uasez/
-(defun frame-pixel-density ()
+(defun frame-pixel-density (&optional frame)
   "Return the pixel density (in px/mm) for the current frame's
 display."
-  (let* ((attrs (frame-monitor-attributes))
+  (unless frame (setq frame (selected-frame)))
+  (let* ((attrs (frame-monitor-attributes frame))
          (mm (apply 'max (cdr (assoc 'mm-size attrs))))
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
@@ -154,23 +155,36 @@ pixel density of ≈4.29). Resolution-based font-size adjustment
 will try to keep the actual font size the same across different
 screens.")
 
-(defun auto-adjust-font-size (frame)
-  "Automatically set the font size based on the resolution of the
-frame's current display.
+(defun adjusted-font-size (&optional frame)
+  "Return the adjusted font size for the given frame, based on
+the resolution of the frame's current display.
 
 My 27” 1440p display has a pixel density of ≈4.29 and works well
 at the basis font size, so I use that as my basis and change it
 proportionately."
-  (let* ((basis (/ basis-font-size 4.29))
-        (font-size (round (* (frame-pixel-density) basis))))
-    (set-face-attribute 'default (selected-frame) :height font-size)))
+  (unless frame (setq frame (selected-frame)))
+  (let ((basis (/ basis-font-size 4.29)))
+    (round (* (frame-pixel-density frame) basis))))
+
+(defun auto-adjust-font-size (&optional frame)
+  "Automatically set the font size based on the resolution of the
+frame's current display. See `adjusted-font-size' for details. "
+  (unless frame (setq frame (selected-frame)))
+  (set-face-attribute 'default frame :height (adjusted-font-size frame)))
+
+(defun auto-adjust-size-if-frame-changed (frame)
+  "Call `auto-adjust-font-size' only if the frame has changed
+size. Designed to work with `window-size-change-functions'."
+  (when (frame-size-changed-p)
+    (auto-adjust-font-size frame)))
 
 ;; For some reason, my font size adjusting code was pretty
 ;; inconsistent on macOS, and I don't feel like debugging it. I just
 ;; end up adjusting the size manually when I hook my macbook up to a
 ;; new display anyway...
 (unless (eq system-type 'darwin)
-  (add-hook 'window-size-change-functions #'auto-adjust-font-size))
+  (add-hook 'after-make-frame-functions #'auto-adjust-font-size)
+  (add-hook 'window-size-change-functions #'auto-adjust-size-if-frame-changed))
 
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
@@ -331,7 +345,14 @@ returns the same value as the function."
     (display-posframe
      #'posframe-poshandler-frame-bottom-center
      (face-attribute 'default :font)
-     (frame-width)))
+
+     ;; (frame-width) sometimes returns an incorrect number for newly
+     ;; opened frames, and this alternate calculation seems to solve
+     ;; the problem.
+     ;;
+     ;; The -1 adjusts for some inconsistencies in the calculation—the
+     ;; frame is too wide otherwise.
+     (- (/ (frame-pixel-width) (window-font-width)) 2)))
 
   (defun display-posframe-center (buffer _alist)
     (display-posframe #'posframe-poshandler-window-center
