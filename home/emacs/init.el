@@ -169,6 +169,7 @@ proportionately."
 (defun auto-adjust-font-size (&optional frame)
   "Automatically set the font size based on the resolution of the
 frame's current display. See `adjusted-font-size' for details. "
+  (interactive)
   (unless frame (setq frame (selected-frame)))
   (set-face-attribute 'default frame :height (adjusted-font-size frame)))
 
