@@ -184,6 +184,7 @@ size. Designed to work with `window-size-change-functions'."
 ;; end up adjusting the size manually when I hook my macbook up to a
 ;; new display anyway...
 (unless (eq system-type 'darwin)
+  (add-hook 'focus-in-hook #'auto-adjust-font-size)
   (add-hook 'after-make-frame-functions #'auto-adjust-font-size)
   (add-hook 'window-size-change-functions #'auto-adjust-size-if-frame-changed))
 
