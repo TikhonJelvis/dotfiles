@@ -1422,6 +1422,13 @@ the current file."
   (scala-mode . yas-minor-mode)
 
   :config
+  (defun scala-lsp-save-and-format ()
+    "First format the buffer with `lsp-organize-imports' then save
+it."
+    (interactive)
+    (save-buffer)
+    (lsp-organize-imports))
+
   (defun scala-lsp-maybe ()
     "Turns on LSP mode if a metals executable is available.
 
@@ -1429,7 +1436,10 @@ I like to manage tools on a per-project basis with Nix + direnv
 rather than installing them globally. If a project isn't set up
 with an LSP server available, lsp-mode prompts me to install it,
 which I don't want to do. This hook avoids that problem."
-    (when (executable-find "metals") (lsp)))
+    (when (executable-find "metals")
+      (lsp)
+      (format-all-mode t)
+      (local-set-key (kbd "C-x C-s") #'scala-lsp-save-and-format)))
   (add-hook 'scala-mode-hook #'scala-lsp-maybe)
 
   (defun scala-auto-format ()
