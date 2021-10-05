@@ -1427,7 +1427,8 @@ the current file."
 it."
     (interactive)
     (save-buffer)
-    (lsp-organize-imports))
+    (lsp-organize-imports)
+    (save-buffer))
 
   (defun scala-lsp-maybe ()
     "Turns on LSP mode if a metals executable is available.
