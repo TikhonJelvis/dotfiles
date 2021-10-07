@@ -1439,7 +1439,6 @@ with an LSP server available, lsp-mode prompts me to install it,
 which I don't want to do. This hook avoids that problem."
     (when (executable-find "metals")
       (lsp)
-      (format-all-mode t)
       (local-set-key (kbd "C-x C-s") #'scala-lsp-save-and-format)))
   (add-hook 'scala-mode-hook #'scala-lsp-maybe)
 
@@ -1447,6 +1446,7 @@ which I don't want to do. This hook avoids that problem."
     "Turn on format-all mode if scalafmt is in the path in this
 buffer."
     (when (executable-find "scalafmt")
+      (setq-local format-all-formatters '(("Scala" scalafmt)))
       (format-all-mode t)))
   (add-hook 'scala-mode-hook #'scala-auto-format)
 
