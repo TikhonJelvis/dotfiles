@@ -94,9 +94,14 @@ learnui.design/tools/data-color-picker.html + blackboard)."
  `(org-agenda-date-weekend ((t (:weight normal :foreground ,(org-color 2)))))
  `(org-agenda-date-today ((t (:weight bold :foreground ,(org-color 7)))))
 
+ `(mode-line ((t (:background "DarkOrange" :foreground "black" :box nil))))
+ `(mode-line-inactive ((t (:box nil))))
+ `(powerline-inactive0 ((t (:background "gray30" :foreground "gray80"))))
+ `(powerline-inactive1 ((t (:background "gray20" :foreground "gray80"))))
+ `(powerline-inactive2 ((t (:background "gray30" :foreground "gray80"))))
+
  `(gui-element ((t (:background "#D4D0C8" :foreground "black"))))
  `(region ((t (:background "#253B76"))))
- `(mode-line ((t (:background "DarkOrange" :foreground "black" :box nil))))
  `(highlight ((t (:background "#222222"))))
  `(highline-face ((t (:background "SeaGreen"))))
  `(italic ((t (nil))))
