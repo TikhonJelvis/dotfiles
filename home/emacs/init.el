@@ -797,6 +797,11 @@ content in a buffer once ready."
 (use-package dockerfile-mode
   :ensure t)
 
+                                        ; BAZEL + STARLARK
+(use-package bazel
+  :ensure t
+  :mode "\\.star\\'")
+
                                         ; COMPANY
 ;; Change company-mode colors to match blackboard:
 (use-package company
@@ -1418,8 +1423,20 @@ the current file."
   :ensure t
   :mode "\\.\\(scala\\|sbt\\)$"
 
+  :bind
+  (:map scala-mode-map
+        ("RET" . scala-insert-asterisk-on-newline))
+
   :hook
   (scala-mode . yas-minor-mode)
+
+  :init
+  (defun scala-insert-asterisk-on-newline ()
+    "Insert a newline, indent and add an asterisk if inside a
+Scaladoc comment."
+    (interactive)
+    (newline-and-indent)
+    (scala-indent:insert-asterisk-on-multiline-comment))
 
   :config
   (defun scala-lsp-save-and-format ()
