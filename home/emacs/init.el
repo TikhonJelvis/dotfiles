@@ -1444,7 +1444,6 @@ Scaladoc comment."
 it."
     (interactive)
     (save-buffer)
-    (lsp-organize-imports)
     (save-buffer))
 
   (defun scala-lsp-maybe ()
