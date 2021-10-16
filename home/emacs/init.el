@@ -136,6 +136,17 @@ Enters or returns the expanded absolute path to the chosen file."
 (setq mark-even-if-inactive t)
 (setq-default truncate-lines t)
 
+;; Trying out a variable-pitch font for programming by default.
+(add-hook 'prog-mode-hook #'variable-pitch-mode)
+(add-hook 'dired-mode #'variable-pitch-mode)
+
+;; Keep using the monospace font for Haskell to support space-based alignment.
+(defun monospace-mode ()
+  "Explicitly turn off `variable-pitch-mode' for the buffer."
+  (variable-pitch-mode -1))
+(add-hook 'haskell-mode-hook #'monospace-mode)
+(add-hook 'nix-mode-hook #'monospace-mode)
+
 ;; Change font size based on resolution
 ;;
 ;; Code based on
@@ -149,7 +160,7 @@ display."
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
 
-(defvar basis-font-size 120
+(defvar basis-font-size 100
   "The font size that works well on my 27” 1440p display (with a
 pixel density of ≈4.29). Resolution-based font-size adjustment
 will try to keep the actual font size the same across different

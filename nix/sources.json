@@ -71,6 +71,18 @@
         "url": "https://github.com/nixos/nixpkgs/archive/b72ad04a8a324697d3fb92e19cd840379a902813.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "npmlock2nix": {
+        "branch": "master",
+        "description": null,
+        "homepage": null,
+        "owner": "Tweag",
+        "repo": "npmlock2nix",
+        "rev": "33eb3300561d724da64a46ab8e9a05a9cfa9264b",
+        "sha256": "07pi4ahyqkap5fhxx9l96502sxh6bx4fh2fflpqp6h68va1ay2y6",
+        "type": "tarball",
+        "url": "https://github.com/Tweag/npmlock2nix/archive/33eb3300561d724da64a46ab8e9a05a9cfa9264b.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "screenshot-el": {
         "branch": "master",
         "description": "Swiftly grab pretty images of your code ",
