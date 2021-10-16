@@ -1,8 +1,8 @@
 { pkgs, lib, ... }:
 let
   # Custom settings for Input font—variations for "a", "g", "*"... etc
-  input-fonts-url = { a, g, i, l, zero, asterisk, braces, line-height }:
-    let options = "a=${a}&g=${g}&i=${i}&l=${l}&zero=${zero}&braces=${braces}&line-height=${line-height}"; in
+  input-fonts-url = { a, g, i, l, zero, asterisk, braces, line-height, preset }:
+    let options = "a=${a}&g=${g}&i=${i}&l=${l}&zero=${zero}&braces=${braces}&line-height=${line-height}&preset=${preset}"; in
     "https://input.djr.com/build/?fontSelection=whole&${options}&accept=I+do&email=&.zip";
   input-fonts-src = { options, version, sha256 }:
     let releaseDate = "2015-06-24"; in
@@ -35,15 +35,16 @@ in
     (input-font {
       options = {
         a           = "0";
-        g           = "1";
-        i           = "3";
-        l           = "4";
+        g           = "ss";
+        i           = "serifs";
+        l           = "serifs_round";
         zero        = "0";
-        asterisk    = "1";
-        braces      = "1";
+        asterisk    = "height";
+        braces      = "straight";
+        preset      = "default";
         line-height = "1.3";
       };
-      sha256 = "0c59ygh3kmpzyjwsr6sh3x29279qjcabk198f29plp5l5wz1dalf";
+      sha256 = "18g89p526295c9h17y1gcwlfb6phxrw6nlhdvn4z2czapg0pzngh";
     })
   ];
 
