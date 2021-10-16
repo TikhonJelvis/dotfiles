@@ -233,8 +233,14 @@ size. Designed to work with `window-size-change-functions'."
 ;; Not sure why this needs to be in a hook, but it didn't initialize
 ;; correctly otherwise.
 (defun emoji-fonts-hook (frame)
-  ;; Basic color Emoji support with Noto:
-  (set-fontset-font t 'symbol "Noto Color Emoji" frame))
+  (set-fontset-font t 'unicode (face-attribute 'default :family))
+  (set-fontset-font t '(#x2300 . #x27e7) "Twitter Color Emoji")
+  (set-fontset-font t '(#x2300 . #x27e7) "EmojiOne Color" nil 'append)
+  (set-fontset-font t '(#x2300 . #x27e7) "Noto Color Emoji" nil 'append)
+  (set-fontset-font t '(#x27F0 . #x1FAFF) "Twitter Color Emoji")
+  (set-fontset-font t '(#x27F0 . #x1FAFF) "EmojiOne Color" nil 'append)
+  (set-fontset-font t '(#x27F0 . #x1FAFF) "Noto Color Emoji" nil 'append)
+  (set-fontset-font t 'unicode "Symbola" nil 'append))
 (add-hook 'after-make-frame-functions #'emoji-fonts-hook)
 
 
@@ -943,13 +949,13 @@ content in a buffer once ready."
 (defun org-mode-prettify-hook ()
   "Configure prettify-symbols to replace todo/consider/done with
   pretty Unicode characters."
-  (push '("TODO" . "") prettify-symbols-alist)
-  (push '("FOLLOW-UP" . "") prettify-symbols-alist)
-  (push '("CONSIDER" . "") prettify-symbols-alist)
-  (push '("INVESTIGATE" . "") prettify-symbols-alist)
-  (push '("DONE" . "✔") prettify-symbols-alist)
-  (push '("CANCELED" . "") prettify-symbols-alist)
-  (push '("PROJECT" . "") prettify-symbols-alist)
+  (push '("TODO" . "📝") prettify-symbols-alist)
+  (push '("FOLLOW-UP" . "➡️") prettify-symbols-alist)
+  (push '("CONSIDER" . "❔") prettify-symbols-alist)
+  (push '("INVESTIGATE" . "🔎") prettify-symbols-alist)
+  (push '("DONE" . "☑️") prettify-symbols-alist)
+  (push '("CANCELED" . "❌") prettify-symbols-alist)
+  (push '("PROJECT" . "📂") prettify-symbols-alist)
   (prettify-symbols-mode 1))
 
 (use-package org
@@ -1065,7 +1071,7 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
          ("k" . org-capture))
 
   :custom
-  (org-agenda-scheduled-leaders '("" " %2d×"))
+  (org-agenda-scheduled-leaders '("" "%2d×"))
   (org-agenda-prefix-format
    '((agenda . " %i %-7t% s")
      (todo . " %i %-12:c")
@@ -1076,8 +1082,13 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
   (org-agenda-time-grid
    '((daily today require-timed)
      (800 1200 1600 2000)
-     "" "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"))
-  (org-agenda-current-time-string "◀ ┈┈┈┈┈┈┈┈ now ┈┈┈┈┈┈┈┈")
+     ""
+     ;; Hack: THREE-PER-EM SPACE inserted at beginning of string so
+     ;; that Org Agenda doesn't trim the leading whitespace:
+     "                       •••"))
+  ;; Note: Using a bunch of NARROW NO-BREAK SPACE around 🕐 to align
+  ;; with ••• in the agenda view
+  (org-agenda-current-time-string "──────────────      🕐     ──────────────")
 
   (org-agenda-window-setup 'other-window)
 
@@ -1154,7 +1165,18 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 		     (substring x (match-end 3)))))))
 	x)))
 
-  (add-hook 'org-agenda-mode-hook 'org-mode-prettify-hook))
+  (defface org-agenda-default
+    '((t (:inherit default :family "Roboto Mono" :weight normal)))
+    "The default face to use when displaying the Org Agenda.")
+  (defun org-agenda-default-face-mode ()
+    "Minor mode that sets the buffer's default face to `org-agenda-default'."
+    (interactive (list (or current-prefix-arg 'toggle)))
+    (setq-local line-spacing 0.2)
+    (buffer-face-mode-invoke 'org-agenda-default (or arg t)
+                             (called-interactively-p 'interactive)))
+  (add-hook 'org-agenda-mode-hook #'org-agenda-default-face-mode)
+
+  (add-hook 'org-agenda-mode-hook #'org-mode-prettify-hook))
 
 (use-package org-bullets
   :ensure t
