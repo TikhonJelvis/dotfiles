@@ -3,7 +3,7 @@ let
   # Custom settings for Input font—variations for "a", "g", "*"... etc
   input-fonts-url = { a, g, i, l, zero, asterisk, braces, line-height }:
     let options = "a=${a}&g=${g}&i=${i}&l=${l}&zero=${zero}&braces=${braces}&line-height=${line-height}"; in
-    "https://input.djr.com/build/?fontSelection=whole&${options}&preset=default&accept=I+do&email=&.zip";
+    "https://input.djr.com/build/?fontSelection=whole&${options}&accept=I+do&email=&.zip";
   input-fonts-src = { options, version, sha256 }:
     let releaseDate = "2015-06-24"; in
     pkgs.fetchzip {

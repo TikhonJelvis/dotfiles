@@ -136,7 +136,17 @@ Enters or returns the expanded absolute path to the chosen file."
 (setq mark-even-if-inactive t)
 (setq-default truncate-lines t)
 
-;; Trying out a variable-pitch font for programming by default.
+;; Variable-width typeface for prose
+(defface prose
+  '((t (:inherit default :weight semi-bold :width normal :family "Junction")))
+  "A variable-width for non-code prose—paragraphs of text, markdown... etc.")
+(defun prose-mode (&optional arg)
+  "Minor mode that sets the buffer's default face to `prose'."
+  (interactive (list (or current-prefix-arg 'toggle)))
+  (buffer-face-mode-invoke 'prose (or arg t)
+                           (called-interactively-p 'interactive)))
+
+;; Trying out a variable-width font for programming by default.
 (add-hook 'prog-mode-hook #'variable-pitch-mode)
 (add-hook 'dired-mode #'variable-pitch-mode)
 
@@ -160,7 +170,7 @@ display."
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
 
-(defvar basis-font-size 100
+(defvar basis-font-size 110
   "The font size that works well on my 27” 1440p display (with a
 pixel density of ≈4.29). Resolution-based font-size adjustment
 will try to keep the actual font size the same across different
@@ -1543,14 +1553,14 @@ buffer."
 
   :config
   (defun my-markdown-hook ()
-    (message "My Markdown hook!")
+    (prose-mode 1)
     (flyspell-mode)
     (visual-line-mode 1)
     (visual-fill-column-mode 1)
     (flyspell-buffer)
     (local-unset-key (kbd "C-M-b"))
     (local-unset-key (kbd "C-M-f")))
-  (add-hook 'markdown-mode-hook 'my-markdown-hook))
+  (add-hook 'markdown-mode-hook #'my-markdown-hook))
 
 (defun copy-markdown-formatted ()
   "Copy a region or buffer in Markdown as RTF—convenient way to
