@@ -1,0 +1,83 @@
+* Icons
+** Generating
+   The icon font was manually generated with [[https://icomoon.io/app][Icomoon]]. I collected a
+   number of icons myself on Noun Project and combined them with the
+   (rather larger) set of icons from [[https://github.com/file-icons][the File Icons project]] across
+   three sets:
+
+     1. [[https://github.com/file-icons/icons][File Icons icons]]
+     2. [[https://github.com/file-icons/DevOpicons][Optimized Devicons]]
+     3. [[https://github.com/file-icons/MFixx][Fixed MFizz Icons]]
+
+   The [[file:icomoon.json][icomoon.json]] file should have all the information needed to
+   recreate and modify the font including both my custom icons and
+   these existing icon sets.
+
+   Apart from the font itself, Icomoon also generates a CSS file with
+   mappings for every single character. I converted this to 
+
+** Icon Files
+   List of icons I found on top of the ones that came with
+   file-icon/etc—almost all from [[https://thenounproject.com][Noun Project]] where I have a
+   membership.
+
+   Note that a lot of these were tweaked in Icomoon to fit to their
+   boundaries, and a couple were also rotated.
+
+*** apps
+    - chat (chat.svg)
+    - archive (archive.svg)
+    - settings (settings.svg)
+    - encryption keys (keys.svg)
+    - bookmark (bookmark.svg)
+    - sticky note (sticky-notes.svg)
+    - favorites (favorites.svg)
+
+*** files
+    - file (file.svg)
+    - symlink (file-symlink.svg)
+    - directory (directory.svg)
+    - directory symlink (directory.svg)
+    - pdf (pdf.svg)
+    - text file (file-text.svg)
+    - binary file (file-binary.svg)
+    - zip file (file-zip.svg)
+    - zip file locked (file-zip-locked.svg)
+    - csv (spreadsheet.svg)
+    - image (photo.svg)
+    - logs (log.svg) (yes, literal log—I have no shame)
+    - package (package.svg)
+    - tools (tools.svg)
+    - tool settings (tools-settings.svg)
+    - audio files (file-music.svg)
+    - film (film.svg)
+    - font (font.svg)
+    - book (book-open.svg)
+
+*** misc
+    - info (info.svg)
+    - checklist (task.svg)
+    - pencil (pencil.svg)
+    - mail (mail.svg)
+    - unread mail (mail-unread.svg)
+    - read mail (mail-read.svg)
+    - important mail (mail-important.svg)
+    - calendar (calendar.svg)
+    - saved (link.svg)
+    - unsaved (link-broken.svg)
+    - locked (lock.svg)
+    - trash (trash.svg)
+    - desktop (desktop.svg)
+    - downloads (download.svg)
+    - photos (photos.svg)
+    - music (albums.svg)
+
+*** Org Agenda
+    - todo (todo.svg)
+    - done (task-done.svg)
+    - clock (clock.svg)
+    - project (project.svg)
+    - investigate (magnifying-glass.svg)
+    - follow-up (follow-up.svg)
+    - canceled (cancel.svg)
+    - consider (thought.svg)
