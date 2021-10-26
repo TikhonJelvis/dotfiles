@@ -230,15 +230,7 @@ size. Designed to work with `window-size-change-functions'."
 ;; Fill to 80 characters by default:
 (setq fill-column 80)
 
-;; Not sure why this needs to be in a hook, but it didn't initialize
-;; correctly otherwise.
-(defun emoji-fonts-hook (frame)
-  (set-fontset-font t 'unicode (face-attribute 'default :family))
-  (set-fontset-font t '(#x2300 . #x27e7) "Twitter Color Emoji")
-  (set-fontset-font t '(#x27F0 . #x1FAFF) "Twitter Color Emoji")
-  (set-fontset-font t 'unicode "Symbola" nil 'append))
-(add-hook 'after-make-frame-functions #'emoji-fonts-hook)
-
+(load-file (dotfile "emacs/fonts.el"))
 
 ;; Icons that I can use in dired, buffer mode lines... etc
 (use-package all-the-icons

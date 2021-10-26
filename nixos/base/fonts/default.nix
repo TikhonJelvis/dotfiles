@@ -4,6 +4,7 @@
   imports = [
     ./input-fonts.nix
     ./junction.nix
+    ./icons
   ];
 
   fonts = {
