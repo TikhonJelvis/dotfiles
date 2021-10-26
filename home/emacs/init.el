@@ -235,11 +235,7 @@ size. Designed to work with `window-size-change-functions'."
 (defun emoji-fonts-hook (frame)
   (set-fontset-font t 'unicode (face-attribute 'default :family))
   (set-fontset-font t '(#x2300 . #x27e7) "Twitter Color Emoji")
-  (set-fontset-font t '(#x2300 . #x27e7) "EmojiOne Color" nil 'append)
-  (set-fontset-font t '(#x2300 . #x27e7) "Noto Color Emoji" nil 'append)
   (set-fontset-font t '(#x27F0 . #x1FAFF) "Twitter Color Emoji")
-  (set-fontset-font t '(#x27F0 . #x1FAFF) "EmojiOne Color" nil 'append)
-  (set-fontset-font t '(#x27F0 . #x1FAFF) "Noto Color Emoji" nil 'append)
   (set-fontset-font t 'unicode "Symbola" nil 'append))
 (add-hook 'after-make-frame-functions #'emoji-fonts-hook)
 
