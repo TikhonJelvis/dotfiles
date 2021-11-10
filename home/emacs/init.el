@@ -938,10 +938,10 @@ content in a buffer once ready."
   "Configure prettify-symbols to replace todo/consider/done with
   pretty Unicode characters."
   (push '("TODO" . "📝") prettify-symbols-alist)
-  (push '("FOLLOW-UP" . "➡️") prettify-symbols-alist)
+  (push '("FOLLOW-UP" . "➡") prettify-symbols-alist)
   (push '("CONSIDER" . "❔") prettify-symbols-alist)
   (push '("INVESTIGATE" . "🔎") prettify-symbols-alist)
-  (push '("DONE" . "☑️") prettify-symbols-alist)
+  (push '("DONE" . "☑") prettify-symbols-alist)
   (push '("CANCELED" . "❌") prettify-symbols-alist)
   (push '("PROJECT" . "📂") prettify-symbols-alist)
   (prettify-symbols-mode 1))
