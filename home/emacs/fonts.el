@@ -42,3 +42,18 @@ the character itself (for better selection menu usability)."
   (let* ((candidates (tikhon-icon-candidates))
          (selection (completing-read "Icon: " candidates nil t)))
     (insert (cdr (assoc selection candidates)))))
+
+(defun tikhon-icon-for-path (path)
+  "Return an icon character and a color for a given file or directory."
+  (if (file-directory-p path)
+      (tikhon-icon-for-directory path)
+    (tikhon-icon-for-file path)))
+
+(defun tikhon-icon-for-directory (path)
+  "Return an icon character for the given directory. This
+defaults to  with special logic for a few specific things like
+symlinks () and programming projects, as well as directories
+with patterns defined in `tikhon-icons-file-name-patterns'."
+  (cond
+   ((file-symlink-p path) (tikhon-icon "directory-symlink"))
+   (t (tikhon-icon "directory"))))
