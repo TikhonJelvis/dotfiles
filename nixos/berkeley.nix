@@ -57,7 +57,7 @@
         # Big projects
         "**/Programming/nixpkgs"
       ];
-      repo = "h05ln3up@h05ln3up.repo.borgbase.com:repo";
+      repo = "i2344ym0@i2344ym0.repo.borgbase.com:repo";
       encryption = {
         mode = "repokey-blake2";
         passCommand = "cat /root/borg-passphrase";
