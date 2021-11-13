@@ -801,6 +801,10 @@ content in a buffer once ready."
   (add-hook 'json-mode-hook 'json-indent-hook)
   (add-hook 'json-mode-hook 'hs-minor-mode))
 
+                                        ; SYSTEM
+(use-package journalctl-mode
+  :ensure t)
+
                                         ; YAML
 (use-package yaml-mode
   :ensure t)
