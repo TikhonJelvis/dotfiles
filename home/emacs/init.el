@@ -1593,6 +1593,9 @@ get Markdown-formatted text into email/Word/etc."
                                         ; LATEX
 
 (use-package tex-mode
+  :mode
+  ("latex\\.template" . latex-mode)     ; Pandoc templates
+
   :config
   (add-hook 'LaTeX-mode-hook 'flyspell-mode)
   (add-hook 'LaTeX-mode-hook 'autofill-mode)
