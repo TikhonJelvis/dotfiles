@@ -1453,6 +1453,10 @@ the current file."
   :after rust-mode
   :hook (rust-mode . flycheck-rust-setup))
 
+                                        ; LUA
+(use-package lua-mode
+  :ensure t)
+
                                         ; SCALA
 (use-package scala-mode
   :ensure t
