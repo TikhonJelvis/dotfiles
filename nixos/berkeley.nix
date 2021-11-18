@@ -32,6 +32,21 @@
     banner = "tikhon-berkeley-nixos";
   };
 
+  services.printing.enable = true;
+  hardware.printers = let
+    name = "Brother_HL-L3270CDW_series";
+  in {
+    ensurePrinters = [{
+      inherit name;
+      deviceUri = "dnssd://Brother%20HL-L3270CDW%20series._ipp._tcp.local/?uuid=e3248000-80ce-11db-8000-b42200424c0f";
+      model = "everywhere";
+      location = "1505 downstairs office";
+      description = "Color laser printer in my downstairs office";
+    }];
+    ensureDefaultPrinter = name;
+  };
+  services.avahi.nssmdns = true; # Needed for CUPS to find the printer.
+
   services.borgbackup.jobs = {
     "borgbase" = {
       paths = [
