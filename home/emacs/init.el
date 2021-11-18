@@ -975,7 +975,10 @@ content in a buffer once ready."
          ("C-c C-," . org-promote-subtree)
          ("C-c C-." . org-demote-subtree))
 
-  :hook (org-insert-heading . org-insert-with-timestamp)
+  :hook
+  ((org-insert-heading . org-insert-with-timestamp)
+   (org-after-refile-insert . org-update-parent-todo-statistics))
+
 
   :init
   (defun org-insert-with-timestamp ()
