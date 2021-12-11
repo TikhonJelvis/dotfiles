@@ -138,13 +138,27 @@ Enters or returns the expanded absolute path to the chosen file."
 
 ;; Variable-width typeface for prose
 (defface prose
-  '((t (:inherit default :weight semi-bold :width normal :family "Junction")))
+  '((t (:inherit default :weight normal :width normal :family "Junction" :height 1.1)))
   "A variable-width for non-code prose—paragraphs of text, markdown... etc.")
+(defvar-local prose-original-line-spacing 0.0
+  "Line spacing set in this buffer *before* `prose-mode' was
+turned on. `prose-mode' sets `line-spacing' to a different value,
+and this variable lets `prose-mode' reset `line-spacing' when
+it's turned off again.")
+(defvar-local prose-mode nil "Is `prose-mode' active in the current buffer?")
 (defun prose-mode (&optional arg)
   "Minor mode that sets the buffer's default face to `prose'."
-  (interactive (list (or current-prefix-arg 'toggle)))
-  (buffer-face-mode-invoke 'prose (or arg t)
-                           (called-interactively-p 'interactive)))
+  (interactive "P")
+  (message "arg: %s" arg)
+  (if (or arg (not prose-mode))
+      (progn
+        (setq prose-original-line-spacing line-spacing)
+        (setq line-spacing 0.2)
+        (setq prose-mode t))
+    (setq line-spacing prose-original-line-spacing)
+    (setq prose-mode nil))
+
+  (buffer-face-mode-invoke 'prose 'toggle (called-interactively-p 'interactive)))
 
 ;; Trying out a variable-width font for programming by default.
 (add-hook 'prog-mode-hook #'variable-pitch-mode)
