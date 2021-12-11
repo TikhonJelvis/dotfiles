@@ -3,6 +3,7 @@
 {
   imports =
     [ ./base
+      ./berkeley/borg.nix
       ./hardware-configuration/berkeley.nix
     ];
 
@@ -46,44 +47,6 @@
     ensureDefaultPrinter = name;
   };
   services.avahi.nssmdns = true; # Needed for CUPS to find the printer.
-
-  services.borgbackup.jobs = {
-    "borgbase" = {
-      paths = [
-        "/home"
-      ];
-      exclude = [
-        # XDG cache directory
-        "/home/*/.cache"
-
-        # Bigger app data directories (> 250M)
-        "/home/*/.local/share/Trash"
-        "/home/*/.local/share/baloo"
-        "/home/*/.local/share/Steam"
-
-        # Build outputs
-        "**/target"        # Rust, Scala... etc
-        "/home/*/.cargo"   # Global Rust cache
-        "**/dist"          # Python, Haskell... etc
-        "**/dist-newstyle" # Haskell
-        "**/_site"         # Hakyll
-        "**/_cache"        # Hakyll
-
-        # Big projects
-        "**/Programming/nixpkgs"
-      ];
-      repo = "i2344ym0@i2344ym0.repo.borgbase.com:repo";
-      encryption = {
-        mode = "repokey-blake2";
-        passCommand = "cat /root/borg-passphrase";
-        # Passphrase also saved in 1Password as
-        # tikhon-nixos-berkeley-passphrase under borgbase
-      };
-      environment.BORG_RSH = "ssh -i /root/.ssh/borgbase";
-      compression = "auto,zstd";
-      startAt = "daily";
-    };
-  };
 
   boot = {
     loader = {
