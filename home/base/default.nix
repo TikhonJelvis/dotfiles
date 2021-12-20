@@ -89,6 +89,9 @@
       enable = true;
       enableBashIntegration = true;
 
+      nix-direnv.enable = true;
+      nix-direnv.enableFlakes = true;
+
       ## use lorri if available
       stdlib = ''
        eval "`declare -f use_nix | sed '1s/.*/_&/'`"
