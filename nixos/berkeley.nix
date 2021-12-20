@@ -17,10 +17,11 @@
 
   # software monitor control (DDC)
   services.ddccontrol.enable = true;
-
   # load i2c-dev explicitly for ddccontrol
   # shouldn't need this in the future (see Nixpkgs PR #148095)
   boot.kernelModules = [ "i2c_dev" ];
+
+  services.autorandr.enable = true;
 
   networking = {
     hostName = "tikhon-nixos-berkeley";
