@@ -866,7 +866,8 @@ content in a buffer once ready."
 
   :hook
   (python-mode . yas-minor-mode)
-  (yaml-mode . yas-minor-mode))
+  (yaml-mode . yas-minor-mode)
+  (haskell-mode . yas-minor-mode))
 
                                         ; PROJECTILE
 (use-package projectile
@@ -1442,6 +1443,20 @@ the current file."
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook 'haskell-mode-hook 'font-lock-mode))
+
+(use-package lsp-haskell
+  :after lsp-mode
+  :ensure t
+  :hook (haskell-mode . haskell-lsp-if-available)
+  :init
+  (defun haskell-lsp-if-available ()
+    "Turn on LSP mode if the haskell-lsp-server is available in the buffer's PATH.
+
+I manage lsp-servers on a per-project basis with Nix and direnv,
+so I only want to try running LSP if the server executable is
+available."
+    (when (executable-find "haskell-language-server")
+      (lsp t))))
 
                                         ; RUST
 (use-package rust-mode
