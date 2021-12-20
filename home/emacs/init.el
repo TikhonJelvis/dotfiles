@@ -1181,7 +1181,7 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
     "Minor mode that sets the buffer's default face to `org-agenda-default'."
     (interactive (list (or current-prefix-arg 'toggle)))
     (setq-local line-spacing 0.2)
-    (buffer-face-mode-invoke 'org-agenda-default (or arg t)
+    (buffer-face-mode-invoke 'org-agenda-default t
                              (called-interactively-p 'interactive)))
   (add-hook 'org-agenda-mode-hook #'org-agenda-default-face-mode)
 
