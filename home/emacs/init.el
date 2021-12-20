@@ -939,6 +939,9 @@ content in a buffer once ready."
   (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
   (add-hook 'git-commit-setup-hook 'my-git-commit-setup-hook))
 
+(use-package git-modes
+  :ensure t)
+
 (use-package forge
   :ensure t
   :after magit
