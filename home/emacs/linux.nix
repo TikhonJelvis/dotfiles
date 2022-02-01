@@ -11,7 +11,7 @@ let
 in {
   imports = [ ./default.nix ];
 
-  emacs = pkgs.emacs.overrideAttrs (old: { nativeComp = true; });
+  emacs = pkgs.emacsGcc;
 
   services.emacs = {
     enable = true;
