@@ -4,7 +4,10 @@
 # the Nix Emacs infrastructure, which means they should *not* have
 # :ensure t set in use-package.
 { config }:
-{ "screenshot.el" = config.sources.screenshot-el + "/screenshot.el"; }
+{
+  "screenshot.el" = config.sources.screenshot-el + "/screenshot.el";
+  "theta-mode.el" = config.sources.theta-idl + "/emacs/theta-mode.el";
+}
 
 
 

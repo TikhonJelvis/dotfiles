@@ -1363,10 +1363,8 @@ process regardless."
 
                                         ; THETA
 
-;;; Theta currently only makes sense at work.
-(when (eq system-type 'darwin)
-  (use-package theta-mode
-    :mode "\\.theta\\'"))
+(use-package theta-mode
+  :mode "\\.theta\\'")
 
                                         ; HASKELL
 (use-package haskell-mode
