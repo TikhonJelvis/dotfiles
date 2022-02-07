@@ -38,6 +38,11 @@
       "https://nix-community.cachix.org"
       "https://nix-tools.cachix.org"
       "https://nixcache.reflex-frp.org"
+
+      # Cachix caches I set up myself
+      "https://haskell-org.cachix.org"
+      "https://rl-book.cachix.org"
+      "https://theta-idl.cachix.org"
     ];
     binaryCachePublicKeys = [
       "hercules-ci.cachix.org-1:ZZeDl9Va+xe9j+KqdzoBZMFJHVQ42Uu/c/1/KMC5Lw0="
@@ -46,6 +51,10 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "nix-tools.cachix.org-1:ebBEBZLogLxcCvipq2MTvuHlP7ZRdkazFSQsbs0Px1A="
       "ryantrinkle.com-1:JJiAKaRv9mWgpVAz8dwewnZe0AzzEAzPkagE9SP5NWI="
+
+      "haskell-org.cachix.org-1:qGKBoWNtLfLvv61PudtpiyvMFQCwlam7mBbpZJ+iaMk="
+      "rl-book.cachix.org-1:0/mq4Bx1ZfXxA1hzSfjFMBzViwfg39wkqTPLEKff4RM="
+      "theta-idl.cachix.org-1:B6I1LwtM4zjDt3+KagdvW9Ma9cQ6rUCPIbuE0FyO9fw="
     ];
     gc = {
       automatic = true;
