@@ -888,7 +888,9 @@ content in a buffer once ready."
 
   :bind
   (:map lsp-mode-map
-        ("C-c C-d" . lsp-ui-doc-show))
+        ("C-c C-d" . lsp-ui-doc-show)
+        ("M-A" . lsp-execute-code-action)
+        ("M-D" . lsp-avy-lens))
 
   :config
   (lsp-diagnostics-mode 1)
@@ -901,11 +903,10 @@ content in a buffer once ready."
 (use-package lsp-ui
   :ensure t
   :custom
-  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-enable t)
 
   (lsp-ui-doc-show-with-cursor nil)
-  (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-alignment 'window))
+  (lsp-ui-doc-position 'at-point))
 
 (use-package dap-mode
   :ensure t
