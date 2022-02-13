@@ -881,6 +881,9 @@ content in a buffer once ready."
   :custom
   (lsp-eldoc-hook nil)
   (lsp-diagnostics-provider :flycheck)
+  (lsp-modeline-code-actions-enable nil)
+  (lsp-modeline-workspace-status-enable nil)
+  (lsp-modeline-diagnostics-enable nil)
 
   :custom-face
   (lsp-lsp-flycheck-info-unnecessary-face
