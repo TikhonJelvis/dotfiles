@@ -15,7 +15,7 @@
   home = {
     packages = with pkgs;
       let
-        utils        = [ drive pandoc unzip zip ];
+        utils        = [ drive pandoc unzip zip _1password ];
         development  = [ ghc lorri niv python3 jupyter poetry cachix ];
         aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
       in utils ++ development ++ [ aspell ];
