@@ -1383,9 +1383,10 @@ process regardless."
   (haskell-process-wrapper-function 'identity)
 
   :bind  (:map haskell-mode-map
-          ("C-M-;" . haskell-doc-comment)
-          ("C-c C-s" . haskell-save-and-format)
-          ("C-c C-r" . my-haskell-load-and-run))
+               ("C-M-;" . haskell-doc-comment)
+               ("C-c C-s" . haskell-save-and-format)
+               ("C-c C-r" . my-haskell-load-and-run)
+               ("M-." . haskell-find-definition))
 
   :init
   (defun insert-at-start (str)
@@ -1431,6 +1432,14 @@ the current file."
       (end-of-buffer)
       (pop-to-buffer start-buffer)))
 
+  (defun haskell-find-definition ()
+    "Jump to the definition at point, using LSP mode if it's on and
+Haskell mode if it's not."
+    (interactive)
+    (if lsp-mode
+        (call-interactively 'lsp-find-definition)
+      (call-interactively 'haskell-mode-jump-to-def-or-tag)))
+
   :config
   (require 'haskell-indentation)
 
@@ -1444,10 +1453,14 @@ the current file."
     (local-set-key (kbd "C-a") 'haskell-interactive-mode-beginning)
     (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
   (add-hook 'inferior-haskell-mode-hook 'my-inferior-haskell-mode-hook)
-
+  
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-  (add-hook 'haskell-mode-hook 'font-lock-mode))
+  (add-hook 'haskell-mode-hook 'font-lock-mode)
+
+  (defun my-interactive-haskell-mode-hook ()
+    (interactive-haskell-mode 1)
+    (unbind-key "M-." interactive-haskell-mode-map))
+  (add-hook 'haskell-mode-hook 'my-interactive-haskell-mode-hook))
 
 (use-package lsp-haskell
   :after lsp-mode
