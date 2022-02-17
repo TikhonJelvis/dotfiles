@@ -8,7 +8,8 @@ import XMonad
 import XMonad.Config.Desktop
 import XMonad.Hooks.ManageHelpers
 
-import XMonad.Layout.MultiColumns
+import XMonad.Layout.Gaps (gaps)
+import XMonad.Layout.NoBorders (noBorders)
 
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
@@ -16,6 +17,7 @@ import XMonad.Prompt.Shell
 
 import XMonad.Util.EZConfig
 import XMonad.Util.Run (safeSpawn)
+import XMonad.Util.Types (Direction2D (..))
 
 main :: IO ()
 main = xmonad $ baseConfig `additionalKeysP` keybindings
@@ -41,5 +43,5 @@ promptConfig = def
 -- * Layouts
 
 layouts = Tall 1 (3 / 100) (1 / 2)
-      ||| Full
-      ||| multiCol [1] 1 0.01 (-0.5)
+      ||| noBorders Full
+      ||| noBorders (gaps [(D, 720), (R, 1280)] Full)
