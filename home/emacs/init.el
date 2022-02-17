@@ -297,6 +297,12 @@ size. Designed to work with `window-size-change-functions'."
 ;; incredibly annoying:
 (global-unset-key (kbd "<f2>"))
 
+;; Turn off "secondary selection"—I only ever trigger it by
+;; accident...
+(global-unset-key (kbd "M-<mouse-1>"))
+(global-unset-key (kbd "M-<down-mouse-1>"))
+(global-unset-key (kbd "M-<drag-mouse-1>"))
+
                                         ; WINDOW MANAGEMENT
 (use-package windmove
   :init
