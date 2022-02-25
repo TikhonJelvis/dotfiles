@@ -97,7 +97,7 @@ Enters or returns the expanded absolute path to the chosen file."
   (interactive "P")
   (let ((action (if add-to-kill-ring 'kill-new 'insert))
         (path (expand-file-name (read-file-name "file path: "))))
-    (apply action (list path))))
+    (funcall action path)))
 (global-set-key (kbd "C-c f") 'file-name-at-point)
 
 
@@ -863,8 +863,58 @@ content in a buffer once ready."
 (use-package forge
   :ensure t
   :after magit
+
+  :bind
+  (:map magit-mode-map
+        ("C-c C-o" . my-forge-browse-dwim))
+
+  :init
+  (defun my-forge-url-at-point (arg)
+    "Return the URL of the appropriate magit object at point.
+
+When a point has both a branch and a commit, this prioritizes the
+URL for the commit."
+    (if-let* ((topic (forge-topic-at-point)))
+        (forge-get-url topic)
+
+      (if-let* ((commit (magit-commit-at-point)))
+          (forge--format (forge-get-repository 'stub)
+                         'commit-url-format
+                         `((?r . ,(magit-rev-hash commit))))
+
+        (when-let* ((branch (magit-branch-at-point)))
+          ;; Code borrowed from `forge-browse-remote'
+          (let (remote)
+            (if (magit-remote-branch-p branch)
+                (let ((cons (magit-split-branch-name branch)))
+                  (setq remote (car cons))
+                  (setq branch (cdr cons)))
+              (or (setq remote (or (magit-get-push-remote branch)
+                                   (magit-get-upstream-remote branch)))
+                  (user-error "Cannot determine remote for %s" branch)))
+            (forge--format remote 'branch-url-format
+                           `((?r . ,branch))))))))
+
+  (defun my-forge-browse-dwim (arg)
+    "A version of `forge-browse-dwim' that, if given a numeric
+argument, pushes the URL onto the kill ring instead of browsing.
+
+Unlike the normal `forge-browse-dwim', this prioritizes commits
+over branches.
+
+If there is no appropriate object at point, this function
+silently does nothing."
+    (interactive "P")
+    (when-let* ((url (my-forge-url-at-point arg)))
+      (if arg (kill-new url) (browse-url url))))
+
   :config
-  (add-to-list 'forge-alist '("git.target.com" "git.target.com/api/v3" "target" forge-github-repository)))
+  (add-to-list
+   'forge-alist
+   '("git.target.com"
+     "git.target.com/api/v3"
+     "target"
+     forge-github-repository)))
 
 (use-package smerge-mode
   :custom
@@ -1367,7 +1417,7 @@ Haskell mode if it's not."
     (local-set-key (kbd "C-a") 'haskell-interactive-mode-beginning)
     (add-to-list 'comint-output-filter-functions 'ansi-color-process-output))
   (add-hook 'inferior-haskell-mode-hook 'my-inferior-haskell-mode-hook)
-  
+
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
   (add-hook 'haskell-mode-hook 'font-lock-mode)
 
