@@ -756,6 +756,8 @@ content in a buffer once ready."
               ("M-RET" . company-complete))
   :hook
   (emacs-lisp-mode . company-mode)
+  :custom
+  (company-idle-delay nil)
   :config
   (let ((bg (face-attribute 'default :background)))
     (custom-set-faces
