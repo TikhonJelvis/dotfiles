@@ -807,7 +807,8 @@ content in a buffer once ready."
   (:map lsp-mode-map
         ("C-c C-d" . lsp-ui-doc-show)
         ("M-A" . lsp-execute-code-action)
-        ("M-D" . lsp-avy-lens))
+        ("M-D" . lsp-avy-lens)
+        ("M-?" . lsp-find-references))
 
   :config
   (lsp-diagnostics-mode 1)
@@ -1350,7 +1351,8 @@ process regardless."
                ("C-M-;" . haskell-doc-comment)
                ("C-c C-s" . haskell-save-and-format)
                ("C-c C-r" . my-haskell-load-and-run)
-               ("M-." . haskell-find-definition))
+               ("M-." . haskell-find-definition)
+               ("M-?" . lsp-find-references))
 
   :init
   (defun insert-at-start (str)
