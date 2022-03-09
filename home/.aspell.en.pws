@@ -1,4 +1,4 @@
-personal_ws-1.1 en 24 
+personal_ws-1.1 en 28 
 architected
 architecting
 avro
@@ -7,12 +7,14 @@ backpropagation
 codebase
 composable
 config
+deduplicated
 destructure
 disaggregation
 extensibility
 hyperparameter
 interpretable
 ipc
+json
 melatonin
 modularity
 observability
@@ -20,6 +22,8 @@ pandoc
 reactiveness
 reproducibility
 scalable
+schemas
+stdout
 substitutability
 unannotated
 usecases
