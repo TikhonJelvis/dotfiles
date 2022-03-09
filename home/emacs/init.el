@@ -883,18 +883,20 @@ URL for the commit."
                          'commit-url-format
                          `((?r . ,(magit-rev-hash commit))))
 
-        (when-let* ((branch (magit-branch-at-point)))
-          ;; Code borrowed from `forge-browse-remote'
-          (let (remote)
-            (if (magit-remote-branch-p branch)
-                (let ((cons (magit-split-branch-name branch)))
-                  (setq remote (car cons))
-                  (setq branch (cdr cons)))
-              (or (setq remote (or (magit-get-push-remote branch)
-                                   (magit-get-upstream-remote branch)))
-                  (user-error "Cannot determine remote for %s" branch)))
-            (forge--format remote 'branch-url-format
-                           `((?r . ,branch))))))))
+        (if-let* ((branch (magit-branch-at-point)))
+            ;; Code borrowed from `forge-browse-remote'
+            (let (remote)
+              (if (magit-remote-branch-p branch)
+                  (let ((cons (magit-split-branch-name branch)))
+                    (setq remote (car cons))
+                    (setq branch (cdr cons)))
+                (or (setq remote (or (magit-get-push-remote branch)
+                                     (magit-get-upstream-remote branch)))
+                    (user-error "Cannot determine remote for %s" branch)))
+              (forge--format remote 'branch-url-format
+                             `((?r . ,branch))))
+          (when-let* ((topic (forge-current-topic)))
+            (forge-get-url topic))))))
 
   (defun my-forge-browse-dwim (arg)
     "A version of `forge-browse-dwim' that, if given a numeric
