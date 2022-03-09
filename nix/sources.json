@@ -84,15 +84,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "theta-idl": {
-        "branch": "main",
+        "branch": "stage",
         "description": "Define communication protocols between applications using algebraic data types.",
         "homepage": "",
         "owner": "target",
         "repo": "theta-idl",
-        "rev": "2725a61ec41a8166edfc3f51f7cce2ca24446463",
-        "sha256": "1fbsdx5kj52f4c6d5qj9ybi9w4n5p4pfx1wqp3d4cal593yayvb7",
+        "rev": "1266882874210edb41de5fdb19cd48f356a5537e",
+        "sha256": "0zn8y7mry2lvn97k237i63r043r34zwgaq3hwmsl41cmkjjfgfrw",
         "type": "tarball",
-        "url": "https://github.com/target/theta-idl/archive/2725a61ec41a8166edfc3f51f7cce2ca24446463.tar.gz",
+        "url": "https://github.com/target/theta-idl/archive/1266882874210edb41de5fdb19cd48f356a5537e.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
