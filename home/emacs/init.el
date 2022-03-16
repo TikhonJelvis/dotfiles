@@ -753,6 +753,8 @@ content in a buffer once ready."
   :ensure t
   :after color
   :bind (:map lsp-mode-map
+              ("M-RET" . company-complete)
+           :map emacs-lisp-mode-map
               ("M-RET" . company-complete))
   :hook
   (emacs-lisp-mode . company-mode)
