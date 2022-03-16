@@ -1356,7 +1356,8 @@ process regardless."
                ("C-c C-s" . haskell-save-and-format)
                ("C-c C-r" . my-haskell-load-and-run)
                ("M-." . haskell-find-definition)
-               ("M-?" . lsp-find-references))
+               ("M-?" . lsp-find-references)
+               ("C-c C-e" . haskell-add-language-pragma))
 
   :init
   (defun insert-at-start (str)
@@ -1409,6 +1410,16 @@ Haskell mode if it's not."
     (if lsp-mode
         (call-interactively 'lsp-find-definition)
       (call-interactively 'haskell-mode-jump-to-def-or-tag)))
+
+  (defun haskell-add-language-pragma ()
+    "Prompt for a GHC extension, then add a pragma for it at the top
+of the file."
+    (interactive)
+    (let* ((targets haskell-ghc-supported-extensions)
+           (extension (center-completing-read "Extension: " targets)))
+      (save-excursion
+        (beginning-of-buffer)
+        (insert (format "{-# LANGUAGE %s #-}\n" extension)))))
 
   :config
   (require 'haskell-indentation)
