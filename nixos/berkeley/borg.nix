@@ -1,9 +1,16 @@
 { config, pkgs, ... }:
-# For interacting with borg directly, you can use the borg-shell
-# command to open a shell with the right environments set up.
+# Run systemd job manually:
 #
-# sudo borg-shell
-# borg list
+# > systemctl start borgbackup-job-borgbase.service
+#
+# Look at recent logs from backup job:
+#
+# > journalctl -fu borgbackup-job-borgbase.service
+#
+# Open shell to run borg commands directly:
+#
+# > sudo borg-shell
+# > borg list
 # ...etc
 let
   borgbase = config.services.borgbackup.jobs.borgbase;
