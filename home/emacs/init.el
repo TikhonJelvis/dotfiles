@@ -754,7 +754,7 @@ content in a buffer once ready."
   :after color
   :bind (:map lsp-mode-map
               ("M-RET" . company-complete)
-           :map emacs-lisp-mode-map
+              :map emacs-lisp-mode-map
               ("M-RET" . company-complete))
   :hook
   (emacs-lisp-mode . company-mode)
@@ -773,7 +773,21 @@ content in a buffer once ready."
 ;; Adds icons to company popups.
 (use-package company-box
   :ensure t
-  :hook (company-mode . company-box-mode))
+  :hook (company-mode . company-box-mode)
+
+  :config
+  (define-advice company-complete (:before (&rest args) adjust-company-box-font-size)
+    "company-box popups are techincally separate frames. They don't
+inherit the default face from their parent frame and the
+company-box code explicitly disables
+`after-make-frame-functions', so the company popup does not
+automatically adjust its font size for different resolutions.
+
+As a workaround, I globally adjust the size of company-specific
+faces each time before company-complete is called."
+    (let ((height (adjusted-font-size (selected-frame))))
+      (set-face-attribute 'company-tooltip nil :height height)
+      (set-face-attribute 'company-tooltip-annotation nil :height height))))
 
                                         ; YASNIPPET
 (use-package yasnippet
