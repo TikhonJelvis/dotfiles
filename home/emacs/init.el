@@ -1425,15 +1425,14 @@ Haskell mode if it's not."
         (call-interactively 'lsp-find-definition)
       (call-interactively 'haskell-mode-jump-to-def-or-tag)))
 
-  (defun haskell-add-language-pragma ()
+  (defun haskell-add-language-pragma (extension)
     "Prompt for a GHC extension, then add a pragma for it at the top
 of the file."
-    (interactive)
-    (let* ((targets haskell-ghc-supported-extensions)
-           (extension (center-completing-read "Extension: " targets)))
-      (save-excursion
-        (beginning-of-buffer)
-        (insert (format "{-# LANGUAGE %s #-}\n" extension)))))
+    (interactive
+     (list (center-completing-read "Extension: " haskell-ghc-supported-extensions)))
+    (save-excursion
+      (beginning-of-buffer)
+      (insert (format "{-# LANGUAGE %s #-}\n" extension))))
 
   :config
   (require 'haskell-indentation)
