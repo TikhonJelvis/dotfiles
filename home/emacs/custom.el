@@ -8,7 +8,8 @@
  '(package-selected-packages
    '(git-modes lsp-haskell bazel lsp-metals sbt-mode scala-mode request format-all restclient python-black docker-compose-mode pdf-tools dockerfile-mode lsp-pyright htmlize yasnippet yaml-mode xterm-color visual-fill-column use-package python-pytest python-docstring powerline paredit ox-reveal org-bullets nix-mode magit lsp-ui lsp-python-ms json-mode js2-mode jenkinsfile-mode haskell-mode flycheck-rust flycheck-pycheckers exec-path-from-shell ess el-patch direnv dap-mode company-box cargo auto-virtualenv all-the-icons-dired))
  '(safe-local-variable-values
-   '((lsp-haskell-plugin-hlint-config-flags .
+   '((package-lint-main-file . "haskell-mode-pkg.el")
+     (lsp-haskell-plugin-hlint-config-flags .
                                             ["--language=QuasiQuotes"])
      (lsp-haskell-plugin-hlint-config-flags .
                                             ["-XQuasiQuotes"])
