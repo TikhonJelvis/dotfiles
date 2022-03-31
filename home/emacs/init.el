@@ -170,6 +170,7 @@ it's turned off again.")
   (variable-pitch-mode -1))
 (add-hook 'haskell-mode-hook #'monospace-mode)
 (add-hook 'nix-mode-hook #'monospace-mode)
+(add-hook 'theta-mode-hook #'monospace-mode)
 
 ;; Change font size based on resolution
 ;;
