@@ -1,4 +1,4 @@
-personal_ws-1.1 en 30 
+personal_ws-1.1 en 31 
 architected
 architecting
 avro
@@ -8,6 +8,7 @@ codebase
 composable
 config
 deduplicated
+deserializing
 destructure
 disaggregation
 extensibility
