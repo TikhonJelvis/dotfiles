@@ -275,8 +275,10 @@ size. Designed to work with `window-size-change-functions'."
 ;; I'm phasing C-x o out:
 (global-set-key (kbd "C-x o") 'other-frame)
 
-;; I never do C-z on purpose...
+;; I ≈never suspend Emacs on purpose, but I hit the default bindings
+;; by accident pretty often :(
 (global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-x C-z"))
 
 (global-set-key (kbd "C-x C-b") 'switch-to-buffer)
 (global-set-key (kbd "C-S-b") 'list-buffers)
@@ -541,8 +543,7 @@ returns the same value as the function."
 ;; Has to be above JABBER settings because it has a conflicting
 ;; keybinding :(.
 (use-package dired-x
-  ;; Automatically omit “uninteresting” files from the listing. (Toggled
-  ;; with M-o.)
+  ;; Automatically omit “uninteresting” files from the listing.
   :hook (dired-mode . dired-omit-mode))
 
 (setq dired-dwim-target t)
