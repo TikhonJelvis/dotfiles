@@ -555,6 +555,7 @@ returns the same value as the function."
 
 ;; Automatically update dired buffers when the directory changes:
 (add-hook 'dired-mode-hook 'auto-revert-mode)
+(setq dired-auto-revert-buffer 't)
 
                                         ; IMAGES
 ;; Set the background for image-previews to an light color. This makes
@@ -626,6 +627,11 @@ content in a buffer once ready."
 
                                         ; PDF
 (global-auto-revert-mode t)
+
+(use-package pdf-view
+  :bind (:map pdf-view-mode-map
+              ("g" . revert-buffer-quick)))
+
 (use-package pdf-tools
   :ensure t
   :magic ("%PDF" . pdf-view-mode)
