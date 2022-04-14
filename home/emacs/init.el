@@ -412,7 +412,10 @@ returns the same value as the function."
 
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
-    (add-to-list 'shortcuts-sources 'shortcuts-org-agenda-files))
+    (add-to-list 'shortcuts-core-shortcuts '("Dropbox" . "~/Dropbox"))
+    (add-to-list 'shortcuts-core-shortcuts `("init.el" . ,(dotfile "emacs/init.el")))
+    (add-to-list 'shortcuts-core-shortcuts `("Treatment.org" . "~/Dropbox/org/Treatment.org"))
+    (add-to-list 'shortcuts-sources #'shortcuts-org-agenda-files))
 
   (when (eq system-type 'darwin)
     (load-file (dotfile "emacs/work-shortcuts.el"))

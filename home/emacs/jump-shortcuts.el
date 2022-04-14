@@ -1,13 +1,20 @@
 ;;; Defines a menu of common locations for me to quickly jump to: home
 ;;; directory, downloads, key org files, programming projects... etc.
 
-(defun shortcuts-core ()
-  "Return “core” shortcuts like ~, ~/Downloads... etc.
+(defvar shortcuts-core-shortcuts
+  '(("Home" . "~")
+    ("Downloads" . "~/Downloads")
+    ("Documents" . "~/Documents")
+    ("Programming" . "~/Programming"))
+  "Shortcuts suggested from `shortcuts-core'.
 
 Entries are pairs (NAME . PATH) where PATH is the path to jump to
-and NAME is a display name to show in the menu."
+and NAME is a display name to show in the menu.")
 
-  '(("Home" . "~") ("Downloads" . "~/Downloads") ("Documents" . "~/Documents") ("Programming" . "~/Programming") ("init.el" . "~/Programming/dotfiles/home/emacs/init.el")))
+(defun shortcuts-core ()
+  "Return “core” shortcuts like ~, ~/Downloads... etc as set in
+`shortcuts-core-shortcuts'."
+  shortcuts-core-shortcuts)
 
 (defun shortcuts-programming-projects ()
   "Return a list of directories in ~/Programming."
