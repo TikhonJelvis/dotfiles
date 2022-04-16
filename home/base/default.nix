@@ -88,7 +88,6 @@
       enableBashIntegration = true;
 
       nix-direnv.enable = true;
-      nix-direnv.enableFlakes = true;
 
       ## use lorri if available
       stdlib = ''

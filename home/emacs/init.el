@@ -1319,11 +1319,6 @@ process regardless."
   :hook (emacs-lisp-mode . paredit-mode)
         (lisp-data-mode . paredit-mode))
 
-                                        ; JENKINSFILES
-(use-package jenkinsfile-mode
-  :ensure t
-  :mode "Jenkinsfile\\'")
-
                                         ; PYTHON
 (use-package python-docstring
   :ensure t
