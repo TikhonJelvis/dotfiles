@@ -8,7 +8,7 @@
 
 ;; --------------
 ;; This porting makes blackboard no longer rely on color-theme package,
-;; since Emacs has it's theme mechanism from Emacs 24.
+;; since Emacs has a native theme mechanism from Emacs 24.
 
 ;; How to use:
 ;; First, add a local directory to custome-theme-load-path,
@@ -85,14 +85,16 @@ learnui.design/tools/data-color-picker.html + blackboard)."
  `(org-verse ((t (:inherit org-block :slant italic))))
  `(org-todo ((t (:bold t :foreground ,(org-color 6)))))
  `(org-done ((t (:bold t :foreground "#61CE3C"))))
+ `(org-warning ((t (:bold t :foreground ,(org-color 7)))))
 
  `(org-agenda-done ((t (:foreground ,(color-desaturate-name (org-color 8) 40)))))
  `(org-scheduled-today ((t (:foreground ,(color-lighten-name (org-color 1) 20)))))
  `(org-scheduled ((t (:foreground ,(org-color 8)))))
- `(org-agenda-structure ((t (:weight bold :foreground ,(org-color 0)))))
  `(org-agenda-date ((t (:foreground ,(org-color 1)))))
  `(org-agenda-date-weekend ((t (:weight normal :foreground ,(org-color 2)))))
  `(org-agenda-date-today ((t (:weight bold :foreground ,(org-color 7)))))
+ `(org-agenda-structure ((t (:weight bold :foreground ,(org-color 0)))))
+ `(org-agenda-structure-filter ((t (:inherit (org-warning org-agenda-structure)))))
 
  `(mode-line ((t (:background "DarkOrange" :foreground "black" :box nil))))
  `(mode-line-inactive ((t (:box nil))))
