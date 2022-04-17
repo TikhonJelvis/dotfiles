@@ -43,18 +43,20 @@
       ];
     };
 
-    file = {
-      "." = {
-        source = ../files;
+    file = let
+      go = name: value: {
+        source = ../files + "/${name}";
         recursive = true;
       };
+      files = builtins.mapAttrs go (builtins.readDir ../files);
+    in {
       ".aspell.conf" = {
         source = pkgs.writeText ".aspell.conf" ''
           data-dir ${config.home.homeDirectory}/.nix-profile/lib/aspell
           personal ${toString ../.aspell.en.pws} 
         '';
       };
-    };
+    } // files;
 
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage when

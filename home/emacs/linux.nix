@@ -11,7 +11,7 @@ let
 in {
   imports = [ ./default.nix ];
 
-  emacs = pkgs.emacsNativeComp;
+  emacs = pkgs.emacsPgtkGcc;
 
   services.emacs = {
     enable = true;
