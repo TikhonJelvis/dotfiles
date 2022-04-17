@@ -1107,16 +1107,29 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
   ;; improve performance of agenda commands.
   (org-agenda-dim-blocked-tasks nil)
 
-  :config
+  ;; Custom agenda commands:
+  ;;  * p to list projects
+  ;;  * P to list projects with a given tag
+  (org-agenda-custom-commands
+   '(("p" "Projects" todo "PROJECT")
+     ("P" "Projects (with tag)" (lambda (arg) (call-interactively #'org-agenda-project-for-tag)))))
+
+  :init
   (defun org-agenda-custom-date-format (date)
     (concat "\n" (org-agenda-format-date-aligned date)))
+
+  (defun org-agenda-project-for-tag (tag)
+    "Search for PROJECT todo entries with the given tag."
+    (interactive (list (completing-read "tag:" #'org-tags-completion-function)))
+    (org-tags-view t (format "%s/PROJECT" tag)))
+
+  :config
   (setq org-agenda-format-date 'org-agenda-custom-date-format)
 
   (setq org-agenda-files
         (list (concat org-directory "/Tasks.org")
               (concat org-directory "/Books.org")
               (concat org-directory "/Projects.org")))
-
 
   :config/el-patch
   (el-patch-feature org-agenda)
