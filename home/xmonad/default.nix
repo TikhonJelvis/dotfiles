@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  breeze-wallpaper = "${pkgs.breeze-qt5}/share/wallpapers/Next/contents/images/2560x1440.png";
+  breeze-wallpaper = "${pkgs.breeze-qt5}/share/wallpapers/Next/contents/images/2560x1440.jpg";
 in
 {
   xsession = {
@@ -13,7 +13,9 @@ in
       config = ./xmonad.hs;
     };
 
-    initExtra = "feh --bg-fill ${breeze-wallpaper}";
+    initExtra = if builtins.pathExists breeze-wallpaper
+                then "feh --bg-fill ${breeze-wallpaper}"
+                else builtins.trace "WARNING: xmonad: background image for feh does not exist" "";
   };
 
   programs.feh = {
