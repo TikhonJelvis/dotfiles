@@ -1486,8 +1486,11 @@ of the file."
 I manage lsp-servers on a per-project basis with Nix and direnv,
 so I only want to try running LSP if the server executable is
 available."
-    (when (executable-find "haskell-language-server")
-      (lsp t))))
+    (cond ((executable-find "haskell-language-server-wrapper")
+           (lsp t))
+          ((executable-find "haskell-language-server")
+           (setq-local lsp-haskell-server-path "haskell-language-server")
+           (lsp t)))))
 
                                         ; RUST
 (use-package rust-mode
