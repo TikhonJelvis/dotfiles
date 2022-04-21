@@ -37,7 +37,7 @@
     listenAddresses = [ { addr = "192.168.0.37"; port = 22; } ];
 
     passwordAuthentication = false;
-    challengeResponseAuthentication = false;
+    kbdInteractiveAuthentication = false;
     banner = "tikhon-berkeley-nixos";
   };
 
@@ -58,7 +58,6 @@
 
   boot = {
     loader = {
-      systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       grub = {
         enable = true;

@@ -142,7 +142,11 @@
     layout = "us";
     xkbOptions = "eurosign:e";
 
-    displayManager.sddm.enable = true;
+    # displayManager.sddm.enable = true;
+    displayManager = {
+      lightdm.enable = true;
+      defaultSession = "home-manager";
+    };
 
     desktopManager.plasma5.enable = true;
     desktopManager.session = [{
