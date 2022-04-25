@@ -34,7 +34,7 @@
           DP-2 = {
             enable = true;
             mode = "2560x1440";
-            rate = "165.00";
+            rate = "59.95";
             primary = true;
           };
           HDMI-0 = {
