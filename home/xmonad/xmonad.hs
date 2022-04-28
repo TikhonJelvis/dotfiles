@@ -32,6 +32,7 @@ baseConfig = desktopConfig
 keybindings =
   [ ("M-q",   safeSpawn "home-manager" ["switch"])
   , ("M-S-q", confirmPrompt promptConfig "exit" (io exitSuccess))
+  , ("M-p",   spawn "rofi -modi drun,ssh,window -show drun -show-icons")
   ]
 
 promptConfig = def

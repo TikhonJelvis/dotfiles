@@ -120,6 +120,8 @@
   sound.enable = true;
   hardware.pulseaudio = {
     enable = true;
+    package = pkgs.pulseaudioFull;
+    extraModules = [ pkgs.pulseaudio-modules-bt ];
 
     daemon.config = {
       "default-sample-rate" = 48000;
@@ -136,14 +138,34 @@
     ];
   };
 
-  # X
+  # Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+
+    settings.General.Enable = "Source,Sink,Media,Socket";
+  };
+  services.blueman.enable = true;
+
+  # Window management/desktop/etc
+  services.dbus = {
+    enable = true;
+    packages = [ pkgs.dconf ];
+  };
+
+  services.gnome.gnome-keyring.enable = true;
+
+  systemd.services.upower.enable = true;
+
   services.xserver = {
     enable = true;
     layout = "us";
     xkbOptions = "eurosign:e";
 
-    # displayManager.sddm.enable = true;
+    # 2022-04-21: sddm started crashing after updating
+    # nixpkgs-unstable; I couldn't figure out why, but enabling
+    # lightdm instead works around the issue
     displayManager = {
+      # sddm.enable = true;
       lightdm.enable = true;
       defaultSession = "home-manager";
     };
