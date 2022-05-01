@@ -1485,12 +1485,16 @@ of the file."
 
 I manage lsp-servers on a per-project basis with Nix and direnv,
 so I only want to try running LSP if the server executable is
-available."
-    (cond ((executable-find "haskell-language-server-wrapper")
-           (lsp t))
-          ((executable-find "haskell-language-server")
-           (setq-local lsp-haskell-server-path "haskell-language-server")
-           (lsp t)))))
+available.
+
+This also ignores files named Setup.hs because HLS seems to
+consistently fail on them."
+    (unless (equal (file-name-nondirectory (buffer-file-name)) "Setup.hs")
+      (cond ((executable-find "haskell-language-server-wrapper")
+             (lsp t))
+            ((executable-find "haskell-language-server")
+             (setq-local lsp-haskell-server-path "haskell-language-server")
+             (lsp t))))))
 
                                         ; RUST
 (use-package rust-mode
