@@ -15,7 +15,6 @@
       emacs-all-the-icons-fonts
       emojione
       eb-garamond
-      fira-code
       hack-font
       hasklig
       inconsolata
