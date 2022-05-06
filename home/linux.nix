@@ -7,12 +7,13 @@
 
     ./firefox
     ./xmonad
-    ./video
   ];
 
   home = {
     username = "tikhon";
     homeDirectory = "/home/tikhon";
+
+    keyboard.options = ["caps:ctrl_modifier"];
 
     packages = with pkgs; [
       chromium

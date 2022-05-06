@@ -163,7 +163,7 @@
   services.xserver = {
     enable = true;
     layout = "us";
-    xkbOptions = "eurosign:e";
+    xkbOptions = "caps:ctrl_modifier";
 
     # 2022-04-21: sddm started crashing after updating
     # nixpkgs-unstable; I couldn't figure out why, but enabling
