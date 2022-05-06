@@ -152,6 +152,10 @@
   };
   programs.dconf.enable = true;
 
+  # Trying to a warning from reflex-dom apps:
+  # > Could not determine the accessibility bus address
+  services.gnome.at-spi2-core.enable = true;
+
   services.gnome.gnome-keyring.enable = true;
 
   systemd.services.upower.enable = true;
