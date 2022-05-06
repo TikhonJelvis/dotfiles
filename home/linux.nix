@@ -18,7 +18,9 @@
       chromium
       discord
       file
+      gimp
       gwenview
+      inkscape
       krita
       slack
       spectacle
