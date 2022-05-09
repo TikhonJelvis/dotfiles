@@ -23,8 +23,10 @@
   services.xserver.libinput = {
     enable = true;
 
-    clickMethod = "clickfinger";
-    tapping = false;
+    touchpad = {
+      clickMethod = "clickfinger";
+      tapping = false;
+    };
   };
 
   # Use the systemd-boot EFI boot loader.
