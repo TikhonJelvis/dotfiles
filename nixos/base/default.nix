@@ -170,8 +170,8 @@
     displayManager.sessionCommands =
       lib.optionalString (config.services.xserver.dpi != null) ''
         ${pkgs.xorg.xrdb}/bin/xrdb -merge <${pkgs.writeText "Xresources" ''
-          Xft.dpi: ${config.services.xserver.dpi}
-          *dpi: ${config.services.xserver.dpi}
+          Xft.dpi: ${toString config.services.xserver.dpi}
+          *dpi: ${toString config.services.xserver.dpi}
         ''}
       '';
 
