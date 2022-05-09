@@ -76,8 +76,6 @@
 
     # The global useDHCP flag is deprecated.
     useDHCP = false;
-    interfaces.enp35s0.useDHCP = true;
-    interfaces.wlp37s0.useDHCP = true;
 
     firewall = {
       enable = true;
