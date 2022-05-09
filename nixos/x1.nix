@@ -5,7 +5,7 @@
             ];
 
   users.mutableUsers = false;
-  users.users.tikhon.hashedPassword = "$6$CHDRwI4R8XXAj131$o.gcXEondaWAYr4bipBbU5C0fofuSuApe5eJEASsLCBgHY30sZ9qKL96hMGXAV7GssNJzcgaPHCZpsOSj4yju0";
+  users.users.tikhon.passwordFile = "/home/tikhon/pass";
 
   networking = {
     hostName = "tikhon-nixos-x1";
