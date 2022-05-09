@@ -184,7 +184,7 @@
     }];
   };
 
-  # Don't forget to set a password with ‘passwd’.
+  # Don't forget to set up a password file on each machine
   users.users = {
     tikhon = {
       isNormalUser = true;

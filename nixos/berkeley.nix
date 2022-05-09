@@ -7,6 +7,9 @@
       ./hardware-configuration/berkeley.nix
     ];
 
+  users.mutableUsers = false;
+  users.users.tikhon.passwordFile = "/home/tikhon/pass";
+
   environment.systemPackages = with pkgs; [ wacomtablet ];
 
   services.xserver.wacom.enable = true;

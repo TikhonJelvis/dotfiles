@@ -1,6 +1,11 @@
 { config, pkgs, ... }:
 {
-  imports = [ ./base ./hardware-configuration/x1.nix ];
+  imports = [ ./base
+              ./hardware-configuration/x1.nix
+            ];
+
+  users.mutableUsers = false;
+  users.users.tikhon.hashedPassword = "$6$CHDRwI4R8XXAj131$o.gcXEondaWAYr4bipBbU5C0fofuSuApe5eJEASsLCBgHY30sZ9qKL96hMGXAV7GssNJzcgaPHCZpsOSj4yju0";
 
   networking = {
     hostName = "tikhon-nixos-x1";
@@ -12,9 +17,7 @@
     interfaces.wlp0s20f3.useDHCP = true;
   };
 
-  users.mutableUsers = false;
   users.users.tikhon.extraGroups = [ "networkmanager" ];
-  users.users.tikhon.hashedPassword = "$6$CHDRwI4R8XXAj131$o.gcXEondaWAYr4bipBbU5C0fofuSuApe5eJEASsLCBgHY30sZ9qKL96hMGXAV7GssNJzcgaPHCZpsOSj4yju0";
 
   # touch pad
   services.xserver.libinput = {
