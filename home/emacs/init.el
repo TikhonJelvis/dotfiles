@@ -177,8 +177,8 @@ it's turned off again.")
 ;; Code based on
 ;; https://www.reddit.com/r/emacs/comments/dpc2aj/readjusting_fontsize_according_to_monitor/f5uasez/
 (defun frame-pixel-density (&optional frame)
-  "Return the pixel density (in px/mm) for the current frame's
-display."
+  "Return the pixel density (in px/mm) for FRAME's display. Use the
+current frame if FRAME is nil."
   (unless frame (setq frame (selected-frame)))
   (let* ((attrs (frame-monitor-attributes frame))
          (mm (apply 'max (cdr (assoc 'mm-size attrs))))
@@ -1332,7 +1332,18 @@ process regardless."
 (use-package stdout-mode)
 
                                         ; ELISP
-(use-package elisp-mode)
+(use-package elisp-mode
+  :init
+  (defun emacs-lisp-link-docstring-identifier ()
+    "Surround the next identifier with ` and '."
+    (interactive)
+    (if (use-region-p)
+        (markdown-wrap-or-insert "`" "'" nil (region-beginning) (region-end))
+      (markdown-wrap-or-insert "`" "'" 'word nil nil)))
+  :bind
+  (:map emacs-lisp-mode-map
+        ("C-M-;" . emacs-lisp-link-docstring-identifier)))
+
 (use-package paredit
   :ensure t
   :hook (emacs-lisp-mode . paredit-mode)
