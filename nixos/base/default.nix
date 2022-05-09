@@ -98,7 +98,7 @@
     };
   };
 
-  # Avahi config needed to work with OBS-NDI
+  # Avahi config needed for OBS-NDI
   services.avahi = {
     enable = true;
     publish = {

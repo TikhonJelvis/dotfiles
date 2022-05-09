@@ -185,11 +185,24 @@ current frame if FRAME is nil."
          (px (apply 'max (cdddr (assoc 'geometry attrs)))))
     (/ (float px) mm)))
 
+(defun frame-monitor-name (&optional frame)
+  "Return the name of FRAME's display. Use the current frame if
+FRAME is nil."
+  (unless frame (setq frame (selected-frame)))
+  (frame-monitor-attribute 'name frame))
+
 (defvar basis-font-size 110
   "The font size that works well on my 27” 1440p display (with a
 pixel density of ≈4.29). Resolution-based font-size adjustment
 will try to keep the actual font size the same across different
 screens.")
+
+(defvar basis-font-size-override
+  '((("tikhon-nixos-x1" "eDP-1") . 45))
+  "Specific monitors for which I want a different font size
+configured. This is an alist mapping hostname (`system-name') +
+output name to a value to use for `basis-font-size' on that
+monitor.")
 
 (defun adjusted-font-size (&optional frame)
   "Return the adjusted font size for the given frame, based on
@@ -199,8 +212,10 @@ My 27” 1440p display has a pixel density of ≈4.29 and works well
 at the basis font size, so I use that as my basis and change it
 proportionately."
   (unless frame (setq frame (selected-frame)))
-  (let ((basis (/ basis-font-size 4.29)))
-    (round (* (frame-pixel-density frame) basis))))
+  (let* ((monitor-key (list system-name (frame-monitor-name frame)))
+         (override (assoc monitor-key basis-font-size-override))
+         (basis (if override (cdr override) basis-font-size)))
+    (round (* (frame-pixel-density frame) (/ basis 4.29)))))
 
 (defun auto-adjust-font-size (&optional frame)
   "Automatically set the font size based on the resolution of the
