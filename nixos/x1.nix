@@ -17,6 +17,8 @@
   # force DPI for reasonable behavior on the laptop's 14" 4k display
   services.xserver.dpi = 192;
 
+  hardware.video.hidpi.enable = true;
+
   services.xserver.libinput = {
     enable = true;
 
