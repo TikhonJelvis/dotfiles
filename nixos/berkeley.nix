@@ -59,11 +59,7 @@
     interfaces.enp35s0.ipv4.addresses = [
       { address = "192.168.0.37"; prefixLength = 24; }
     ];
-
-    networkmanager.enable = true;
   };
-
-  users.users.tikhon.extraGroups = [ "networkmanager" ];
 
   services.openssh = {
     enable = true;

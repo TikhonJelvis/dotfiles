@@ -10,13 +10,9 @@
   networking = {
     hostName = "tikhon-nixos-x1";
 
-    networkmanager.enable = true;
-
     interfaces.enp0s31f6.useDHCP = true;
     interfaces.wlp0s20f3.useDHCP = true;
   };
-
-  users.users.tikhon.extraGroups = [ "networkmanager" ];
 
   # force DPI for reasonable behavior on the laptop's 14" 4k display
   services.xserver.dpi = 192;

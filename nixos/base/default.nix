@@ -77,6 +77,8 @@
     # The global useDHCP flag is deprecated.
     useDHCP = false;
 
+    networkmanager.enable = true;
+
     firewall = {
       enable = true;
 
@@ -187,10 +189,11 @@
     tikhon = {
       isNormalUser = true;
       extraGroups = [
-        "wheel"   # Enable ‘sudo’ for the user.
+        "wheel"   # enable ‘sudo’
         "docker"
         "scanner" # sane
         "lp"      # sane
+        "networkmanager"
       ];
     };
   };
