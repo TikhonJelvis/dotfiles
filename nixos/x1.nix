@@ -19,6 +19,10 @@
 
   users.users.tikhon.extraGroups = [ "networkmanager" ];
 
+  # Screen dimensions not detected correctly, so we need to force the
+  # DPI
+  services.xserver.dpi = 192;
+
   # touch pad
   services.xserver.libinput = {
     enable = true;
