@@ -1390,7 +1390,9 @@ process regardless."
                ("C-c C-r" . my-haskell-load-and-run)
                ("M-." . haskell-find-definition)
                ("M-?" . lsp-find-references)
-               ("C-c C-e" . haskell-add-language-pragma))
+               ("C-c C-e" . haskell-add-language-pragma)
+           :map haskell-cabal-mode-map
+               ("C-c C-s" . haskell-cabal-save-and-format))
 
   :init
   (defun insert-at-start (str)
@@ -1452,6 +1454,20 @@ of the file."
     (save-excursion
       (beginning-of-buffer)
       (insert (format "{-# LANGUAGE %s #-}\n" extension))))
+
+  (defun haskell-cabal-fmt ()
+    "If the cabal-fmt executable is available, use it to format the
+current buffer. Otherwise do nothing."
+    (when (executable-find "cabal-fmt")
+      (haskell-mode-buffer-apply-command "cabal-fmt")))
+
+  (defun haskell-cabal-save-and-format ()
+    "If the cabal-fmt executable is available, use it to format the
+current buffer. Save the buffer afterwards either way."
+    (interactive)
+    (save-buffer)
+    (haskell-cabal-fmt)
+    (save-buffer))
 
   :config
   (require 'haskell-indentation)
