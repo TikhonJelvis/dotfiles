@@ -1003,6 +1003,12 @@ silently does nothing."
              (timestamp (format-time-string fmt (current-time))))
         (org-set-property "CREATED" timestamp))))
 
+  (defun org-agenda-schedule-now ()
+    "Schedule the agenda item at the point to the current time
+without confirmation."
+    (interactive)
+    (org-agenda-schedule nil (format-time-string "+0d %H:%M")))
+
   :config
   (add-hook 'org-mode-hook 'org-mode-prettify-hook)
 
