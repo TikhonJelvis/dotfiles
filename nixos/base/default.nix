@@ -6,7 +6,7 @@
 #
 #  * networking.hostName
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -164,6 +164,16 @@
     enable = true;
     layout = "us";
     xkbOptions = "caps:ctrl_modifier";
+
+    # Set Xft.dpi to services.xserver.dpi if it's explicitly
+    # configured
+    displayManager.sessionCommands =
+      lib.optionalString (config.services.xserver.dpi != null) ''
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge <${pkgs.writeText "Xresources" ''
+          Xft.dpi: ${config.services.xserver.dpi}
+          *dpi: ${config.services.xserver.dpi}
+        ''}
+      '';
 
     # 2022-04-21: sddm started crashing after updating
     # nixpkgs-unstable; I couldn't figure out why, but enabling
