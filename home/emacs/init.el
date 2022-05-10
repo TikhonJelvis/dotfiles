@@ -1018,12 +1018,6 @@ silently does nothing."
              (timestamp (format-time-string fmt (current-time))))
         (org-set-property "CREATED" timestamp))))
 
-  (defun org-agenda-schedule-now ()
-    "Schedule the agenda item at the point to the current time
-without confirmation."
-    (interactive)
-    (org-agenda-schedule nil (format-time-string "+0d %H:%M")))
-
   :config
   (add-hook 'org-mode-hook 'org-mode-prettify-hook)
 
@@ -1100,7 +1094,8 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 
   :bind (("C-c a" . org-agenda)
          :map org-agenda-mode-map
-         ("k" . org-capture))
+         ("k" . org-capture)
+         ("C-<return>" . org-agenda-schedule-now))
 
   :custom
   (org-agenda-scheduled-leaders '("" "%2d×"))
@@ -1143,6 +1138,27 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
     "Search for PROJECT todo entries with the given tag."
     (interactive (list (completing-read "tag:" #'org-tags-completion-function)))
     (org-tags-view t (format "%s/PROJECT" tag)))
+
+  (defun org-agenda-schedule-now (arg)
+    "Schedule the agenda item at the point to the current time
+without confirmation.
+
+With a prefix argument, schedules to +0d with no time. "
+    (interactive "P")
+    (if arg (org-agenda-schedule nil "+0d")
+      (org-agenda-schedule nil (format-time-string "+0d %H:%M"))))
+
+  (define-advice org-read-date (:filter-args (args) default-current-time)
+    "Use the current time as the default option when org reads a
+date, unless a different default option was provided
+explicitly. (Normal behavior is to not have a default at all in
+that case.)"
+    (let ((f (lambda (&optional with-time to-time from-string prompt
+                                default-time default-input inactive)
+               (let* ((new-default-input (or default-input (format-time-string "%H:%M"))))
+                 (list with-time to-time from-string prompt default-time
+                       new-default-input inactive)))))
+      (apply f args)))
 
   :config
   (setq org-agenda-format-date 'org-agenda-custom-date-format)
