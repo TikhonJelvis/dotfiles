@@ -1148,17 +1148,19 @@ With a prefix argument, schedules to +0d with no time. "
     (if arg (org-agenda-schedule nil "+0d")
       (org-agenda-schedule nil (format-time-string "+0d %H:%M"))))
 
+  (defun org-read-add-default-time
+      (&optional with-time to-time from-string prompt
+                 default-time default-input inactive)
+    "Filters the inputs to `org-read-date', setting the current time
+as the default input if one was not already specified."
+    (let ((new-default (or default-input (format-time-string "%H:%M"))))
+      (list with-time to-time from-string prompt
+            default-time new-default inactive)))
+
   (define-advice org-read-date (:filter-args (args) default-current-time)
-    "Use the current time as the default option when org reads a
-date, unless a different default option was provided
-explicitly. (Normal behavior is to not have a default at all in
-that case.)"
-    (let ((f (lambda (&optional with-time to-time from-string prompt
-                                default-time default-input inactive)
-               (let* ((new-default-input (or default-input (format-time-string "%H:%M"))))
-                 (list with-time to-time from-string prompt default-time
-                       new-default-input inactive)))))
-      (apply f args)))
+    "Use the current time as the default input for `org-read-date'
+unless one was provided."
+    (apply 'org-read-add-default-time args))
 
   :config
   (setq org-agenda-format-date 'org-agenda-custom-date-format)
