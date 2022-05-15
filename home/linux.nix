@@ -26,6 +26,7 @@
       slack
       spectacle
       synergy
+      xournal
       vlc
       zoom-us
     ];
