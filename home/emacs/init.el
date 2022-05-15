@@ -305,7 +305,6 @@ size. Designed to work with `window-size-change-functions'."
 (global-set-key (kbd "C-c C-a") 'align-regexp)
 (global-set-key (kbd "M-#") 'ispell-complete-word)
 (global-set-key (kbd "M-j") 'next-error)
-(global-set-key (kbd "M-J") 'flycheck-next-error)
 
 ;; C-w remap:
 (global-set-key (kbd "C-w") 'backward-kill-word)
@@ -379,27 +378,34 @@ returns the same value as the function."
   ;;; Without explicitly passing in (face-attribute 'default :font),
   ;;; posframe windows were not working correctly with my
   ;;; auto-adjust-font-size function.
-  (defun display-posframe (handler font &optional width)
-    (frame-root-window
-     (posframe-show buffer
-                    :min-height 15
-                    :min-width (or width 50)
+  (defun display-posframe (buffer &rest extra-settings)
+    "Display a posframe with my default settings, correctly adjusted
+to the current frame's font size.
 
-                    :poshandler handler
+EXTRA-SETTINGS provides extra arguments to `posframe-show',
+overriding defaults. For example, to use a different
+':min-width', you can do:
 
-                    :left-fringe (frame-parameter (selected-frame) 'left-fringe)
-                    :right-fringe (frame-parameter (selected-frame) 'right-fringe)
+(display-posframe my-handler :min-width new-width)"
+    (let* ((font (face-attribute 'default :font))
+           (settings
+            (list :min-height 15
+                  :min-width 50
 
-                    :font font
-                    :background-color (posframe-background-color)
+                  :left-fringe (frame-parameter (selected-frame) 'left-fringe)
+                  :right-fringe (frame-parameter (selected-frame) 'right-fringe)
 
-                    :internal-border-width 1
-                    :internal-border-color (posframe-border-color))))
+                  :font font
+                  :background-color (posframe-background-color)
+
+                  :internal-border-width 1
+                  :internal-border-color (posframe-border-color))))
+      (frame-root-window
+       (apply 'posframe-show buffer (org-combine-plists settings extra-settings)))))
 
   (defun display-posframe-bottom (buffer _alist)
-    (display-posframe
-     #'posframe-poshandler-frame-bottom-center
-     (face-attribute 'default :font)
+    (display-posframe buffer
+     :poshandler #'posframe-poshandler-frame-bottom-center
 
      ;; (frame-width) sometimes returns an incorrect number for newly
      ;; opened frames, and this alternate calculation seems to solve
@@ -407,11 +413,10 @@ returns the same value as the function."
      ;;
      ;; The -1 adjusts for some inconsistencies in the calculation—the
      ;; frame is too wide otherwise.
-     (- (/ (frame-pixel-width) (window-font-width)) 2)))
+     :width (- (/ (frame-pixel-width) (window-font-width)) 2)))
 
   (defun display-posframe-center (buffer _alist)
-    (display-posframe #'posframe-poshandler-window-center
-     (face-attribute 'default :font))))
+    (display-posframe buffer :poshandler #'posframe-poshandler-window-center)))
 
 (use-package selectrum
   :ensure t
@@ -693,11 +698,74 @@ content in a buffer once ready."
   :ensure t
   :demand t
   :hook (python-mode . flycheck-mode)
+
+  :bind (("M-J" . flycheck-next-error)
+         ("M-K" . flycheck-previous-error)
+         ("M-L" . flycheck-display-error-at-point))
+
   :custom
   (flycheck-check-syntax-automatically '(save mode-enabled))
+
   :config
   (setq flycheck-executable-find
         (lambda (cmd) (direnv-update-environment default-directory) (executable-find cmd))))
+
+  ;; Modified from flycheck.el to not display the error message
+  ;; automatically.
+  (defun flycheck-next-error (&optional n reset)
+    "Visit the N-th error from the current point *without* displaying
+the error message.
+
+N is the number of errors to advance by, where a negative N
+advances backwards.  With non-nil RESET, advance from the
+beginning of the buffer, otherwise advance from the current
+position."
+    (interactive "P")
+    (when (consp n)
+      ;; Universal prefix argument means reset
+      (setq reset t n nil))
+    (flycheck-next-error-function n reset))
+
+(use-package flycheck-posframe
+  :ensure t
+  :after (flycheck posframe)
+  :hook (flycheck-mode . flycheck-posframe-mode)
+
+  :init
+  (defun flycheck-posframe-hide-posframe ()
+    "Hide the flycheck posframe if it is visible."
+    (posframe-hide flycheck-posframe-buffer))
+
+  (define-advice keyboard-quit (:before () hide-flycheck-posframe-on-quit)
+    (flycheck-posframe-hide-posframe))
+
+  :config
+  (flycheck-posframe-configure-pretty-defaults)
+
+  (defun flycheck-posframe-show-posframe (errors)
+    "Display ERRORS using my custom posframe settings (see
+`display-posframe')."
+    (posframe-hide flycheck-posframe-buffer)
+    (when (and errors
+               (not (run-hook-with-args-until-success 'flycheck-posframe-inhibit-functions)))
+      (let ((poshandler (intern (format "posframe-poshandler-%s" flycheck-posframe-position))))
+        (unless (functionp poshandler)
+          (setq poshandler nil))
+        (flycheck-posframe-check-position)
+        (display-posframe flycheck-posframe-buffer)
+
+        (display-posframe
+         flycheck-posframe-buffer
+         :string (flycheck-posframe-format-errors errors)
+         :position (point)
+         :poshandler poshandler
+         :hidehandler #'flycheck-posframe-hidehandler))))
+
+  ;; Disable automatic doc popups
+  (defun flycheck-maybe-display-error-at-point-soon ()
+    "Doesn't do anything in order to disable displaying error
+messages under the cursor automatically. Call
+`flycheck-display-error-at-point' manually instead."))
 
 
                                         ; CODE FORMATTING
