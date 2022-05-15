@@ -1094,8 +1094,7 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
 
   :bind (("C-c a" . org-agenda)
          :map org-agenda-mode-map
-         ("k" . org-capture)
-         ("C-<return>" . org-agenda-schedule-now))
+         ("k" . org-capture))
 
   :custom
   (org-agenda-scheduled-leaders '("" "%2d×"))
@@ -1138,15 +1137,6 @@ Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not
     "Search for PROJECT todo entries with the given tag."
     (interactive (list (completing-read "tag:" #'org-tags-completion-function)))
     (org-tags-view t (format "%s/PROJECT" tag)))
-
-  (defun org-agenda-schedule-now (arg)
-    "Schedule the agenda item at the point to the current time
-without confirmation.
-
-With a prefix argument, schedules to +0d with no time. "
-    (interactive "P")
-    (if arg (org-agenda-schedule nil "+0d")
-      (org-agenda-schedule nil (format-time-string "+0d %H:%M"))))
 
   (defun org-read-add-default-time
       (&optional with-time to-time from-string prompt
