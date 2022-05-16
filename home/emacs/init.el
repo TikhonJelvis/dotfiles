@@ -697,7 +697,9 @@ content in a buffer once ready."
 (use-package flycheck
   :ensure t
   :demand t
+
   :hook (python-mode . flycheck-mode)
+
 
   :bind (("M-J" . flycheck-next-error)
          ("M-K" . flycheck-previous-error)
@@ -742,13 +744,32 @@ position."
   :config
   (flycheck-posframe-configure-pretty-defaults)
 
+  ;; override existing flymake function to disable automatic popups on
+  ;; a timer
+  (defun flycheck-maybe-display-error-at-point-soon ()
+    "Doesn't do anything in order to disable displaying error
+messages under the cursor automatically. Call
+`flycheck-display-error-at-point' manually instead.")
+
+  (defun flycheck-posframe-format-error (err)
+  "Formats ERR for display."
+  (propertize (concat
+               (flycheck-posframe-get-prefix-for-error err)
+               (flycheck-error-format-message-and-id err)
+               "\n")
+              'face
+              `(:inherit ,(flycheck-posframe-get-face-for-error err))) )
+
   (defun flycheck-posframe-show-posframe (errors)
     "Display ERRORS using my custom posframe settings (see
 `display-posframe')."
     (posframe-hide flycheck-posframe-buffer)
     (when (and errors
                (not (run-hook-with-args-until-success 'flycheck-posframe-inhibit-functions)))
-      (let ((poshandler (intern (format "posframe-poshandler-%s" flycheck-posframe-position))))
+      (let ((poshandler
+             (intern (format "posframe-poshandler-%s" flycheck-posframe-position)))
+            (formatted-message
+             (concat "\n" (flycheck-posframe-format-errors errors))))
         (unless (functionp poshandler)
           (setq poshandler nil))
         (flycheck-posframe-check-position)
@@ -756,16 +777,11 @@ position."
 
         (display-posframe
          flycheck-posframe-buffer
-         :string (flycheck-posframe-format-errors errors)
+         :string formatted-message
+         :min-height (length (string-lines formatted-message))
          :position (point)
          :poshandler poshandler
-         :hidehandler #'flycheck-posframe-hidehandler))))
-
-  ;; Disable automatic doc popups
-  (defun flycheck-maybe-display-error-at-point-soon ()
-    "Doesn't do anything in order to disable displaying error
-messages under the cursor automatically. Call
-`flycheck-display-error-at-point' manually instead."))
+         :hidehandler #'flycheck-posframe-hidehandler)))))
 
 
                                         ; CODE FORMATTING
@@ -1483,6 +1499,8 @@ process regardless."
                                         ; HASKELL
 (use-package haskell-mode
   :ensure t
+  :after flycheck
+
   :custom
   (haskell-process-type 'cabal-repl)
   (haskell-process-args-cabal-repl '("--ghc-option=-ferror-spans"))
@@ -1499,7 +1517,7 @@ process regardless."
                ("M-." . haskell-find-definition)
                ("M-?" . lsp-find-references)
                ("C-c C-e" . haskell-add-language-pragma)
-           :map haskell-cabal-mode-map
+               :map haskell-cabal-mode-map
                ("C-c C-s" . haskell-cabal-save-and-format))
 
   :init
@@ -1576,6 +1594,57 @@ current buffer. Save the buffer afterwards either way."
     (save-buffer)
     (haskell-cabal-fmt)
     (save-buffer))
+
+  (defun haskell-process-flycheck-error (err)
+    "Process ERR, returning a more compact error message for flycheck
+to display."
+    (when (eq major-mode #'haskell-mode)
+      (setf (flycheck-error-message err)
+            (concat (haskell-message-compact (flycheck-error-message err)) "\n"))
+      nil))
+  (add-hook 'flycheck-process-error-functions #'haskell-process-flycheck-error)
+
+  (defvar haskell-message-ignored-parts
+    '("^Relevant bindings include"
+      "^In a stmt")
+    "Regexps to determine whether a section of an error
+message (delimited by •) should be ignored.")
+
+  (defvar haskell-message-ignored-lines
+    '("^ *at /.*$")
+    "Regexps to determine whether a line in an error message should
+be filtered out.")
+
+  (defun haskell-message-part-is-ignored (part)
+    "Returns whether a subset of an error message is ignored.
+
+A part of a message is ignored if it matches any of the patterns
+in `haskell-message-ignored-parts'."
+    (-any (lambda (expr) (string-match expr part)) haskell-message-ignored-parts))
+
+  (defun haskell-message-line-is-ignored (line)
+    "Returns whether the given line is ignored.
+
+A line is ignored if it matches any of the patternsin
+`haskell-message-ignored-lines'."
+    (-any (lambda (expr) (string-match expr line)) haskell-message-ignored-lines))
+
+  (defun haskell-message-trim-part (part)
+    "Given a single part of an error message, trim out unneeded
+bits."
+    (let ((lines
+           (seq-filter (-not 'haskell-message-line-is-ignored) (split-string part "\n"))))
+      (string-join lines "\n")))
+
+  (defun haskell-message-compact (error-message)
+    "Use some heuristics to trim down Haskell error message strings
+to be easier to read at a glance.
+
+If the format of ERROR-MESSAGE is not recognized, it should be returned
+unchanged."
+    (let* ((parts (mapcar #'string-trim (split-string error-message "•" t)))
+           (kept (seq-filter (-not 'haskell-message-part-is-ignored) parts)))
+      (string-join (mapcar #'haskell-message-trim-part kept) "\n\n")))
 
   :config
   (require 'haskell-indentation)
