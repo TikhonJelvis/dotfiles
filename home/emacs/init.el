@@ -1606,7 +1606,9 @@ to display."
 
   (defvar haskell-message-ignored-parts
     '("^Relevant bindings include"
-      "^In a stmt")
+      "^In a stmt"
+      "^In the \\w+ argument of"
+      "^In the expression:")
     "Regexps to determine whether a section of an error
 message (delimited by •) should be ignored.")
 
