@@ -83,6 +83,18 @@
         "url": "https://github.com/tecosaur/screenshot/archive/7621e0cd176f65e22bc7e7d03a8003e59426f7f7.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "stylish-haskell": {
+        "branch": "group-imports",
+        "description": "Haskell code prettifier",
+        "homepage": "",
+        "owner": "TikhonJelvis",
+        "repo": "stylish-haskell",
+        "rev": "5054105b207cb88b81418e50c16439993c67bbc2",
+        "sha256": "03rbcq211iwmqq9z5v3ykzmgs6pjv4xh320b36wj19fhs9cr6rk7",
+        "type": "tarball",
+        "url": "https://github.com/TikhonJelvis/stylish-haskell/archive/5054105b207cb88b81418e50c16439993c67bbc2.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "theta-idl": {
         "branch": "stage",
         "description": "Define communication protocols between applications using algebraic data types.",

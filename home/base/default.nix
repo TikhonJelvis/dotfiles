@@ -15,10 +15,16 @@
   home = {
     packages = with pkgs;
       let
-        utils        = [ drive pandoc unzip zip _1password poppler_utils ];
-        development  = [ ghc lorri niv python3 jupyter poetry cachix ];
-        aspell       = pkgs.aspellWithDicts (d: [d.en d.ru]);
-      in utils ++ development ++ [ aspell ];
+        utils =
+          [ drive pandoc unzip zip _1password poppler_utils aspell ];
+        development  =
+          [ ghc lorri niv python3 jupyter poetry cachix stylish-haskell ];
+
+        stylish-haskell =
+          let project = (import config.sources.stylish-haskell {}).stylish-haskell;
+          in project.components.exes.stylish-haskell;
+        aspell = pkgs.aspellWithDicts (d: [d.en d.ru]);
+      in utils ++ development;
 
     sessionPath = [
       "$HOME/.nix-profile/bin"
