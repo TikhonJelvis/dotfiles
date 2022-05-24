@@ -808,7 +808,15 @@ messages under the cursor automatically. Call
 
 (use-package nix-mode
   :ensure t
-  :mode "\\.nix\\'")
+  :mode "\\.nix\\'"
+  :hook (nix-mode . nix-auto-format)
+  :init
+  (defun nix-auto-format ()
+    "Turn on `format-all-mode' if nixpkgs-fmt is in the PATH in this
+buffer."
+    (when (executable-find "nixpkgs-fmt")
+      (setq-local format-all-formatters '(("Nix" nixpkgs-fmt)))
+      (format-all-mode t))))
 
 (use-package direnv
   :ensure t
@@ -1763,7 +1771,7 @@ which I don't want to do. This hook avoids that problem."
   (add-hook 'scala-mode-hook #'scala-lsp-maybe)
 
   (defun scala-auto-format ()
-    "Turn on format-all mode if scalafmt is in the path in this
+    "Turn on `format-all-mode' if scalafmt is in the path in this
 buffer."
     (when (executable-find "scalafmt")
       (setq-local format-all-formatters '(("Scala" scalafmt)))
