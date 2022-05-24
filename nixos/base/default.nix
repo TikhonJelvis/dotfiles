@@ -60,7 +60,7 @@
       "rl-book.cachix.org-1:0/mq4Bx1ZfXxA1hzSfjFMBzViwfg39wkqTPLEKff4RM="
       "theta-idl.cachix.org-1:B6I1LwtM4zjDt3+KagdvW9Ma9cQ6rUCPIbuE0FyO9fw="
 
-      "tikhon-nixos-berkeley:9d4kjZwNqYsfcxMMrPFtQGqKPznX0Sobg0a+cSb8AQ8="
+      "198.162.0.37:8080:cKl/fMG8ors1+OQdqHbMx88/sQgSLMJEqLz0EyWkCK8="
     ];
     gc = {
       automatic = true;
