@@ -10,7 +10,8 @@
 
 {
   imports =
-    [./fonts
+    [
+      ./fonts
     ];
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -67,7 +68,7 @@
       options = "--delete-older-than 30d";
     };
     extraOptions = ''
-    http-connections = 0
+      http-connections = 0
     '';
   };
 
@@ -77,7 +78,7 @@
   };
 
   networking = {
-    nameservers = ["1.1.1.1" "8.8.8.8"];
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
 
     # The global useDHCP flag is deprecated.
     useDHCP = false;
@@ -88,9 +89,14 @@
       enable = true;
 
       allowedTCPPorts = [
+        8080 # My own hosting/etc
+
         5960 # NDI communication
 
-        5961 5962 5963 5964 # NDI Channels
+        5961
+        5962
+        5963
+        5964 # NDI Channels
 
         24800 # Synergy
       ];
@@ -204,10 +210,10 @@
     tikhon = {
       isNormalUser = true;
       extraGroups = [
-        "wheel"   # enable ‘sudo’
+        "wheel" # enable ‘sudo’
         "docker"
         "scanner" # sane
-        "lp"      # sane
+        "lp" # sane
         "networkmanager"
       ];
     };
