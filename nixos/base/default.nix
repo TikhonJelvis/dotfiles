@@ -46,7 +46,7 @@
       "https://theta-idl.cachix.org"
 
       # Caches on my home network
-      # "http://192.168.0.37:8080"
+      # "http://tikhon-nixos-berkeley.local:8080"
     ];
     binaryCachePublicKeys = [
       "hercules-ci.cachix.org-1:ZZeDl9Va+xe9j+KqdzoBZMFJHVQ42Uu/c/1/KMC5Lw0="
@@ -60,7 +60,7 @@
       "rl-book.cachix.org-1:0/mq4Bx1ZfXxA1hzSfjFMBzViwfg39wkqTPLEKff4RM="
       "theta-idl.cachix.org-1:B6I1LwtM4zjDt3+KagdvW9Ma9cQ6rUCPIbuE0FyO9fw="
 
-      "local-cache:LJXC1G9dQpAlyxqoB6vTZ5Jm3GL4DGPCg5qhYERGDMM="
+      "tikhon-nixos-berkeley.local:qsrRFBYXe0YyQ+/94GgIIMnR8tZGGKPLHL8mdV25Kkg="
     ];
     gc = {
       automatic = true;
@@ -108,6 +108,10 @@
 
         5353 # mDNS for NDI
       ];
+    };
+
+    hosts = {
+      "192.168.0.37" = [ "tikhon-nixos-berkeley.local" ];
     };
   };
 
