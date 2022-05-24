@@ -46,7 +46,7 @@
       "https://theta-idl.cachix.org"
 
       # Caches on my home network
-      # "http://tikhon-nixos-berkeley.local:8080"
+      # "tikhon-nixos-berkeley.local"
     ];
     binaryCachePublicKeys = [
       "hercules-ci.cachix.org-1:ZZeDl9Va+xe9j+KqdzoBZMFJHVQ42Uu/c/1/KMC5Lw0="
@@ -89,24 +89,31 @@
       enable = true;
 
       allowedTCPPorts = [
-        8080 # My own hosting/etc
+        # My own hosting/etc
+        80
+        8080
 
-        5960 # NDI communication
+        # NDI communication
+        5960
 
+        # NDI channels
         5961
         5962
         5963
-        5964 # NDI Channels
+        5964
 
-        24800 # Synergy
+        # Synergy
+        24800
       ];
       allowedUDPPorts = [
-        2142 # SRT
+        # SRT
+        2142
         # As far as I can tell, SRT does not have a default port
         # number that's used by convention, so I just chose one
         # arbitrarily.
 
-        5353 # mDNS for NDI
+        # mDNS for NDI
+        5353
       ];
     };
 
