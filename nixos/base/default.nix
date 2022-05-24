@@ -46,7 +46,7 @@
       "https://theta-idl.cachix.org"
 
       # Caches on my home network
-      "http://192.168.0.37:8080"
+      # "http://192.168.0.37:8080"
     ];
     binaryCachePublicKeys = [
       "hercules-ci.cachix.org-1:ZZeDl9Va+xe9j+KqdzoBZMFJHVQ42Uu/c/1/KMC5Lw0="
@@ -60,7 +60,7 @@
       "rl-book.cachix.org-1:0/mq4Bx1ZfXxA1hzSfjFMBzViwfg39wkqTPLEKff4RM="
       "theta-idl.cachix.org-1:B6I1LwtM4zjDt3+KagdvW9Ma9cQ6rUCPIbuE0FyO9fw="
 
-      "198.162.0.37:8080:cKl/fMG8ors1+OQdqHbMx88/sQgSLMJEqLz0EyWkCK8="
+      "local-cache:LJXC1G9dQpAlyxqoB6vTZ5Jm3GL4DGPCg5qhYERGDMM="
     ];
     gc = {
       automatic = true;
