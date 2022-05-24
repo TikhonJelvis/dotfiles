@@ -43,6 +43,9 @@
       "https://haskell-org.cachix.org"
       "https://rl-book.cachix.org"
       "https://theta-idl.cachix.org"
+
+      # Caches on my home network
+      "http://192.168.0.37:8080"
     ];
     binaryCachePublicKeys = [
       "hercules-ci.cachix.org-1:ZZeDl9Va+xe9j+KqdzoBZMFJHVQ42Uu/c/1/KMC5Lw0="
@@ -55,6 +58,8 @@
       "haskell-org.cachix.org-1:qGKBoWNtLfLvv61PudtpiyvMFQCwlam7mBbpZJ+iaMk="
       "rl-book.cachix.org-1:0/mq4Bx1ZfXxA1hzSfjFMBzViwfg39wkqTPLEKff4RM="
       "theta-idl.cachix.org-1:B6I1LwtM4zjDt3+KagdvW9Ma9cQ6rUCPIbuE0FyO9fw="
+
+      "tikhon-nixos-berkeley:9d4kjZwNqYsfcxMMrPFtQGqKPznX0Sobg0a+cSb8AQ8="
     ];
     gc = {
       automatic = true;
