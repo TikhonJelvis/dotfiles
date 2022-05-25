@@ -580,6 +580,10 @@ overriding defaults. For example, to use a different
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 (setq dired-auto-revert-buffer 't)
 
+;; Don't ask about copying or deleting directories recursively:
+(setq dired-recursive-copies 'always)
+(setq dired-recursive-deletes 'always)
+
                                         ; IMAGES
 ;; Set the background for image-previews to an light color. This makes
 ;; reading diagrams with transparent backgrounds easier.
