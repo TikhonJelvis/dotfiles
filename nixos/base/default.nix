@@ -91,6 +91,7 @@
       allowedTCPPorts = [
         # My own hosting/etc
         80
+        8000
         8080
 
         # NDI communication
