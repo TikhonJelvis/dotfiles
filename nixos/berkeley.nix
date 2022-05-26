@@ -86,6 +86,13 @@
   };
   services.avahi.nssmdns = true; # Needed for CUPS to find the printer.
 
+  # Expose a Nix cache to the local network
+  services.nix-serve = {
+    enable = true;
+    secretKeyFile = "/var/cache-priv-key.pem";
+    port = 8080;
+  };
+
   boot = {
     loader = {
       efi.canTouchEfiVariables = true;
