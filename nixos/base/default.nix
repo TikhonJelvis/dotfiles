@@ -175,11 +175,17 @@
   };
   programs.dconf.enable = true;
 
-  # Trying to a warning from reflex-dom apps:
-  # > Could not determine the accessibility bus address
-  services.gnome.at-spi2-core.enable = true;
+  services.gnome = {
+    # Trying to a warning from reflex-dom apps:
+    # > Could not determine the accessibility bus address
+    at-spi2-core.enable = true;
 
-  services.gnome.gnome-keyring.enable = true;
+    # For saving wifi passwords with nm-applet/etc
+    gnome-keyring.enable = true;
+
+    # WebKitGtk needs this for https:// requests
+    glib-networking.enable = true;
+  };
 
   systemd.services.upower.enable = true;
 

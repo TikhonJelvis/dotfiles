@@ -53,11 +53,16 @@
   networking = {
     hostName = "tikhon-nixos-berkeley";
 
-    interfaces.enp35s0.useDHCP = true;
-    interfaces.wlp37s0.useDHCP = true;
-
     interfaces.enp35s0.ipv4.addresses = [
       { address = "192.168.0.37"; prefixLength = 24; }
+    ];
+    interfaces.enp35s0.ipv4.routes = [
+      {
+        address = "0.0.0.0";
+        via = "192.168.0.1";
+        options = { metric = "0"; };
+        prefixLength = 0;
+      }
     ];
   };
 
