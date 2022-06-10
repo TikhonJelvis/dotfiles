@@ -53,6 +53,8 @@
   networking = {
     hostName = "tikhon-nixos-berkeley";
 
+    networkmanager.unmanaged = ["enp35s0"];
+    interfaces.enp35s0.useDHCP = false;
     interfaces.enp35s0.ipv4.addresses = [
       { address = "192.168.0.37"; prefixLength = 24; }
     ];
