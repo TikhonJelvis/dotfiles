@@ -33,7 +33,6 @@
 
     sessionVariables = {
       NIX_SSL_CERT_FILE   = "/etc/ssl/certs/ca-certificates.crt";
-      HOME_MANAGER_CONFIG = toString ./linux.nix;
     };
   };
 

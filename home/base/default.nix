@@ -11,7 +11,7 @@
     "nixpkgs/config.nix".source   = ./config.nix;
     "nixpkgs/overlays.nix".source = ./overlays.nix;
   };
-  
+
   home = {
     packages = with pkgs;
       let
@@ -91,9 +91,12 @@
       '';
     };
 
+    fish.enable = false;
+
     direnv = {
       enable = true;
       enableBashIntegration = true;
+      enableFishIntegration = false;
 
       nix-direnv.enable = true;
 
