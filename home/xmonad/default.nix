@@ -58,6 +58,12 @@ in
         label = "%time%";
       };
 
+      "module/battery" = {
+        type = "internal/battery";
+        battery = "BAT0";
+        adapter = "AC";
+      };
+
       "bar/top" = {
         width = "100%";
         height = "20";
@@ -68,7 +74,7 @@ in
         tray-position = "right";
         tray-padding = 5;
 
-        modules-right = "date";
+        modules-right = "date battery";
 
         font = [
           "DejaVu Sans:style=Book:size=12;3"
