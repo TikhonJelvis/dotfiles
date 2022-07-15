@@ -1115,6 +1115,43 @@ silently does nothing."
              (timestamp (format-time-string fmt (current-time))))
         (org-set-property "CREATED" timestamp))))
 
+  ;; TODO: Run this function automatically?
+  ;;
+  ;; Not sure if I'd do this on a timer, as a cron job, on Emacs
+  ;; startup...
+  ;;
+  ;; For now I'll just run it manually and it'll be fine.
+  (defun org-archive-tasks-older-than (time &optional match)
+    "Archive all top-level done tasks (ie not subtasks inside
+projects) that were scheduled at least TIME before now.
+
+Example: archive all TODO=\"DONE\" tasks older than 30 days:
+
+(org-archive-tasks-older-than (days-to-time 30))
+
+Example: archive all tasks tagged work older than 30
+days (regardless of TODO status):
+
+(org-archive-old-tasks (days-to-time 30) \"+work\")"
+    (setq match (or match "+TODO=\"DONE\""))
+    (org-map-entries
+     (lambda ()
+       (org-archive-subtree)
+
+       ;; org-map-entries moves to the end of the line after
+       ;; processing each entry
+       ;;
+       ;; since we are removing the current entry by archiving, this
+       ;; implicitly skips the next entry; we have to set
+       ;; org-map-continue-from to avoid this
+       (setq org-map-continue-from
+             (org-element-property :begin (org-element-at-point))))
+     (format "%s+LEVEL=1+SCHEDULED<=\"%s\""
+             match
+             (format-time-string "<%Y-%m-%d %H:%M>"
+                                 (time-subtract (current-time) time)))
+     nil))
+
   :config
   (add-hook 'org-mode-hook 'org-mode-prettify-hook)
 
