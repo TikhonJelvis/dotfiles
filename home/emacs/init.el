@@ -1090,6 +1090,7 @@ silently does nothing."
       "* TODO %?\n  SCHEDULED: %T\n:PROPERTIES:\n:CREATED: %U\n:END:")))
   (org-refile-targets
    '((org-agenda-files :maxlevel . 3)))
+  (org-log-done 'time)
 
   :bind (("C-c l" . org-store-link)
          ("C-c c" . org-capture)
