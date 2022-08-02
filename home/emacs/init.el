@@ -1846,7 +1846,11 @@ buffer."
 
 (use-package sbt-mode
   :ensure t
-  :commands sbt-start sbt-command)
+  :commands sbt-start sbt-command
+  :bind
+  (:map scala-mode-map
+        ("RET" . scala-insert-asterisk-on-newline)
+        ("C-c C-l" . sbt-do-run)))
 
 (use-package lsp-metals
   :ensure t)
