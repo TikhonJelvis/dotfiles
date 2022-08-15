@@ -18,7 +18,7 @@
         utils =
           [ drive pandoc unzip zip _1password poppler_utils aspell ];
         development  =
-          [ ghc lorri niv python3 jupyter poetry cachix stylish-haskell ];
+          [ ghc lorri niv python3 poetry cachix stylish-haskell ];
 
         stylish-haskell =
           let project = (import config.sources.stylish-haskell {}).stylish-haskell;
