@@ -8,7 +8,8 @@
                       ("\\x" ?×)
                       ("\\tm" ?™)
                       ("\\grad" ?∇)
-                      ("\\inc" ?∆))
+                      ("\\inc" ?∆)
+                      ("\\sf" ?➲))
 
   ;; Use ; in place of \
   (quail-defrule ";" (quail-lookup-key "\\")))
