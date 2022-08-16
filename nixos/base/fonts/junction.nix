@@ -6,10 +6,18 @@ let
     url = "https://github.com/theleagueof/junction/archive/master.zip";
     sha256 = "110jsijn3i26d2487c9680w2z8g3bxflxjlsc4yhyc3wbmb7v1b8";
 
+    # Modified based on code in nixpkgs PR #157381, fixing an issue
+    # caused by #173430
     postFetch = ''
-      mkdir -p $out/share/fonts
-      unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
-      unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+      mkdir -p $out/share/fonts/truetype
+      mv $out/webfonts/*.ttf -t $out/share/fonts/truetype
+
+      mkdir -p $out/share/fonts/opentype
+      mv $out/*.otf -t $out/share/fonts/opentype
+
+      shopt -s extglob dotglob
+      rm -rf $out/!(share)
+      shopt -u extglob dotglob
     '';
 
     meta = with lib; {
