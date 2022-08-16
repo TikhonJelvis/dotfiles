@@ -8,4 +8,6 @@ pkgs.mkShell rec {
     if pkgs.stdenv.isDarwin
     then toString ./home/target-macbook.nix
     else toString ./home/linux.nix;
+
+  NIX_PATH = "nixpkgs=${sources.nixpkgs}:nixpkgs/nixos=${sources.nixpkgs}";
 }
