@@ -33,7 +33,7 @@
   ];
 
   # need at least 5.16 for Wifi + Bluetooth
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # fingerprint reader
   services.fprintd.enable = true;
