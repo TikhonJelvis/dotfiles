@@ -9,5 +9,5 @@ pkgs.mkShell rec {
     then toString ./home/target-macbook.nix
     else toString ./home/linux.nix;
 
-  NIX_PATH = "nixpkgs=${sources.nixpkgs}:nixpkgs/nixos=${sources.nixpkgs}";
+  NIX_PATH = "nixpkgs=${sources.nixpkgs}:nixpkgs/nixos=${sources.nixpkgs}:nixos-config=/etc/nixos/configuration.nix";
 }
