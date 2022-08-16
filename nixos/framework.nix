@@ -43,5 +43,8 @@
   # (mis-detected by nixos-generate-config)
   hardware.acpilight.enable = true;
 
+  # for Intel CPUs?
+  hardware.enableRedistributableFirmware = true;
+
   system.stateVersion = "22.05";
 }
