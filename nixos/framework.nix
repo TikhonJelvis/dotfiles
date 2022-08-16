@@ -32,8 +32,10 @@
     "nvme.noacpi=1"
   ];
 
-  # need at least 5.16 for Wifi + Bluetooth
-  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  # try using 5.18 as suggested on GitHub
+  #
+  # https://github.com/NixOS/nixpkgs/issues/183955#issuecomment-1210468614
+  boot.kernelPackages = pkgs.linuxPackages_5_18;
 
   # fingerprint reader
   services.fprintd.enable = true;

@@ -81,7 +81,10 @@
   };
 
   boot = {
-    extraModulePackages = [ pkgs.linuxPackages.v4l2loopback ];
+    # config.boot.linuxPackages instead of pkgs.linuxPackages so that
+    # this is consistent when changing the kernel version in other
+    # parts of my config
+    extraModulePackages = [ config.boot.linuxPackages.v4l2loopback ];
     kernelModules = [ "v4l2loopback" ];
   };
 
