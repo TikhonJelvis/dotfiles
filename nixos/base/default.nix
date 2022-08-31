@@ -171,6 +171,9 @@
     ];
   };
 
+  # For QMK
+  services.udev.packages = [ pkgs.qmk-udev-rules ];
+
   # Bluetooth
   hardware.bluetooth = {
     enable = true;
