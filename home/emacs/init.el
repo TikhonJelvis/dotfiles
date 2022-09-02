@@ -198,7 +198,8 @@ will try to keep the actual font size the same across different
 screens.")
 
 (defvar basis-font-size-override
-  '((("tikhon-nixos-x1" "eDP-1") . 45))
+  '((("tikhon-nixos-x1" "eDP-1") . 45)
+    (("tikhon-nixos-framework" "eDP-1") . 80))
   "Specific monitors for which I want a different font size
 configured. This is an alist mapping hostname (`system-name') +
 output name to a value to use for `basis-font-size' on that
