@@ -250,6 +250,24 @@ size. Designed to work with `window-size-change-functions'."
 (setq custom-safe-themes t)
 (load-theme 'blackboard t)
 
+;;; the theme definition for my version of blackboard uses color
+;;; functions like `color-lighten-name' which depend on the selected
+;;; frame
+;;;
+;;; this was causing incorrect behavior when Emacs is started up
+;;; /without/ a frame (ie starting a server before launching a
+;;; client), so color calculations would be performed incorrectly (!)
+;;;
+;;; as a hacky workaround, we can just (re)load the theme the first
+;;; time that we create a new frame
+(defvar frame-created nil "Has a frame been created before?")
+(defun load-theme-after-frame-hook ()
+  "Load my default theme when a frame is created for the first time by a server."
+  (unless frame-created
+    (load-theme 'blackboard t))
+  (setq frame-created t))
+(add-hook 'server-after-make-frame-hook #'load-theme-after-frame-hook)
+
 ;;Make the window simpler:
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
@@ -288,6 +306,11 @@ size. Designed to work with `window-size-change-functions'."
 ;; Make visual-line-mode configurable to fill-column. Not great, but
 ;; gets the job done...
 (use-package visual-fill-column
+  :ensure t)
+
+
+;; Preview colors for color literals
+(use-package rainbow-mode
   :ensure t)
 
                                         ; KEY REBINDINGS
@@ -1206,37 +1229,21 @@ days (regardless of TODO status):
   :config
   (setq el-patch-enable-use-package-integration t))
 
-(define-advice org-agenda-format-item (:filter-args (&rest args) fontify-org)
-  "Force fontify ageda item. (hack)
-
-Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not_working_with_orgagenda/"
-  (cl-multiple-value-bind (extra txt level category tags dotime remove-re habitp) (car args)
-    (with-temp-buffer
-      (cl-letf (((symbol-function 'yant/process-att-abbrev) #'identity)
-		((symbol-function 'yant/process-att-id-abbrev) #'identity)) ;; expanding sometimes causes errors when attempting to access ancestors
-	(org-mode)
-        (setq txt (replace-regexp-in-string "[ \t]*:[[:alnum:]_@#%:]+:[ 	]*$" "" txt))
-	(insert "* "
-		txt
-		"\t"
-		(or (and tags (s-join ":" `(nil ,@(cl-remove-duplicates tags) nil)))
-		    "")
-		"\n")
-	(font-lock-fontify-buffer)
-	(goto-char (point-min))
-	(looking-at "^\\* \\(\\([^\t]+\\)[ 	]+\\(:\\([[:alnum:]_@#%:]+\\):\\)*\\)[ 	]*$")
-	(setq txt (match-string 2))
-	(setq tags (and tags (s-split ":" (match-string 3) 't))))
-      (list extra txt level category tags dotime remove-re habitp))))
-
 (use-package org-agenda
-  :after el-patch
+  :after (org el-patch)
 
   :bind (("C-c a" . org-agenda)
          :map org-agenda-mode-map
          ("k" . org-capture))
 
   :custom
+  (org-agenda-files
+   (list (concat org-directory "/Tasks.org")
+         (concat org-directory "/Books.org")
+         (concat org-directory "/Projects.org")))
+  
+  (org-agenda-format-date 'org-agenda-custom-date-format)
+
   (org-agenda-scheduled-leaders '("" "%2d×"))
   (org-agenda-prefix-format
    '((agenda . " %i %-7t% s")
@@ -1292,13 +1299,28 @@ as the default input if one was not already specified."
 unless one was provided."
     (apply 'org-read-add-default-time args))
 
-  :config
-  (setq org-agenda-format-date 'org-agenda-custom-date-format)
+  (define-advice org-agenda-format-item (:filter-args (&rest args) fontify-org)
+    "Force fontify ageda item. (hack)
 
-  (setq org-agenda-files
-        (list (concat org-directory "/Tasks.org")
-              (concat org-directory "/Books.org")
-              (concat org-directory "/Projects.org")))
+Source: https://www.reddit.com/r/orgmode/comments/i3upt6/prettifysymbolsmode_not_working_with_orgagenda/"
+    (cl-multiple-value-bind (extra txt level category tags dotime remove-re habitp) (car args)
+      (with-temp-buffer
+        (cl-letf (((symbol-function 'yant/process-att-abbrev) #'identity)
+		  ((symbol-function 'yant/process-att-id-abbrev) #'identity)) ;; expanding sometimes causes errors when attempting to access ancestors
+	  (org-mode)
+          (setq txt (replace-regexp-in-string "[ \t]*:[[:alnum:]_@#%:]+:[ 	]*$" "" txt))
+	  (insert "* "
+		  txt
+		  "\t"
+		  (or (and tags (s-join ":" `(nil ,@(cl-remove-duplicates tags) nil)))
+		      "")
+		  "\n")
+	  (font-lock-fontify-buffer)
+	  (goto-char (point-min))
+	  (looking-at "^\\* \\(\\([^\t]+\\)[ 	]+\\(:\\([[:alnum:]_@#%:]+\\):\\)*\\)[ 	]*$")
+	  (setq txt (match-string 2))
+	  (setq tags (and tags (s-split ":" (match-string 3) 't))))
+        (list extra txt level category tags dotime remove-re habitp))))
 
   :config/el-patch
   (el-patch-feature org-agenda)
