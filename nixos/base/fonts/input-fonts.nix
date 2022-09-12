@@ -12,7 +12,7 @@ let
       url = input-fonts-url options;
       stripRoot = false;
 
-      extraPostFetch = ''
+      postFetch = ''
         # Reset the timestamp to release date for determinism.
         PATH=${lib.makeBinPath [ pkgs.python3.pkgs.fonttools ]}:$PATH
         for ttf_file in $out/Input_Fonts/*/*/*.ttf; do

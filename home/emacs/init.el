@@ -377,7 +377,7 @@ returns the same value as the function."
   :init
   (defun posframe-background-color ()
     (let ((bg (face-attribute 'default :background)))
-      (color-lighten-name bg 10)))
+      (color-lighten-name bg 100)))
   (defun posframe-border-color ()
     (face-attribute 'default :foreground))
 
