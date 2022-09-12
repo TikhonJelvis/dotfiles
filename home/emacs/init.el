@@ -112,6 +112,11 @@ Enters or returns the expanded absolute path to the chosen file."
 ;; I don't like tabs very much:
 (setq-default indent-tabs-mode nil)
 
+;; Hack for typing backticks with QMK keyboard config
+;;
+;; QMK uses super + ESC to type a `, but Emacs reads that as s-`
+(global-set-key (kbd "s-`") (lambda () (interactive) (insert "`")))
+
 ;; Unique buffer names:
 (use-package uniquify
   :custom
