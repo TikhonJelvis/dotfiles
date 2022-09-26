@@ -26,6 +26,7 @@
       slack
       spectacle
       synergy
+      unison-ucm
       xournal
       vlc
       zoom-us

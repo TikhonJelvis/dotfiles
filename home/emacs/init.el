@@ -1769,6 +1769,10 @@ consistently fail on them."
              (setq-local lsp-haskell-server-path "haskell-language-server")
              (lsp t))))))
 
+                                        ; UNISON
+(use-package unisonlang-mode
+  :ensure t)
+
                                         ; RUST
 (use-package rust-mode
   :ensure t
