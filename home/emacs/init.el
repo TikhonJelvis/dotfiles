@@ -1102,7 +1102,8 @@ silently does nothing."
          ("M-}" . forward-paragraph)
          ("M-{" . backward-paragraph)
          ("C-c C-," . org-promote-subtree)
-         ("C-c C-." . org-demote-subtree))
+         ("C-c C-." . org-demote-subtree)
+         ("C-c C-;" . org-insert-structure-template))
 
   :hook
   ((org-insert-heading . org-insert-with-timestamp)
