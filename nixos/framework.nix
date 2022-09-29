@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  imports = [ ./base
+  imports = [ ./base/laptop.nix
               ./hardware-configuration/framework.nix
             ];
 
@@ -9,15 +9,6 @@
 
   networking = {
     hostName = "tikhon-nixos-framework";
-  };
-
-  services.xserver.libinput = {
-    enable = true;
-
-    touchpad = {
-      clickMethod = "clickfinger";
-      tapping = false;
-    };
   };
 
   # the systemd-boot EFI boot loader (rather than GRUB/etc)
@@ -36,17 +27,6 @@
   #
   # https://github.com/NixOS/nixpkgs/issues/183955#issuecomment-1210468614
   boot.kernelPackages = pkgs.linuxPackages_5_18;
-
-  # fingerprint reader
-  services.fprintd.enable = true;
-
-  # for changing monitor brightness
-  #
-  # (mis-detected by nixos-generate-config)
-  hardware.acpilight.enable = true;
-
-  # for Intel CPUs?
-  hardware.enableRedistributableFirmware = true;
 
   system.stateVersion = "22.05";
 }
