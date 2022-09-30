@@ -1,7 +1,7 @@
 # Config for desktops but *not* laptops
 { config, pkgs, ... }:
 {
-  imports = [ ./base ];
+  imports = [ ./. ];
   
   users.mutableUsers = false;
   users.users.tikhon.passwordFile = "/home/tikhon/pass";

@@ -1,7 +1,7 @@
 # Additional configuration shared by all my laptops
 { ... }:
 {
-  imports = [ ./base ];
+  imports = [ ./. ];
 
   # Touchpad settings
   services.xserver.libinput = {
