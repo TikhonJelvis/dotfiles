@@ -25,6 +25,14 @@
     ];
   };
 
+  # TODO: try nix-serve-ng instead?
+  # Expose a Nix cache to the local network
+  services.nix-serve = {
+    enable = true;
+    secretKeyFile = "/var/cache-priv-key.pem";
+    port = 8080;
+  };
+
   services.openssh = {
     enable = true;
     allowSFTP = false;
