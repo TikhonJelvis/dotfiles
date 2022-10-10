@@ -204,8 +204,6 @@
     glib-networking.enable = true;
   };
 
-  systemd.services.upower.enable = true;
-
   services.xserver = {
     enable = true;
     layout = "us";
@@ -221,16 +219,14 @@
         ''}
       '';
 
-    # 2022-04-21: sddm started crashing after updating
-    # nixpkgs-unstable; I couldn't figure out why, but enabling
-    # lightdm instead works around the issue
+    # using lightdm instead of sddm to suppress kwallet dialog at
+    # startup
     displayManager = {
-      # sddm.enable = true;
       lightdm.enable = true;
       defaultSession = "home-manager";
     };
 
-    desktopManager.plasma5.enable = true;
+    desktopManager.plasma5.enable = false;
     desktopManager.session = [{
       name = "home-manager";
       start = ''

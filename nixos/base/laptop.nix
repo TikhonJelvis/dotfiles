@@ -13,6 +13,9 @@
     };
   };
 
+  # battery/power info
+  systemd.services.upower.enable = true;
+
   # fingerprint reader
   services.fprintd.enable = true;
 
