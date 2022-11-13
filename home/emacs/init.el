@@ -910,16 +910,7 @@ buffer."
   :hook
   (emacs-lisp-mode . company-mode)
   :custom
-  (company-idle-delay nil)
-  :config
-  (let ((bg (face-attribute 'default :background)))
-    (custom-set-faces
-     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
-     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
-     `(company-scrollbar-fg ((t (:background "DarkOrange"))))
-     `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
-     `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
-     `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face)))))))
+  (company-idle-delay nil))
 
 ;; Adds icons to company popups.
 (use-package company-box
