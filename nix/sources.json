@@ -5,10 +5,10 @@
         "homepage": "",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "5b866cfe1ffcb2dc004c862d7da2ff5c6dc66e51",
-        "sha256": "16idky07ab20cgh3rh7w2j6jg424vyvvjw7fkwxx7hyqxjajm87m",
+        "rev": "958d90403b9a968d1e49cbb2997423a54dc14921",
+        "sha256": "01nd3im7h1dk1cni9blq993bjni5kd1s9gkfjvfh2va22h5pwb04",
         "type": "tarball",
-        "url": "https://github.com/nix-community/NUR/archive/5b866cfe1ffcb2dc004c862d7da2ff5c6dc66e51.tar.gz",
+        "url": "https://github.com/nix-community/NUR/archive/958d90403b9a968d1e49cbb2997423a54dc14921.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "emacs-nativecomp": {
@@ -29,10 +29,10 @@
         "homepage": "",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "f8d2c22b0714629bb7f8e90071b12fa56cd620be",
-        "sha256": "1r19hhmpx2ddbb9ffah1jfi1i87bwb0sb94jmhip1gh2lrazd8lb",
+        "rev": "90530888811ea4e15b221a051f54cc3a50e62f1f",
+        "sha256": "0nrskwcfqvmd2py9ylqa5c4n53m2xm34zfc03rsdxkp4cpcx0pq5",
         "type": "tarball",
-        "url": "https://github.com/nix-community/emacs-overlay/archive/f8d2c22b0714629bb7f8e90071b12fa56cd620be.tar.gz",
+        "url": "https://github.com/nix-community/emacs-overlay/archive/90530888811ea4e15b221a051f54cc3a50e62f1f.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "home-manager": {
@@ -41,10 +41,10 @@
         "homepage": "https://nix-community.github.io/home-manager/",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "e901c8d86082be74a8be70773bbb6d401ff21e49",
-        "sha256": "1yr8grb1a642l5i39pjhnmi0b923qjb84dgm17h2d1wd1y0nxf2m",
+        "rev": "bc90de24d898655542589237cc0a6ada7564cb6c",
+        "sha256": "01y5vdqckvn8hx5b1kp6rcm4snkhhsz65gqqsi7a02nc9xq6lgb1",
         "type": "tarball",
-        "url": "https://github.com/nix-community/home-manager/archive/e901c8d86082be74a8be70773bbb6d401ff21e49.tar.gz",
+        "url": "https://github.com/nix-community/home-manager/archive/bc90de24d898655542589237cc0a6ada7564cb6c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -65,10 +65,10 @@
         "homepage": "",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d0f9857448e77df50d1e0b518ba0e835b797532a",
-        "sha256": "1jm600y02q2x2pkdgyhvc3pmywr12vj7ag8bqskp7y0r4kdw4x3g",
+        "rev": "d8f2c4d846a2e65ad3f5a5e842b672f0b81588a2",
+        "sha256": "14gpih34y7gjxf89dhs5iw7y088cg2qqhxmy0n01m0gkivvyp1pz",
         "type": "tarball",
-        "url": "https://github.com/nixos/nixpkgs/archive/d0f9857448e77df50d1e0b518ba0e835b797532a.tar.gz",
+        "url": "https://github.com/nixos/nixpkgs/archive/d8f2c4d846a2e65ad3f5a5e842b672f0b81588a2.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "screenshot-el": {
@@ -77,10 +77,10 @@
         "homepage": "",
         "owner": "tecosaur",
         "repo": "screenshot",
-        "rev": "053c9e856f27ae2e3a15a688cb354d63fbf2a260",
-        "sha256": "1af750kksswq90v56j9fmc2d2q3bd2q6qi517xq1014jmlkpl006",
+        "rev": "177dbd399651d9aa1478bffb255919c9aff2866d",
+        "sha256": "1fhzaxvv3j7wjnps73ma35pcs42m6w6k1d2a6223xam3zk26nzd2",
         "type": "tarball",
-        "url": "https://github.com/tecosaur/screenshot/archive/053c9e856f27ae2e3a15a688cb354d63fbf2a260.tar.gz",
+        "url": "https://github.com/tecosaur/screenshot/archive/177dbd399651d9aa1478bffb255919c9aff2866d.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "stylish-haskell": {
@@ -89,10 +89,10 @@
         "homepage": "",
         "owner": "haskell",
         "repo": "stylish-haskell",
-        "rev": "0d364b5a869dcef0e2f78b7d6c817b207d9eb6fe",
-        "sha256": "1pgih23mpwi9lnj8vw76lx6xadsrh2xk2mnqx61qvmq4p731apsc",
+        "rev": "ba8f471a73fe031e8e193337a2683eeb328cf756",
+        "sha256": "1x60l3gvxiqd4m6q4ffzswrnvblzmghz11v1z4s5v6g8anq97scm",
         "type": "tarball",
-        "url": "https://github.com/haskell/stylish-haskell/archive/0d364b5a869dcef0e2f78b7d6c817b207d9eb6fe.tar.gz",
+        "url": "https://github.com/haskell/stylish-haskell/archive/ba8f471a73fe031e8e193337a2683eeb328cf756.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "theta-idl": {
