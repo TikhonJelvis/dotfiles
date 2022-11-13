@@ -6,9 +6,8 @@
   users.mutableUsers = false;
   users.users.tikhon.passwordFile = "/home/tikhon/pass";
 
-  # let's see if *not* using the prorpietary NVidia drivers solves
-  # some of the monitor config problems I'm seeing
-  # services.xserver.videoDrivers = [ "nvidia" ];
+  # using proprietary Nvidia drivers
+  services.xserver.videoDrivers = [ "nvidia" ];
   
   # Wacom tablet
   environment.systemPackages = with pkgs; [ wacomtablet ];
