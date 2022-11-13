@@ -14,6 +14,18 @@
       package = pkgs.emacsWithPackagesFromUsePackage {
         package = config.emacs;
         config = ./init.el;
+        override = epkgs: epkgs // {
+          # patch treemacs to fix eager macro-expand error
+          #
+          # see several related issues:
+          #
+          # https://github.com/emacs-lsp/dap-mode/issues/673
+          # https://github.com/emacs-lsp/lsp-metals/issues/81
+          # https://github.com/Alexander-Miller/treemacs/issues/982
+          treemacs = epkgs.melpaPackages.treemacs.overrideAttrs(old: {
+            patches = [ ./treemacs-treelib-el.patch ];
+          });
+        };
       };
     };
 

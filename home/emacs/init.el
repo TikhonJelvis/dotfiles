@@ -955,9 +955,13 @@ faces each time before company-complete is called."
   :ensure t)
 
                                         ; LSP
+(use-package treemacs
+  :ensure t)
+
 (use-package lsp-mode
   :ensure t
   :demand t
+  :after treemacs
 
   :custom
   (lsp-eldoc-hook nil)

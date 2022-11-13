@@ -1,0 +1,13 @@
+diff --git a/src/elisp/treemacs-treelib.el b/src/elisp/treemacs-treelib.el
+index d30c8c6..9825fbf 100644
+--- a/src/elisp/treemacs-treelib.el
++++ b/src/elisp/treemacs-treelib.el
+@@ -1018,7 +1018,7 @@ ARG: Prefix Arg"
+    :post-close-action
+    (treemacs-on-collapse (treemacs-button-get btn :path))))
+ 
+-(cl-defmacro treemacs-initialize
++(cl-defmacro treemacs-initialize-ext
+     (extension
+      &key
+      (with-expand-depth 0)
