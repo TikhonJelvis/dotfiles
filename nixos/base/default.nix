@@ -36,7 +36,7 @@
         "https://cache.nixos.org"
         "https://hercules-ci.cachix.org"
         "https://iohk.cachix.org"
-        "https://hydra.iohk.io"
+        # "https://hydra.iohk.io" # Currently down (temporarily?)
         "https://nix-community.cachix.org"
         "https://nix-tools.cachix.org"
         "https://nixcache.reflex-frp.org"
