@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  imports = [ ./base
+  imports = [ ./base/laptop.nix
               ./hardware-configuration/x1.nix
             ];
 
@@ -18,15 +18,6 @@
   services.xserver.dpi = 96 * 2;
 
   hardware.video.hidpi.enable = true;
-
-  services.xserver.libinput = {
-    enable = true;
-
-    touchpad = {
-      clickMethod = "clickfinger";
-      tapping = false;
-    };
-  };
 
   # the systemd-boot EFI boot loader (rather than GRUB/etc)
   boot.loader.systemd-boot.enable = true;

@@ -1,11 +1,16 @@
 { pkgs, ... }:
 
 let
-  breeze-wallpaper = "${pkgs.breeze-qt5}/share/wallpapers/Next/contents/images/2560x1440.jpg";
+  breeze-wallpaper-base =
+    "${pkgs.breeze-qt5}/share/wallpapers/Next/contents/images/2560x1440";
+  breeze-wallpaper =
+    if builtins.pathExists "${breeze-wallpaper-base}.png"
+    then "${breeze-wallpaper-base}.png"
+    else "${breeze-wallpaper-base}.jpg";
   wallpaper =
     if builtins.pathExists breeze-wallpaper
     then "feh --bg-fill ${breeze-wallpaper} &\n"
-    else builtins.trace "WARNING: xmonad: background image for feh does not exist" "";
+    else builtins.trace "WARNING: xmonad: background image for feh does not exist\npath: ${breeze-wallpaper}" "";
   polybar = ''
     nm-applet --sm-disable --indicator &
   '';

@@ -2,7 +2,7 @@
 
 {
   imports =
-    [ ./base
+    [ ./base/laptop.nix
       ./hardware-configuration/aero.nix
     ];
 
@@ -18,14 +18,6 @@
   #
   # See: https://github.com/NixOS/nixpkgs/issues/60900
   systemd.services.systemd-user-sessions.enable = false;
-
-  # Touchpad settings.
-  services.xserver.libinput = {
-    enable = true;
-
-    clickMethod = "clickfinger";
-    tapping = false;
-  };
 
   boot = {
     loader = {

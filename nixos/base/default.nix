@@ -36,7 +36,7 @@
         "https://cache.nixos.org"
         "https://hercules-ci.cachix.org"
         "https://iohk.cachix.org"
-        "https://hydra.iohk.io"
+        # "https://hydra.iohk.io" # Currently down (temporarily?)
         "https://nix-community.cachix.org"
         "https://nix-tools.cachix.org"
         "https://nixcache.reflex-frp.org"
@@ -160,6 +160,9 @@
       "default-sample-rate" = 48000;
     };
   };
+  # realtime scheduling priority for Pulse Audio
+  security.rtkit.enable = true;
+
 
   # Scanning
   hardware.sane = {
@@ -201,8 +204,6 @@
     glib-networking.enable = true;
   };
 
-  systemd.services.upower.enable = true;
-
   services.xserver = {
     enable = true;
     layout = "us";
@@ -218,16 +219,14 @@
         ''}
       '';
 
-    # 2022-04-21: sddm started crashing after updating
-    # nixpkgs-unstable; I couldn't figure out why, but enabling
-    # lightdm instead works around the issue
+    # using lightdm instead of sddm to suppress kwallet dialog at
+    # startup
     displayManager = {
-      # sddm.enable = true;
       lightdm.enable = true;
       defaultSession = "home-manager";
     };
 
-    desktopManager.plasma5.enable = true;
+    desktopManager.plasma5.enable = false;
     desktopManager.session = [{
       name = "home-manager";
       start = ''
@@ -241,6 +240,7 @@
   users.users = {
     tikhon = {
       isNormalUser = true;
+      description = "Tikhon Jelvis";
       extraGroups = [
         "wheel" # enable ‘sudo’
         "docker"
