@@ -30,6 +30,15 @@
     })
   ];
 
+  # MongoDB for development/etc
+  services.mongodb = {
+    enable = true;
+    package = pkgs.mongodb-6_0;
+    extraConfig = ''
+      net.port: 27018
+    '';
+  };
+
   nix = {
     settings = {
       substituters = [
