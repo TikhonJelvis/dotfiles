@@ -959,6 +959,8 @@ faces each time before company-complete is called."
   :custom
   (lsp-eldoc-hook nil)
   (lsp-diagnostics-provider :flycheck)
+
+  (lsp-headerline-breadcrumb-icons-enable nil)
   (lsp-modeline-code-actions-enable nil)
   (lsp-modeline-workspace-status-enable nil)
   (lsp-modeline-diagnostics-enable nil)
