@@ -1986,6 +1986,26 @@ get Markdown-formatted text into email/Word/etc."
 (use-package sgml-mode
   :mode "\\(\\.php\\|\\.html\\)\\'")
 
+(defun typescript-mode-formatting-hook ()
+  (message "prettier: %s" (executable-find "prettier"))
+  (when (executable-find "prettier")
+    (setq-local format-all-formatters '(("TypeScript" prettier)))
+    (format-all-mode t)))
+
+(use-package typescript-mode
+  :ensure t
+  :hook ((typescript-mode . typescript-mode-formatting-hook)))
+
+(defun typescript-tide-setup-hook ()
+  (direnv-update-environment)
+  (sleep-for 0 100)
+  (tide-setup))
+
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . typescript-tide-setup-hook)))
+
                                         ; COMMANDS
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
