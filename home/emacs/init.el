@@ -1994,7 +1994,10 @@ get Markdown-formatted text into email/Word/etc."
 
 (use-package typescript-mode
   :ensure t
-  :hook ((typescript-mode . typescript-mode-formatting-hook)))
+  :hook ((typescript-mode . typescript-mode-formatting-hook))
+
+  :custom
+  (typescript-indent-level 2))
 
 (defun typescript-tide-setup-hook ()
   (direnv-update-environment)
