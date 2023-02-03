@@ -1,7 +1,12 @@
 { config, pkgs, ... }:
-{
+let
+  # TODO: better way of managing sources?
+  # Probably just switch to flakes instead...
+  sources = import ../nix/sources.nix;
+in {
   imports = [ ./base/laptop.nix
               ./hardware-configuration/framework.nix
+              (sources.nixos-hardware + "/framework/12th-gen-intel")
             ];
 
   users.mutableUsers = false;
@@ -22,11 +27,6 @@
     "mem_sleep_default=deep"
     "nvme.noacpi=1"
   ];
-
-  # try using 5.18 as suggested on GitHub
-  #
-  # https://github.com/NixOS/nixpkgs/issues/183955#issuecomment-1210468614
-  boot.kernelPackages = pkgs.linuxPackages_5_18;
 
   system.stateVersion = "22.05";
 }
