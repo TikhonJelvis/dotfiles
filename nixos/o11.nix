@@ -14,6 +14,7 @@
   networking = {
     hostName = "tikhon-nixos-o11";
 
+    interfaces.enp39s0.useDHCP = false;
     interfaces.enp39s0.ipv4.addresses = [
       { address = "192.168.0.42"; prefixLength = 24; }
     ];
