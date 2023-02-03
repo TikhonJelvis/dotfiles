@@ -61,6 +61,7 @@
         #
         # Won't work when I'm /not/ on my home network
         "http://tikhon-nixos-berkeley.local:8080"
+        "http://tikhon-nixos-o11.local:8080"
       ];
 
       trusted-public-keys = [
@@ -76,6 +77,7 @@
         "theta-idl.cachix.org-1:B6I1LwtM4zjDt3+KagdvW9Ma9cQ6rUCPIbuE0FyO9fw="
 
         "tikhon-nixos-berkeley.local:qsrRFBYXe0YyQ+/94GgIIMnR8tZGGKPLHL8mdV25Kkg="
+        "tikhon-nixos-o11.local:J/cmWNKj/cOF+E6D1BToOJ2yLD1Q1kZWNt4bj1vZJSI="
       ];
     };
 
@@ -140,6 +142,7 @@
 
     hosts = {
       "192.168.0.37" = [ "tikhon-nixos-berkeley.local" ];
+      "192.168.0.42" = [ "tikhon-nixos-berkeley.local" ];
     };
   };
 

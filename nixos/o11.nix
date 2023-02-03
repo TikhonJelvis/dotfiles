@@ -13,6 +13,26 @@
 
   networking = {
     hostName = "tikhon-nixos-o11";
+
+    interfaces.enp39s0.ipv4.addresses = [
+      { address = "192.168.0.42"; prefixLength = 24; }
+    ];
+    interfaces.enp39s0.ipv4.routes = [
+      {
+        address = "0.0.0.0";
+        via = "192.168.0.1";
+        options = { metric = "0"; };
+        prefixLength = 0;
+      }
+    ];
+  };
+
+  # TODO: try nix-serve-ng instead?
+  # Expose a Nix cache to the local network
+  services.nix-serve = {
+    enable = true;
+    secretKeyFile = "/var/cache-priv-key.pem";
+    port = 8080;
   };
 
   # This value determines the NixOS release from which the default
