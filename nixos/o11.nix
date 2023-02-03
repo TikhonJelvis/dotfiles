@@ -34,6 +34,12 @@
     enable = true;
     secretKeyFile = "/var/cache-priv-key.pem";
     port = 8080;
+
+    # Workaround for #7705 as suggested in #7704
+    # https://github.com/NixOS/nix/issues/7704
+    package = pkgs.nix-serve.override {
+      nix = pkgs.nixVersions.nix_2_12;
+    };
   };
 
   # This value determines the NixOS release from which the default
