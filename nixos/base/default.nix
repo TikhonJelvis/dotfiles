@@ -142,7 +142,7 @@
 
     hosts = {
       "192.168.0.37" = [ "tikhon-nixos-berkeley.local" ];
-      "192.168.0.42" = [ "tikhon-nixos-berkeley.local" ];
+      "192.168.0.42" = [ "tikhon-nixos-o11.local" ];
     };
   };
 
