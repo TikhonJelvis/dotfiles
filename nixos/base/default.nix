@@ -30,13 +30,19 @@
     })
   ];
 
-  # MongoDB for development/etc
+  # MongoDB for CX Score development/etc
   services.mongodb = {
     enable = true;
     package = pkgs.mongodb-6_0;
     extraConfig = ''
       net.port: 27018
     '';
+  };
+
+  # Redis for CX Score development/etc
+  services.redis.servers.cxscore = {
+    enable = true;
+    port = 6379;
   };
 
   nix = {
