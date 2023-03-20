@@ -1,4 +1,14 @@
 { config, pkgs, ... }:
+# To set up for a new machine:
+#
+#  1. import ./base/borg.nix
+#  2. Set services.borgbackup.jobs.borgbase.repo
+#  3. Copy repo passphrase into /root/borg-passphrase
+#  4. Create /root/.ssh/borgbase{.pub}
+#  5. Upload key to borgbase.com + add to repo
+#  6. ssh to repo locally, say <yes>
+#
+#
 # Run systemd job manually:
 #
 # > systemctl start borgbackup-job-borgbase.service
@@ -44,16 +54,15 @@ in
         "**/dist-newstyle" # Haskell
         "**/_site"         # Hakyll
         "**/_cache"        # Hakyll
+        "**/node_modules"  # node
 
         # Big projects
         "**/Programming/nixpkgs"
       ];
-      repo = "i2344ym0@i2344ym0.repo.borgbase.com:repo";
       encryption = {
         mode = "repokey-blake2";
         passCommand = "cat /root/borg-passphrase";
-        # Passphrase also saved in 1Password as
-        # tikhon-nixos-berkeley-passphrase under borgbase
+        # Passphrase also saved in 1Password
       };
       environment.BORG_RSH = "ssh -i /root/.ssh/borgbase";
       compression = "auto,zstd";

@@ -3,6 +3,7 @@
 {
   imports =
     [ ./base/desktop.nix
+      ./base/borg.nix
       ./hardware-configuration/o11.nix
     ];
 
@@ -27,6 +28,8 @@
       }
     ];
   };
+
+  services.borgbackup.jobs.borgbase.repo = "k4h5cwq6@k4h5cwq6.repo.borgbase.com:repo";
 
   # TODO: try nix-serve-ng instead?
   # Expose a Nix cache to the local network
