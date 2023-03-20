@@ -18,7 +18,7 @@
         utils =
           [ drive pandoc unzip zip _1password poppler_utils aspell ];
         development  =
-          [ ghc lorri niv python3 poetry cachix stylish-haskell ];
+          [ ghc lorri niv python3 poetry cachix stylish-haskell nodePackages.http-server ];
         aspell = pkgs.aspellWithDicts (d: [d.en d.ru]);
       in utils ++ development;
 
