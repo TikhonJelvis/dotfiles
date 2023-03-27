@@ -3,7 +3,7 @@
 #
 #  1. import ./base/borg.nix
 #  2. Set services.borgbackup.jobs.borgbase.repo
-#  3. Copy repo passphrase into /root/borg-passphrase
+#  3. Generate repo passphrase in 1Password, save in /root/borg-passphrase
 #  4. Create /root/.ssh/borgbase{.pub}
 #  5. Upload key to borgbase.com + add to repo
 #  6. ssh to repo locally, say <yes>
@@ -22,6 +22,15 @@
 # > sudo borg-shell
 # > borg list
 # ...etc
+#
+# Mount backup to restore or test):
+#
+# > mkdir ~/tmp/backup
+# > sudo borg-job-borgbase mount <repo> ~/tmp/backup
+#
+# When done, unmount:
+#
+# > sudo borg-job-borgbase unmount ~/tmp/backup
 let
   borgbase = config.services.borgbackup.jobs.borgbase;
   borg-shell = pkgs.writeShellScriptBin "borg-shell" ''
