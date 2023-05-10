@@ -2,7 +2,9 @@
 let
   obs-studio = pkgs.wrapOBS {
     plugins = with pkgs.obs-studio-plugins; [
-      obs-ndi
+      # 2023-05-08: disabling NDI because prefetching the file isn't
+      # working
+      # obs-ndi
     ];
   };
 in
