@@ -7,10 +7,8 @@
       ./hardware-configuration/berkeley.nix
     ];
 
-  # trying to get the proprietary NVidia drivers and XMonad to play
-  # well together:
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.opengl.enable = true;
+  # try using open-source NVidia driver to play better with XMonad
+  # services.xserver.videoDrivers = [ "nvidia" ];
   # hardware.nvidia.modesetting.enable = true; # is this needed?
 
   networking = {
