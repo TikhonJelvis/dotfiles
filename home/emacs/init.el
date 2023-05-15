@@ -598,7 +598,9 @@ overriding defaults. For example, to use a different
 ;; keybinding :(.
 (use-package dired-x
   ;; Automatically omit “uninteresting” files from the listing.
-  :hook (dired-mode . dired-omit-mode))
+  :hook (dired-mode . dired-omit-mode)
+  :config
+  (add-to-list 'dired-omit-extensions ".map"))
 
 (setq dired-dwim-target t)
 
