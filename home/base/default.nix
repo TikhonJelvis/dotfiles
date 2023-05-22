@@ -34,7 +34,6 @@
     sessionVariables = {
       EDITOR = "emacsclient --create-frame --alternate-editor emacs";
       PS1    = "λ x → \\W>";
-      MANPATH = "$HOME/.nix-profile/share/man";
 
       NIX_PROFILES = "/nix/var/nix/profiles/default $HOME/.nix-profile";
 
@@ -43,6 +42,12 @@
         "nixos-config=/etc/nixos/configuration.nix"
         "nixpkgs/nixos=${config.sources.nixpkgs}"
       ];
+
+      # Disable Poetry keyring integration
+      #
+      # I don't use my keyring on XMonad, but poetry commands still
+      # try to access it and fail when it doesn't work
+      PYTHON_KEYRING_BACKEND = "keyring.backends.null.Keyring";
     };
 
     file = let
