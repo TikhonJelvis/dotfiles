@@ -1539,7 +1539,9 @@ process regardless."
                                         ; PYTHON
 (use-package python-docstring
   :ensure t
-  :hook (python-mode . python-docstring-mode))
+  :hook (python-mode . python-docstring-mode)
+  :custom
+  (python-docstring-sentence-end-double-space nil))
 
 (use-package python-pytest
   :ensure t
