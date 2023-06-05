@@ -1985,8 +1985,8 @@ get Markdown-formatted text into email/Word/etc."
   :custom
   (css-indent-offset 2))
 
-(use-package sgml-mode
-  :mode "\\(\\.php\\|\\.html\\)\\'")
+(use-package mhtml-mode
+  :mode "\\.html")
 
 (defun typescript-mode-formatting-hook ()
   (message "prettier: %s" (executable-find "prettier"))
