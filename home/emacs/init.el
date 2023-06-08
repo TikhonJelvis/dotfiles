@@ -1540,7 +1540,9 @@ process regardless."
                                         ; PYTHON
 (use-package python-docstring
   :ensure t
-  :hook (python-mode . python-docstring-mode))
+  :hook (python-mode . python-docstring-mode)
+  :custom
+  (python-docstring-sentence-end-double-space nil))
 
 (use-package python-pytest
   :ensure t
@@ -1986,8 +1988,8 @@ get Markdown-formatted text into email/Word/etc."
   :custom
   (css-indent-offset 2))
 
-(use-package sgml-mode
-  :mode "\\(\\.php\\|\\.html\\)\\'")
+(use-package mhtml-mode
+  :mode "\\.html")
 
 (defun typescript-mode-formatting-hook ()
   (message "prettier: %s" (executable-find "prettier"))
