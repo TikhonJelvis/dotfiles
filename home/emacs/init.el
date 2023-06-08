@@ -638,6 +638,7 @@ This uses the `buffer-face' minor mode."
                                         ; NETWORK REQUESTS
 (use-package restclient
   :ensure t
+  :mode ("\\.http" . restclient-mode)
   :config
   (add-to-list 'restclient-content-type-modes '("application/json" . json-mode))
   (add-to-list 'restclient-content-type-modes '("text/html" . mhtml-mode)))
