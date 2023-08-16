@@ -31,7 +31,7 @@ let
   });
 in
 {
-  fonts.fonts = [
+  fonts.packages = [
     (input-font {
       options = {
         a           = "0";

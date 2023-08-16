@@ -29,6 +29,6 @@ let
   });
 in
 {
-  fonts.fonts = [ junction ];
+  fonts.packages = [ junction ];
 }
 

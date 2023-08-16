@@ -10,5 +10,5 @@ let
   };
 in
 {
-  fonts.fonts = [ icon-font ];
+  fonts.packages = [ icon-font ];
 }

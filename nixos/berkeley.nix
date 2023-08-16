@@ -41,12 +41,16 @@
 
   services.openssh = {
     enable = true;
+
+    banner = "tikhon-berkeley-nixos";
+
     allowSFTP = false;
     listenAddresses = [ { addr = "192.168.0.37"; port = 22; } ];
 
-    passwordAuthentication = false;
-    kbdInteractiveAuthentication = false;
-    banner = "tikhon-berkeley-nixos";
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
   };
 
   boot = {
@@ -57,7 +61,6 @@
         devices = [ "nodev" ];
         efiSupport = true;
         useOSProber = false;
-        version = 2;
         splashImage = ./grub/breeze/background.png;
         theme = ./grub/breeze;
         extraEntries = ''

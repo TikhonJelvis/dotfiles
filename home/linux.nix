@@ -43,8 +43,12 @@
 
   services.lorri.enable = true;
 
-  services.dropbox = {
-    enable = true;
-    path = "${config.home.homeDirectory}/Dropbox";
-  };
+  # 2023-08-15: Not working in 23.05 (or 23.11)
+  #
+  # See: https://github.com/nix-community/home-manager/issues/4226
+  #
+  # services.dropbox = {
+  #   enable = true;
+  #   path = "${config.home.homeDirectory}/Dropbox";
+  # };
 }

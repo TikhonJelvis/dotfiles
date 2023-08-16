@@ -8,7 +8,7 @@
   ];
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       corefonts
       cozette
       dejavu_fonts
@@ -28,6 +28,6 @@
       ubuntu_font_family
     ];
 
-    enableDefaultFonts = true;
+    enableDefaultPackages = true;
   };
 }
