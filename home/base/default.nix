@@ -16,7 +16,7 @@
     packages = with pkgs;
       let
         utils =
-          [ drive pandoc unzip zip _1password poppler_utils aspell ];
+          [ drive pandoc unzip zip _1password poppler_utils aspell maestral maestral-gui ];
         development  =
           [ ghc lorri niv python3 poetry cachix stylish-haskell nodePackages.http-server ];
         aspell = pkgs.aspellWithDicts (d: [d.en d.ru]);
