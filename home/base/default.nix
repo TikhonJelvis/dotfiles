@@ -1,6 +1,6 @@
 { config, pkgs, lib, ...}:
 {
-  imports = [ ./sources.nix ./ssh.nix ../utils ];
+  imports = [ ./sources.nix ./ssh.nix ./maestral.nix ../utils ];
 
   nixpkgs = {
     config   = import ./config.nix;
@@ -16,7 +16,7 @@
     packages = with pkgs;
       let
         utils =
-          [ drive pandoc unzip zip _1password poppler_utils aspell maestral ];
+          [ drive pandoc unzip zip _1password poppler_utils aspell ];
         development  =
           [ ghc lorri niv python3 poetry cachix stylish-haskell nodePackages.http-server ];
         aspell = pkgs.aspellWithDicts (d: [d.en d.ru]);
@@ -79,6 +79,8 @@
   fonts.fontconfig.enable = true;
 
   news.display = "silent";
+
+  services.maestral.enable = true;
 
   programs = {
     bash = {
