@@ -18,7 +18,7 @@ in {
 
     systemd.user.services = {
       maestral = rec {
-        Unit = { description = "Maestral (Dropbox)"; };
+        Unit = { Description = "Maestral (Dropbox)"; };
         Install = { WantedBy = [ "default.target" ]; };
 
         Service = {
