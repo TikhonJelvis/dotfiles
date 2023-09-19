@@ -48,18 +48,20 @@
   nix = {
     settings = {
       substituters = [
+        # 2023-09-05: temporarily disabling some cachix caches because
+        # cachix is giving me 502 errors:
+
         "https://cache.nixos.org"
         "https://hercules-ci.cachix.org"
         "https://iohk.cachix.org"
-        # "https://hydra.iohk.io" # Currently down (temporarily?)
         "https://nix-community.cachix.org"
         "https://nix-tools.cachix.org"
         "https://nixcache.reflex-frp.org"
 
         # Cachix caches I set up myself
-        "https://haskell-org.cachix.org"
-        "https://rl-book.cachix.org"
-        "https://theta-idl.cachix.org"
+        # "https://haskell-org.cachix.org"
+        # "https://rl-book.cachix.org"
+        # "https://theta-idl.cachix.org"
       ];
 
       trusted-substituters = [
