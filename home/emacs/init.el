@@ -1556,6 +1556,10 @@ process regardless."
   :hook (python-mode . python-black-on-save-mode))
 
 (defun my-python-hook ()
+  ;; Make forward- and backward-sexp functions work as they do in
+  ;; other modes
+  (setq forward-sexp-function nil)
+
   (direnv-update-environment default-directory)
 
   (require 'lsp-pyright)
