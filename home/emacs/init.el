@@ -1771,7 +1771,7 @@ available.
 
 This also ignores files named Setup.hs because HLS seems to
 consistently fail on them."
-    (unless (equal (file-name-nondirectory (buffer-file-name)) "Setup.hs")
+    (unless (or (not (buffer-file-name)) (equal (file-name-nondirectory (buffer-file-name)) "Setup.hs"))
       (cond ((executable-find "haskell-language-server-wrapper")
              (lsp t))
             ((executable-find "haskell-language-server")
