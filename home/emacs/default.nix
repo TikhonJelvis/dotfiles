@@ -30,7 +30,7 @@
     };
 
     home.packages = with pkgs;
-      [ nodePackages.pyright yaml-language-server taplo-lsp ];
+      [ nodePackages.pyright yaml-language-server taplo-lsp nerdfonts ];
 
     home.file = {
       ".emacs" = {

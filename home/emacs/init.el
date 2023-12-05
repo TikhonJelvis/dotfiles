@@ -289,20 +289,34 @@ size. Designed to work with `window-size-change-functions'."
 (load-file (dotfile "emacs/fonts.el"))
 
 ;; Icons that I can use in dired, buffer mode lines... etc
-(use-package all-the-icons
-  :ensure t)
-(use-package all-the-icons-dired
+(use-package nerd-icons
   :ensure t
-  :after all-the-icons
-  :hook (dired-mode . all-the-icons-dired-mode)
-  :custom
-  (all-the-icons-dired-monochrome nil))
+  :config
+  (let ((file-type-overrides
+         '(("hs" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
+           ("chs" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
+           ("lhs" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
+           ("hsc" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
 
+           ("http" nerd-icons-octicon "nf-oct-globe" :face nerd-icons-lblue)
+           
+           ("json" nerd-icons-sucicon "nf-seti-json" :face nerd-icons-dyellow)
+           ("cfg" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
+           ("toml" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
+           ("lock" nerd-icons-faicon "nf-fa-lock" :face nerd-icons-dyellow))))
+    (setq nerd-icons-extension-icon-alist (append file-type-overrides nerd-icons-extension-icon-alist))))
+
+(use-package nerd-icons-dired
+  :ensure t
+  :hook
+  (dired-mode . nerd-icons-dired-mode)
+  :config
+  (set-face-attribute 'nerd-icons-dired-dir-face nil :foreground "#BBBBBB"))
 
 ;; Prettier mode line
 (use-package powerline
   :ensure t)
-(load-file (dotfile "emacs/mode-line.el"))
+;; (load-file (dotfile "emacs/mode-line.el"))
 
 
 ;; Make visual-line-mode configurable to fill-column. Not great, but
