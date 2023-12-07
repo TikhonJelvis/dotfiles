@@ -304,7 +304,9 @@ size. Designed to work with `window-size-change-functions'."
            ("cfg" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
            ("toml" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
            ("lock" nerd-icons-faicon "nf-fa-lock" :face nerd-icons-dyellow))))
-    (setq nerd-icons-extension-icon-alist (append file-type-overrides nerd-icons-extension-icon-alist))))
+    (setq nerd-icons-extension-icon-alist (append file-type-overrides nerd-icons-extension-icon-alist)))
+  (add-to-list 'nerd-icons-regexp-icon-alist
+               '("^\\." nerd-icons-octicon "nf-oct-gear" :face nerd-icons-lsilver)))
 
 (use-package nerd-icons-dired
   :ensure t

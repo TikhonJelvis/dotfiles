@@ -2,9 +2,7 @@
 (powerline-default-theme)
 
                                         ; ICONS
-(require 'all-the-icons)
-
-;; Icon settings based off
+;; Icon settings inspired by
 ;; https://github.com/domtronn/all-the-icons.el/wiki/Mode-Line
 
 (defun mode-line/modified (face)
@@ -14,17 +12,17 @@
    A broken chain for modified.
    A padlock for read-only. "
   (let* ((config-alist
-          '(("*" all-the-icons-faicon-family all-the-icons-faicon "chain-broken" :height 1.2 :v-adjust -0.0)
-            ("-" all-the-icons-faicon-family all-the-icons-faicon "link" :height 1.2 :v-adjust -0.0)
-            ("%" all-the-icons-octicon-family all-the-icons-octicon "lock" :height 1.2 :v-adjust 0.1)))
+          '(("*" nerd-icons-faicon "nf-fa-chain_broken")
+            ("-" nerd-icons-faicon "nf-fa-chain")
+            ("%" nerd-icons-octicon "nf-oct-lock")))
          (result (cdr (assoc (format-mode-line "%*") config-alist))))
-    (propertize (apply (cadr result) (cddr result))
-                'face `(:inherit ,face :family ,(funcall (car result))))))
+    (propertize (apply (car result) (cdr result))
+                'face `(:inherit ,face :family ,nerd-icons-font-family))))
 
 (defun mode-line/major-mode (face)
   "Display the icon for the major mode of the current buffer."
   (let ((icon (propertize
-               (format "%s "(all-the-icons-icon-for-buffer))
+               (format "%s " (nerd-icons-icon-for-buffer))
                'face `(:inherit ,face :height 1.1)
                'display '(raise -0.1))))
     (powerline-raw icon face 'l)))
@@ -36,8 +34,8 @@
         (powerline-raw
          (concat
           " "
-          (propertize (all-the-icons-octicon "git-branch")
-                      'face `(:height 1.0 :family ,(all-the-icons-octicon-family) :inherit ,face)
+          (propertize (nerd-icons-octicon "nf-oct-git_branch")
+                      'face `(:height 1.0 :family ,nerd-icons-font-family :inherit ,face)
                       'display '(raise 0.1))
           (format " %s" branch))
          face pad))
