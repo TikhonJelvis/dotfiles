@@ -318,7 +318,7 @@ size. Designed to work with `window-size-change-functions'."
 ;; Prettier mode line
 (use-package powerline
   :ensure t)
-;; (load-file (dotfile "emacs/mode-line.el"))
+(load-file (dotfile "emacs/mode-line.el"))
 
 
 ;; Make visual-line-mode configurable to fill-column. Not great, but
