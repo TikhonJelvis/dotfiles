@@ -2038,7 +2038,7 @@ get Markdown-formatted text into email/Word/etc."
 (defun cx/go-to-violation (violation-id)
   "Open the violations detail page for the violation with the given
 id in Chromium."
-  (interactive "sViolation ID:")
+  (interactive "sViolation ID: ")
   ;; need to use chromium because our own web app does not work
   ;; properly in Firefox >.<
   (browse-url-chromium (format "https://api-dev.twinex.io/guided-validation/studio?appId=&scanId=&element=&stateId=&groupId=&id=%s&isAutomated=true&url=" violation-id)))
