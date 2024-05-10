@@ -243,17 +243,17 @@
     # startup
     displayManager = {
       lightdm.enable = true;
-      defaultSession = "home-manager";
+      # defaultSession = "home-manager";
     };
 
-    desktopManager.plasma5.enable = false;
-    desktopManager.session = [{
-      name = "home-manager";
-      start = ''
-        ${pkgs.stdenv.shell} $HOME/.xsession-hm &
-        waitPID=$!
-      '';
-    }];
+    desktopManager.plasma5.enable = true;
+    # desktopManager.session = [{
+    #   name = "home-manager";
+    #   start = ''
+    #     ${pkgs.stdenv.shell} $HOME/.xsession-hm &
+    #     waitPID=$!
+    #   '';
+    # }];
   };
 
   # Don't forget to set up a password file on each machine

@@ -2041,7 +2041,7 @@ id in Chromium."
   (interactive "sViolation ID: ")
   ;; need to use chromium because our own web app does not work
   ;; properly in Firefox >.<
-  (browse-url-chromium (format "https://api-dev.twinex.io/guided-validation/studio?appId=&scanId=&element=&stateId=&groupId=&id=%s&isAutomated=true&url=" violation-id)))
+  (browse-url-chromium (format "https://beta.twinex.io/guided-validation/studio?appId=&scanId=&element=&stateId=&groupId=&id=%s&isAutomated=true&url=" violation-id)))
 
                                         ; COMMANDS
 (put 'downcase-region 'disabled nil)

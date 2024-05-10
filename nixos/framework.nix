@@ -6,7 +6,7 @@ let
 in {
   imports = [ ./base/laptop.nix
               ./hardware-configuration/framework.nix
-              (sources.nixos-hardware + "/framework/12th-gen-intel")
+              (sources.nixos-hardware + "/framework/13-inch/12th-gen-intel")
             ];
 
   users.mutableUsers = false;
