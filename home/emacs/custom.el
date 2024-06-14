@@ -7,22 +7,11 @@
    '(name old-name general-category decomposition uppercase lowercase
           titlecase))
  '(eldoc-documentation-functions nil t nil "Customized with use-package lsp-mode")
- '(package-selected-packages
-   '(nerd-icons typescript-mode flycheck-posframe git-modes lsp-haskell
-                bazel lsp-metals sbt-mode scala-mode request
-                format-all restclient python-black docker-compose-mode
-                pdf-tools dockerfile-mode lsp-pyright htmlize
-                yasnippet yaml-mode xterm-color visual-fill-column
-                use-package python-pytest python-docstring powerline
-                paredit ox-reveal org-bullets nix-mode magit lsp-ui
-                lsp-python-ms json-mode js2-mode jenkinsfile-mode
-                haskell-mode flycheck-rust flycheck-pycheckers
-                exec-path-from-shell ess el-patch direnv dap-mode
-                company-box cargo auto-virtualenv all-the-icons-dired))
+ '(package-selected-packages nil)
  '(safe-local-variable-values
    '((package-lint-main-file . "haskell-mode-pkg.el")
-     (lsp-haskell-plugin-hlint-config-flags .
-                                            ["--language=QuasiQuotes"])
+     (lsp-haskell-plugin-hlint-config-flags
+      . ["--language=QuasiQuotes"])
      (lsp-haskell-plugin-hlint-config-flags . ["-XQuasiQuotes"])
      (python-shell-interpreter . "bin/nix-aware-python")
      (python-shell-interpreter . "nix-shell")))

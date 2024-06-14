@@ -25,12 +25,16 @@
           treemacs = epkgs.melpaPackages.treemacs.overrideAttrs(old: {
             patches = [ ./treemacs-treelib-el.patch ];
           });
+
+          lean4-mode = pkgs.callPackage ./lean4-mode.nix {
+            inherit pkgs lib epkgs;
+          };
         };
       };
     };
 
     home.packages = with pkgs;
-      [ nodePackages.pyright yaml-language-server taplo-lsp nerdfonts ];
+      [ yaml-language-server taplo-lsp nerdfonts ];
 
     home.file = {
       ".emacs" = {

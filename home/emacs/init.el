@@ -1794,6 +1794,15 @@ consistently fail on them."
              (setq-local lsp-haskell-server-path "haskell-language-server")
              (lsp t))))))
 
+                                        ; LEAN
+(use-package dash
+  :ensure t)
+
+(use-package lean4-mode
+  :after dash lsp-mode
+  :ensure t)
+
+
                                         ; UNISON
 (use-package unisonlang-mode
   :ensure t)
