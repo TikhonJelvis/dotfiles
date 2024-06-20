@@ -13,12 +13,16 @@ epkgs.trivialBuild {
     rev = commit;
   };
 
-  buildInputs = (with epkgs; [
+  packageRequires = (with epkgs; [
     dash
     flycheck
     lsp-mode
     magit-section
   ]);
+
+  postInstall = ''
+    cp -r $src/data $LISPDIR
+  '';
 
   meta = {
     homepage = "https://github.com/leanprover-community/lean4-mode";
