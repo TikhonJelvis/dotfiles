@@ -223,11 +223,18 @@
     # WebKitGtk needs this for https:// requests
     glib-networking.enable = true;
   };
+  
+  # using lightdm instead of sddm to suppress kwallet dialog at
+  # startup
+  services.displayManager = {
+    # lightdm.enable = true;
+    defaultSession = "home-manager";
+  };
 
   services.xserver = {
     enable = true;
-    layout = "us";
-    xkbOptions = "caps:ctrl_modifier";
+    xkb.layout = "us";
+    xkb.options = "caps:ctrl_modifier";
 
     # Set Xft.dpi to services.xserver.dpi if it's explicitly
     # configured
@@ -238,13 +245,6 @@
           *dpi: ${toString config.services.xserver.dpi}
         ''}
       '';
-
-    # using lightdm instead of sddm to suppress kwallet dialog at
-    # startup
-    displayManager = {
-      # lightdm.enable = true;
-      defaultSession = "home-manager";
-    };
 
     desktopManager.plasma5.enable = true;
     desktopManager.session = [{

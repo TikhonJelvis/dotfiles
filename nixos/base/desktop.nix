@@ -4,7 +4,7 @@
   imports = [ ./. ];
   
   users.mutableUsers = false;
-  users.users.tikhon.passwordFile = "/home/tikhon/pass";
+  users.users.tikhon.hashedPasswordFile = "/home/tikhon/pass";
 
   # let's see if *not* using the prorpietary NVidia drivers solves
   # some of the monitor config problems I'm seeing
@@ -57,5 +57,5 @@
     }];
     ensureDefaultPrinter = name;
   };
-  services.avahi.nssmdns = true; # Needed for CUPS to find the printer.
+  services.avahi.nssmdns4 = true; # Needed for CUPS to find the printer.
 }
