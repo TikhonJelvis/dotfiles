@@ -171,7 +171,6 @@
   services.openssh.enable = true;
 
   # Sound
-  sound.enable = true;
   hardware.pulseaudio = {
     enable = true;
     package = pkgs.pulseaudioFull;
@@ -223,7 +222,7 @@
     # WebKitGtk needs this for https:// requests
     glib-networking.enable = true;
   };
-  
+
   # using lightdm instead of sddm to suppress kwallet dialog at
   # startup
   services.displayManager = {
