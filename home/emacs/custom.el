@@ -7,6 +7,9 @@
    '(name old-name general-category decomposition uppercase lowercase
           titlecase))
  '(eldoc-documentation-functions nil t nil "Customized with use-package lsp-mode")
+ '(org-agenda-files
+   '("/home/tikhon/Dropbox/org/Tasks.org"
+     "/home/tikhon/Dropbox/org/Projects.org") nil nil "Customized with use-package org-agenda")
  '(package-selected-packages nil)
  '(safe-local-variable-values
    '((package-lint-main-file . "haskell-mode-pkg.el")

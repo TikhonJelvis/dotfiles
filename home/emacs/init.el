@@ -1134,7 +1134,11 @@ silently does nothing."
      (sequence "PROJECT" "|" "DONE")))
   (org-capture-templates
    '(("t" "Todo" entry (file "Tasks.org")
-      "* TODO %?\n  SCHEDULED: %T\n:PROPERTIES:\n:CREATED: %U\n:END:")))
+      "* TODO %?\n  SCHEDULED: %T\n:PROPERTIES:\n:CREATED: %U\n:END:")
+     ("n" "Note" entry (file "misc.org")
+      "* ")
+     ("l" "Link" entry (file "links.org")
+      "* ")))
   (org-refile-targets
    '((org-agenda-files :maxlevel . 3)))
   (org-log-done 'time)
@@ -1228,6 +1232,11 @@ days (regardless of TODO status):
   ;; we want to override the elisp variable instead
   (put 'org-reveal-title-slide 'safe-local-variable 'stringp))
 
+(use-package org-ql
+  :ensure t)
+
+(use-package org-ql-view)
+
 (use-package htmlize
   :ensure t)
 
@@ -1258,7 +1267,6 @@ days (regardless of TODO status):
   :custom
   (org-agenda-files
    (list (concat org-directory "/Tasks.org")
-         (concat org-directory "/Books.org")
          (concat org-directory "/Projects.org")))
   
   (org-agenda-format-date 'org-agenda-custom-date-format)
