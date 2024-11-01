@@ -1970,7 +1970,8 @@ buffer."
     (visual-fill-column-mode 1)
     (flyspell-buffer)
     (local-unset-key (kbd "C-M-b"))
-    (local-unset-key (kbd "C-M-f")))
+    (local-unset-key (kbd "C-M-f"))
+    (setq sentence-end-double-space nil))
   (add-hook 'markdown-mode-hook #'my-markdown-hook))
 
 (defun copy-markdown-formatted ()
