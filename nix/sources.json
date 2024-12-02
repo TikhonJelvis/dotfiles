@@ -59,6 +59,18 @@
         "url": "https://github.com/nmattia/niv/archive/f9760c0aaebc24c47f350d2e580b2c56716b0410.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nix-agent": {
+        "branch": "main",
+        "description": "Packages kolide/launcher for Nix",
+        "homepage": null,
+        "owner": "kolide",
+        "repo": "nix-agent",
+        "rev": "d154b67a88e9cf8a6c10fd589afd51b299f7faca",
+        "sha256": "0h2y1qqv4jkd01sdds8xkkq2796w1220163pxj0myy5l9d9hsd6d",
+        "type": "tarball",
+        "url": "https://github.com/kolide/nix-agent/archive/d154b67a88e9cf8a6c10fd589afd51b299f7faca.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixos-hardware": {
         "branch": "master",
         "description": "A collection of NixOS modules covering hardware quirks.",

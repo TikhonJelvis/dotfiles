@@ -2052,15 +2052,6 @@ get Markdown-formatted text into email/Word/etc."
   :after (typescript-mode company flycheck)
   :hook ((typescript-mode . typescript-tide-setup-hook)))
 
-                                        ; CX-SCORE UTILS
-(defun cx/go-to-violation (violation-id)
-  "Open the violations detail page for the violation with the given
-id in Chromium."
-  (interactive "sViolation ID: ")
-  ;; need to use chromium because our own web app does not work
-  ;; properly in Firefox >.<
-  (browse-url-chromium (format "https://beta.twinex.io/guided-validation/studio?appId=&scanId=&element=&stateId=&groupId=&id=%s&isAutomated=true&url=" violation-id)))
-
                                         ; COMMANDS
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)

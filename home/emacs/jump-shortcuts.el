@@ -26,16 +26,11 @@ and NAME is a display name to show in the menu.")
 exists and contains a .git subdirectory."
   (file-exists-p (expand-file-name ".git" dir)))
 
-(defun shortcuts-cx-score ()
-  "Return a list of the git repos in ~/Programming/cxscore."
-  (let ((files (seq-filter #'is-git-directory (cddr (directory-files "~/Programming/cxscore" t)))))
-    (mapcar (lambda (f) (cons (file-name-nondirectory f) f)) files)))
-
 (defun shortcuts-org-agenda-files ()
   "Return shortcuts for every configured Org agenda file."
   (mapcar (lambda (f) (cons (file-name-nondirectory f) f)) org-agenda-files))
 
-(defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects shortcuts-cx-score)
+(defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects)
   "Sources for shortcut locations to jump to.
 
 This should be a list where each entry is a function that takes
