@@ -1,6 +1,9 @@
 # Emacs
 *~
 
+# ad-hoc secret management
+secrets
+
 # Nix
 result
 result-*
@@ -10,6 +13,7 @@ result-*
 
 # Work files
 work-shortcuts.el
+
 # Haskell
 dist
 dist-newstyle

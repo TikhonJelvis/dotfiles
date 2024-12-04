@@ -23,8 +23,19 @@ in
     hostName = "tikhon-nixos-mercury";
   };
 
-  services.tailscale.enable = true;
+  # manually add the crt file to dotfiles
+  security.pki.certificateFiles = [ ./secrets/internal.mercury.com.ca.crt ];
+
   services.kolide-launcher.enable = true;
+
+  # connect machine to tailscale with:
+  #
+  # > sudo tailscale up
+  #
+  # find tailscale ip4 address:
+  #
+  # > tailscale ip -4
+  services.tailscale.enable = true;
 
   # kolide-launcher provides an executable called 'launcher'
   #
