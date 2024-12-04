@@ -26,6 +26,12 @@ in
   services.tailscale.enable = true;
   services.kolide-launcher.enable = true;
 
+  # kolide-launcher provides an executable called 'launcher'
+  #
+  # useful for debugging kolide issues with the 'launcher doctor'
+  # command
+  environment.systemPackages = [ kolide-launcher ];
+
   # seems like nixos-hardware wants to use pipewire for sound on
   # Framework laptops, which requires disabling pusleaudio
   hardware.pulseaudio.enable = lib.mkForce false;
