@@ -34,6 +34,9 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # for decrypting full-disk encryption on boot
+  boot.initrd.luks.devices."luks-967a54c3-b736-4889-81fd-56467140246f".device = "/dev/disk/by-uuid/967a54c3-b736-4889-81fd-56467140246f";
+
   # kernel settings as suggested in
   # nixos-hardware/framework/default.nix
   boot.kernelParams = [
