@@ -71,6 +71,12 @@
         "url": "https://github.com/kolide/nix-agent/archive/d154b67a88e9cf8a6c10fd589afd51b299f7faca.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nixos-configuration": {
+        "branch": "main",
+        "repo": "git@github.com:MercuryTechnologies/nixos-configuration",
+        "rev": "4166b1d088b6870cdc614c5f30f579ae10100fb9",
+        "type": "git"
+    },
     "nixos-hardware": {
         "branch": "master",
         "description": "A collection of NixOS modules covering hardware quirks.",

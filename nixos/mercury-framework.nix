@@ -6,6 +6,8 @@ let
 
   kolide-launcher =
     pkgs.callPackage (import (sources.nix-agent + "/kolide-launcher.nix")) {};
+
+  mercury-modules = import (sources.nixos-configuration + "/nixos-modules");
 in
 {
   imports = [
@@ -13,7 +15,25 @@ in
     ./hardware-configuration/mercury-framework.nix
     (sources.nixos-hardware + "/framework/13-inch/7040-amd")
     (sources.nix-agent + "/modules/kolide-launcher")
+    mercury-modules
   ];
+
+  mercury = {
+    # Enable the CA cert used for internal resources
+    internalCertificateAuthority.enable = true;
+
+    # Enable services required for MWB development (Postgres)
+    mwbDevelopment.enable = true;
+
+    # Enable the internal Nix cache
+    nixCache.enable = true;
+
+    # Create openvpn-mercury.service systemd service
+    vpn = {
+      enable = true;
+      configurationPath = "./config.ovpn"; # TODO: get this file?
+    };
+  };
 
   # TODO: switch to immutable users + hashed password file?
   # users.mutableUsers = false;
