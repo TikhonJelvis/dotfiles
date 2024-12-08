@@ -1803,12 +1803,15 @@ consistently fail on them."
              (lsp t))))))
 
                                         ; LEAN
-(use-package dash
-  :ensure t)
+;;; Lean mode is not loading correctly for some reason; will debug
+;;; later
 
-(use-package lean4-mode
-  :after dash lsp-mode
-  :ensure t)
+;; (use-package dash
+;;   :ensure t)
+
+;; (use-package lean4-mode
+;;   :after dash lsp-mode
+;;   :ensure t)
 
 
                                         ; UNISON
