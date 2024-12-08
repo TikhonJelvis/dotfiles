@@ -465,137 +465,46 @@ overriding defaults. For example, to use a different
   (defun display-posframe-center (buffer _alist)
     (display-posframe buffer :poshandler #'posframe-poshandler-window-center)))
 
-(use-package selectrum
+(use-package vertico
   :ensure t
-  :demand t
-  :requires posframe
-
   :custom
-  (selectrum-display-action '(display-posframe-bottom))
-
+  (enable-recursive-minibuffers t)
   :config
-  (selectrum-mode 't)
-  (add-hook 'minibuffer-exit-hook 'posframe-delete-all)
-
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
     (add-to-list 'shortcuts-core-shortcuts '("Dropbox" . "~/Dropbox"))
     (add-to-list 'shortcuts-core-shortcuts `("init.el" . ,(dotfile "emacs/init.el")))
     (add-to-list 'shortcuts-core-shortcuts `("Treatment.org" . "~/Dropbox/org/Treatment.org"))
     (add-to-list 'shortcuts-sources #'shortcuts-org-agenda-files))
-
-  (when (eq system-type 'darwin)
-    (load-file (dotfile "emacs/work-shortcuts.el"))
-    (add-to-list 'shortcuts-sources #'work-shortcuts))
-
   (global-set-key (kbd "C-x j") 'jump-to-shortcut)
-
-  ;; Make find-file behave similarly to how it does with ido-mode: RET
-  ;; enters directories, DEL goes up a level.
-  ;;
-  ;; See Selectrum GitHub for more details:
-  ;; https://github.com/raxod502/selectrum/wiki/Ido,-icomplete(fido)-emulation
-  (defun selectrum-fido-backward-updir ()
-    "Delete char before or go up directory, like `ido-mode'."
-    (interactive)
-    (if (and (eq (char-before) ?/)
-             (eq (selectrum--get-meta 'category) 'file))
-        (save-excursion
-          (goto-char (1- (point)))
-          (when (search-backward "/" (point-min) t)
-            (delete-region (1+ (point)) (point-max))))
-      (call-interactively 'backward-delete-char)))
-
-  (defun selectrum-fido-delete-char ()
-    "Delete char or maybe call `dired', like `ido-mode'."
-    (interactive)
-    (let ((end (point-max)))
-      (if (or (< (point) end) (not (eq (selectrum--get-meta 'category) 'file)))
-          (call-interactively 'delete-char)
-        (dired (file-name-directory (minibuffer-contents)))
-        (exit-minibuffer))))
-
-  (defun selectrum-fido-ret ()
-    "Exit minibuffer or enter directory, like `ido-mode'."
-    (interactive)
-    (let* ((dir (and (eq (selectrum--get-meta 'category) 'file)
-                     (file-name-directory (minibuffer-contents))))
-           (current (selectrum-get-current-candidate))
-           (probe (and dir current
-                       (expand-file-name (directory-file-name current) dir))))
-      (cond ((and probe (file-directory-p probe) (not (string= current "./")))
-             (selectrum-insert-current-candidate))
-            (t
-             (selectrum-select-current-candidate)))))
-
-  ;; Change selectrum so that menus wrap around.
-  (defun selectrum--wrap (x lower upper)
-    (cond ((< x lower) upper)
-          ((> x upper) lower)
-          ('t x)))
-
-  (defun selectrum-next-candidate (&optional arg)
-    "Move selection ARG candidates down, stopping at the end."
-    (interactive "p")
-    (when selectrum--current-candidate-index
-      (setq selectrum--current-candidate-index
-            (selectrum--wrap
-             (+ selectrum--current-candidate-index (or arg 1))
-             (if (and (selectrum--match-strictly-required-p)
-                      (cond (minibuffer-completing-file-name
-                             (not (selectrum--at-existing-prompt-path-p)))
-                            (t
-                             (not (string-empty-p selectrum--virtual-input)))))
-                 0
-               -1)
-             (1- (length selectrum--refined-candidates))))))
-
-  ;; Fix how Selectrum completes org-mode tags
-  ;;
-  ;; See https://github.com/raxod502/selectrum/issues/139
-  (defun org-set-tags-command-multiple (orig &optional arg)
-    (cl-letf (((symbol-function #'completing-read)
-               (lambda (prompt collection &optional predicate require-match initial-input
-                               hist def inherit-input-method)
-                 (when initial-input
-                   (setq initial-input
-                         (replace-regexp-in-string
-                          ":" ","
-                          (replace-regexp-in-string
-                           "\\`:" "" initial-input))))
-                 (let ((res (completing-read-multiple
-                             prompt collection predicate require-match initial-input
-                             hist def inherit-input-method)))
-                   (mapconcat #'identity res ":")))))
-      (let ((current-prefix-arg arg))
-        (call-interactively orig))))
-
-  (advice-add #'org-set-tags-command :around #'org-set-tags-command-multiple)
-
-  (define-key selectrum-minibuffer-map (kbd "RET") 'selectrum-fido-ret)
-  (define-key selectrum-minibuffer-map (kbd "DEL") 'selectrum-fido-backward-updir)
-  (define-key selectrum-minibuffer-map (kbd "C-d") 'selectrum-fido-delete-char))
-
-(use-package selectrum-prescient
-  :ensure t
-  :demand t
-
-  :config
-  (selectrum-prescient-mode 't)
-  (prescient-persist-mode 't))
-
-(use-package marginalia
-  :ensure t
-  :bind (("M-A" . marginalia-cycle))
-
   :init
-  (marginalia-mode)
-  (advice-add
-   #'marginalia-cycle
-   :after
-   (lambda ()
-     (when (bound-and-true-p selectrum-mode)
-       (selectrum-exhibit 'keep-selected)))))
+  (vertico-mode 1))
+
+(use-package vertico-posframe
+  :ensure t
+  :init
+  (vertico-posframe-mode 1))
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+;; TODO: figure out how to add to vertico
+;; (use-package marginalia
+;;   :ensure t
+;;   :bind (("M-A" . marginalia-cycle))
+
+;;   :init
+;;   (marginalia-mode)
+;;   (advice-add
+;;    #'marginalia-cycle
+;;    :after
+;;    (lambda ()
+;;      (when (bound-and-true-p selectrum-mode)
+;;        (selectrum-exhibit 'keep-selected)))))
 
 
                                         ; INPUT MODES

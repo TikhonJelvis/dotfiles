@@ -43,15 +43,19 @@ to.")
 can jump to."
   (apply #'append (mapcar #'funcall shortcuts-sources)))
 
-(defun center-completing-read (prompt completions)
-  "A version of completing-read that sets Selectrum to display a
-  prompt in the middle of the current window rather than the
-  bottom."
-  (let ((initial-display-action selectrum-display-action))
-    (setq selectrum-display-action '(display-posframe-center))
-    (unwind-protect
-        (completing-read prompt completions)
-      (setq selectrum-display-action initial-display-action))))
+;; TODO: different vertico settings for different commands?
+;;
+;; probably with vertico-multiform or something
+;;
+;; (defun center-completing-read (prompt completions)
+;;   "A version of completing-read that sets Selectrum to display a
+;;   prompt in the middle of the current window rather than the
+;;   bottom."
+;;   (let ((initial-display-action selectrum-display-action))
+;;     (setq selectrum-display-action '(display-posframe-center))
+;;     (unwind-protect
+;;         (completing-read prompt completions)
+;;       (setq selectrum-display-action initial-display-action))))
 
 (defun jump-to-shortcut (add-to-kill-ring)
   "Prompt the user with completions for the list of shortcuts,
@@ -61,6 +65,6 @@ If called with a numeric argument, add the location to the kill
 ring instead of jumping there."
   (interactive "P")
   (let* ((targets (shortcuts))
-         (chosen (center-completing-read "Jump to:" targets))
+         (chosen (completing-read "Jump to:" targets))
          (path (cdr (assoc chosen targets))))
     (when path (if add-to-kill-ring (kill-new path) (find-file path)))))
