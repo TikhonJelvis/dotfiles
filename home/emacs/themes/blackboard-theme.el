@@ -53,6 +53,15 @@ learnui.design/tools/data-color-picker.html + blackboard)."
 
    `(buffers-tab ((t (:background ,bg :foreground ,fg))))
 
+   `(vertico-posframe ((t (:inherit default :background ,(color-lighten-name bg 50)))))
+
+   `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
+   `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
+   `(company-scrollbar-fg ((t (:background "DarkOrange"))))
+   `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
+   `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
+   `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face))))
+
    `(font-lock-builtin-face ((t (:foreground "#94bff3"))))
    `(font-lock-comment-face ((t (:italic t :foreground "#AEAEAE"))))
    `(font-lock-constant-face ((t (:foreground "#D8FA3C"))))
@@ -68,13 +77,6 @@ learnui.design/tools/data-color-picker.html + blackboard)."
 
    `(font-lock-regexp-grouping-backslash ((t (:foreground "#E9C062"))))
    `(font-lock-regexp-grouping-construct ((t (:foreground "red"))))
-
-   `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 10)))))
-   `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 15)))))
-   `(company-scrollbar-fg ((t (:background "DarkOrange"))))
-   `(company-tooltip-selection ((t (:background ,(color-lighten-name bg 20)))))
-   `(company-tooltip-common ((t (:inherit font-lock-builtin-face))))
-   `(company-tooltip-annotation ((t (:inherit font-lock-builtin-face))))
 
    `(org-hide ((t (:foreground "#2e3436"))))
 

@@ -493,6 +493,10 @@ overriding defaults. For example, to use a different
 
 (use-package vertico-posframe
   :ensure t
+  :custom
+  (vertico-posframe-parameters
+   '((left-fringe . 8)
+     (right-fringe . 8)))
   :init
   (vertico-posframe-mode 1))
 
