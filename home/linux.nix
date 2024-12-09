@@ -7,6 +7,8 @@
 
     ./firefox
     ./xmonad
+
+    ./video
   ];
 
   home = {
