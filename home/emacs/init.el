@@ -205,6 +205,7 @@ screens.")
 (defvar basis-font-size-override
   '((("tikhon-nixos-x1" "eDP-1") . 45)
     (("tikhon-nixos-framework" "eDP-1") . 80)
+    (("tikhon-nixos-mercury" "eDP-1") . 80)
     ;; HDMI connection (for 1080p monitor in Tahoe)
     (("tikhon-nixos-framework" "DP-3") . 120))
   "Specific monitors for which I want a different font size
