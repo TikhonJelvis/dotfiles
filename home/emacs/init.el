@@ -469,6 +469,7 @@ overriding defaults. For example, to use a different
   :ensure t
   :custom
   (enable-recursive-minibuffers t)
+  (completion-ignore-case t)
   :config
   (load-file (dotfile "emacs/jump-shortcuts.el"))
   (unless (eq system-type 'darwin)
@@ -479,6 +480,15 @@ overriding defaults. For example, to use a different
   (global-set-key (kbd "C-x j") 'jump-to-shortcut)
   :init
   (vertico-mode 1))
+
+(use-package vertico-directory
+  :after vertico
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package vertico-posframe
   :ensure t
