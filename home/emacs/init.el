@@ -502,19 +502,14 @@ overriding defaults. For example, to use a different
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
-;; TODO: figure out how to add to vertico
-;; (use-package marginalia
-;;   :ensure t
-;;   :bind (("M-A" . marginalia-cycle))
-
-;;   :init
-;;   (marginalia-mode)
-;;   (advice-add
-;;    #'marginalia-cycle
-;;    :after
-;;    (lambda ()
-;;      (when (bound-and-true-p selectrum-mode)
-;;        (selectrum-exhibit 'keep-selected)))))
+(use-package marginalia
+  :ensure t
+  :bind (("M-A" . marginalia-cycle))
+  :custom
+  (marginalia-max-relative-age 0)
+  (marginalia-align 'right)
+  :init
+  (marginalia-mode))
 
 
                                         ; INPUT MODES
