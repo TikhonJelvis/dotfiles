@@ -122,11 +122,8 @@
         24800
       ];
       allowedUDPPorts = [
-        # SRT
-        2142
-        # As far as I can tell, SRT does not have a default port
-        # number that's used by convention, so I just chose one
-        # arbitrarily.
+        # Teleport (from OBS)
+        1337
 
         # mDNS for NDI
         5353
