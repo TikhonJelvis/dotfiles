@@ -3,6 +3,12 @@
 {
   imports = [ ./. ];
 
+  # Use KDE as default session because I have not really configured
+  # XMonad for laptop use. (One day...)
+  #
+  # set to "" to get an error with all available session names
+  services.displayManager.defaultSession = "plasma";
+
   # Touchpad settings
   services.xserver.libinput = {
     enable = true;

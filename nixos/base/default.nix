@@ -213,11 +213,8 @@
     glib-networking.enable = true;
   };
 
-  # using lightdm instead of sddm to suppress kwallet dialog at
-  # startup
   services.displayManager = {
-    # lightdm.enable = true;
-    defaultSession = "home-manager";
+    sddm.enable = true;
   };
 
   services.xserver = {

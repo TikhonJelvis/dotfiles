@@ -9,7 +9,10 @@
   # let's see if *not* using the prorpietary NVidia drivers solves
   # some of the monitor config problems I'm seeing
   # services.xserver.videoDrivers = [ "nvidia" ];
-  
+
+  # set to "" to get an error with all available session names
+  services.displayManager.defaultSession = "home-manager";
+
   # Wacom tablet
   environment.systemPackages = with pkgs; [ wacomtablet ];
   services.xserver.wacom.enable = true;
