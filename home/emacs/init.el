@@ -31,6 +31,11 @@
 (add-to-list 'load-path "~/.emacs.d/packages")
 (add-to-list 'load-path (dotfile "emacs/packages"))
 
+                                        ; WORK
+(defun is-work ()
+  "Am I on a work computer?"
+  (string= (system-name) "tikhon-nixos-mercury"))
+
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
@@ -473,6 +478,9 @@ overriding defaults. For example, to use a different
   (completion-ignore-case t)
   :config
   (load-file (dotfile "emacs/jump-shortcuts.el"))
+  (when (is-work)
+    (load-file (dotfile "emacs/work-shortcuts.el"))
+    (add-to-list 'shortcuts-sources #'shortcuts-mercury))
   (unless (eq system-type 'darwin)
     (add-to-list 'shortcuts-core-shortcuts '("Dropbox" . "~/Dropbox"))
     (add-to-list 'shortcuts-core-shortcuts `("init.el" . ,(dotfile "emacs/init.el")))
