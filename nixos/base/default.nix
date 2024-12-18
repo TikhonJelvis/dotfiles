@@ -123,6 +123,7 @@
       ];
       allowedUDPPorts = [
         # Teleport (from OBS)
+        9999
         1337
 
         # mDNS for NDI
