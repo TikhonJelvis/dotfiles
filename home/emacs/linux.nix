@@ -11,7 +11,7 @@ let
 in {
   imports = [ ./default.nix ];
 
-  emacs = pkgs.emacs-pgtk;
+  emacs = pkgs.emacs-git;
 
   services.emacs = {
     enable = true;
