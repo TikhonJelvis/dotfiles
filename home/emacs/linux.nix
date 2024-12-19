@@ -15,10 +15,7 @@ in {
 
   services.emacs = {
     enable = true;
-
-    # temporarily disabled; see:
-    # https://github.com/nix-community/emacs-overlay/issues/58
-    # client.enable = true;
+    client.enable = true;
   };
 
   home.file = extra-packages;
