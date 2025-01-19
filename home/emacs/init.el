@@ -1615,7 +1615,7 @@ Haskell mode if it's not."
     "Prompt for a GHC extension, then add a pragma for it at the top
 of the file."
     (interactive
-     (list (center-completing-read "Extension: " haskell-ghc-supported-extensions)))
+     (list (completing-read "Extension: " haskell-ghc-supported-extensions)))
     (save-excursion
       (beginning-of-buffer)
       (insert (format "{-# LANGUAGE %s #-}\n" extension))))
