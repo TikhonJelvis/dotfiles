@@ -829,7 +829,9 @@ buffer."
 
                                         ; SYSTEM
 (use-package journalctl-mode
-  :ensure t)
+  :ensure t
+  :custom
+  (journalctl-chunk-size 2500))
 
                                         ; YAML
 (use-package yaml-mode
