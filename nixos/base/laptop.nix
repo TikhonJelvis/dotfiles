@@ -10,7 +10,7 @@
   services.displayManager.defaultSession = "plasma";
 
   # Touchpad settings
-  services.xserver.libinput = {
+  services.libinput = {
     enable = true;
 
     touchpad = {
