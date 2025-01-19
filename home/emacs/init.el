@@ -1723,8 +1723,12 @@ available.
 
 This also ignores files named Setup.hs because HLS seems to
 consistently fail on them."
-    (unless (or (not (buffer-file-name)) (equal (file-name-nondirectory (buffer-file-name)) "Setup.hs"))
-      (cond ((executable-find "haskell-language-server-wrapper")
+    (unless (or (not (buffer-file-name))
+                (equal (file-name-nondirectory (buffer-file-name)) "Setup.hs"))
+      (cond ((executable-find "static-ls")
+             (setq-local lsp-haskell-server-path "static-ls")
+             (lsp t))
+            ((executable-find "haskell-language-server-wrapper")
              (lsp t))
             ((executable-find "haskell-language-server")
              (setq-local lsp-haskell-server-path "haskell-language-server")
