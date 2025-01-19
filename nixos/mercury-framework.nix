@@ -35,6 +35,10 @@ in
     };
   };
 
+  # as suggested on NixOS Wiki:
+  # https://wiki.nixos.org/wiki/Hardware/Framework/Laptop_13
+  services.power-profiles-daemon.enable = true;
+
   # TODO: switch to immutable users + hashed password file?
   # users.mutableUsers = false;
   # users.users.tikhon.hashedPasswordFile = "/home/tikhon/pass";
