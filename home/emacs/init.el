@@ -358,6 +358,7 @@ size. Designed to work with `window-size-change-functions'."
 (global-set-key (kbd "C-c C-a") 'align-regexp)
 (global-set-key (kbd "M-#") 'ispell-complete-word)
 (global-set-key (kbd "M-j") 'next-error)
+(global-set-key (kbd "C-c C-o") 'browse-url-at-point)
 
 ;; C-w remap:
 (global-set-key (kbd "C-w") 'backward-kill-word)
