@@ -4,25 +4,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(describe-char-unidata-list
-   '(name old-name general-category decomposition uppercase lowercase
-          titlecase))
+   '(name old-name general-category decomposition uppercase lowercase titlecase))
  '(package-selected-packages
-   '(bazel cargo company-box consult direnv docker-compose-mode
-           dockerfile-mode el-patch ess exec-path-from-shell
-           flycheck-posframe flycheck-rust forge format-all git-modes
-           htmlize journalctl-mode js2-mode json-mode lean4-mode
-           lsp-haskell lsp-metals lsp-pyright lsp-ui lua-mode
-           marginalia nerd-icons-dired nix-mode org-bullets org-ql
-           ox-reveal paredit pdf-tools powerline projectile
-           python-black python-docstring python-pytest rainbow-mode
-           request restclient rust-mode sbt-mode selectrum-prescient
-           tide typescript-mode unisonlang-mode use-package
-           visual-fill-column xterm-color yasnippet))
+   '(nerd-icons bazel cargo company-box consult direnv docker-compose-mode dockerfile-mode el-patch ess exec-path-from-shell flycheck-posframe flycheck-rust forge format-all git-modes htmlize journalctl-mode js2-mode json-mode lean4-mode lsp-haskell lsp-metals lsp-pyright lsp-ui lua-mode marginalia nerd-icons-dired nix-mode org-bullets org-ql ox-reveal paredit pdf-tools powerline projectile python-black python-docstring python-pytest rainbow-mode request restclient rust-mode sbt-mode selectrum-prescient tide typescript-mode unisonlang-mode use-package visual-fill-column xterm-color yasnippet))
  '(safe-local-variable-values
    '((package-lint-main-file . "haskell-mode-pkg.el")
-     (lsp-haskell-plugin-hlint-config-flags
-      . ["--language=QuasiQuotes"])
-     (lsp-haskell-plugin-hlint-config-flags . ["-XQuasiQuotes"])
+     (lsp-haskell-plugin-hlint-config-flags .
+                                            ["--language=QuasiQuotes"])
+     (lsp-haskell-plugin-hlint-config-flags .
+                                            ["-XQuasiQuotes"])
      (python-shell-interpreter . "bin/nix-aware-python")
      (python-shell-interpreter . "nix-shell")))
  '(send-mail-function 'sendmail-send-it)
