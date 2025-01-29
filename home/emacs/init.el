@@ -1035,6 +1035,9 @@ silently does nothing."
      "target"
      forge-github-repository)))
 
+(use-package pr-review
+  :ensure t)
+
 (use-package smerge-mode
   :custom
   (smerge-command-prefix (kbd "M-C")))
