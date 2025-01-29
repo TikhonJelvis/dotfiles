@@ -1552,7 +1552,6 @@ process regardless."
 
   (haskell-font-lock-symbols nil)
 
-  ;; Wrap haskell-mode's comamnds in a nix-shell by default:
   (haskell-process-wrapper-function 'identity)
 
   :bind  (:map haskell-mode-map
@@ -1713,7 +1712,12 @@ unchanged."
   (defun my-interactive-haskell-mode-hook ()
     (interactive-haskell-mode 1)
     (unbind-key "M-." interactive-haskell-mode-map))
-  (add-hook 'haskell-mode-hook 'my-interactive-haskell-mode-hook))
+  (add-hook 'haskell-mode-hook 'my-interactive-haskell-mode-hook)
+
+  (defun mwb-settings-haskell-mode-hook ()
+    (when (string= (file-name-base (haskell-cabal-find-file)) "mwb")
+      (setq-local haskell-process-type 'ghci)
+      (setq-local haskell-process-path-ghci "mwb-ghci"))))
 
 (use-package lsp-haskell
   :after lsp-mode
