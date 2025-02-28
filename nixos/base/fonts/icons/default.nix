@@ -4,7 +4,7 @@ let
     name = "tikhon-icon-font";
     src = ./font;
     installPhase = ''
-      mkdir -p $out/share/fonts
+      mkdir -p $out/share/fonts/truetype
       cp *.ttf $out/share/fonts/truetype
     '';
   };

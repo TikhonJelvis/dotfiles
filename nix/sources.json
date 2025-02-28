@@ -5,10 +5,10 @@
         "homepage": "",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "9f8b4b1b2a29ae6dc0395b81e9d457a14b8016c4",
-        "sha256": "0crj6xhlb5md084035n1cxhziad1hrfhw8yp8h2vmvlagc4pjki6",
+        "rev": "0ed1a467447a04a60cdc6444de0dedd9adc55952",
+        "sha256": "1zpj5kkvx7cr4n316wsrz8glm7g0m8fzazcgyl74rsqj5jq6751b",
         "type": "tarball",
-        "url": "https://github.com/nix-community/NUR/archive/9f8b4b1b2a29ae6dc0395b81e9d457a14b8016c4.tar.gz",
+        "url": "https://github.com/nix-community/NUR/archive/0ed1a467447a04a60cdc6444de0dedd9adc55952.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "emacs-nativecomp": {

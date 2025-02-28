@@ -67,10 +67,6 @@ in
   # command
   environment.systemPackages = [ kolide-launcher ];
 
-  # seems like nixos-hardware wants to use pipewire for sound on
-  # Framework laptops, which requires disabling pusleaudio
-  hardware.pulseaudio.enable = lib.mkForce false;
-
   # the systemd-boot EFI boot loader (rather than GRUB/etc)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

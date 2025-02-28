@@ -153,27 +153,6 @@
 
   services.openssh.enable = true;
 
-  # Sound
-
-  # we used to use pulseaudio, but it has to be turned off to use
-  # pipewire instead
-  #
-  # annoyingly, I am not 100% sure about *what* is turning pipewire on
-  # for me...
-  hardware.pulseaudio.enable = false;
-
-  # hardware.pulseaudio = {
-  #   enable = true;
-  #   package = pkgs.pulseaudioFull;
-
-  #   daemon.config = {
-  #     "default-sample-rate" = 48000;
-  #   };
-  # };
-  # # realtime scheduling priority for Pulse Audio
-  # security.rtkit.enable = true;
-
-
   # Scanning
   hardware.sane = {
     enable = true;
