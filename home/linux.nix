@@ -22,14 +22,12 @@
       discord
       file
       gimp
-      gwenview
       inkscape
       krita
       slack
-      spectacle
+      kdePackages.spectacle
       synergy
       unison-ucm
-      xournal
       vlc
       zoom-us
     ];

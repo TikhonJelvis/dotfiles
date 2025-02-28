@@ -16,7 +16,7 @@
     packages = with pkgs;
       let
         utils =
-          [ drive pandoc unzip zip _1password poppler_utils aspell ptouch-print ];
+          [ drive pandoc unzip zip _1password-cli poppler_utils aspell ptouch-print ];
         development  =
           [ ghc lorri niv python3 poetry cachix stylish-haskell python3Packages.livereload ];
         aspell = pkgs.aspellWithDicts (d: [d.en d.ru]);

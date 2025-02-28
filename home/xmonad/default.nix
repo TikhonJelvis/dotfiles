@@ -1,8 +1,9 @@
 { pkgs, ... }:
 
 let
+  breeze = pkgs.kdePackages.breeze-gtk;
   breeze-wallpaper-base =
-    "${pkgs.breeze-qt5}/share/wallpapers/Next/contents/images/2560x1440";
+    "${breeze}/share/wallpapers/Next/contents/images/2560x1440";
   breeze-wallpaper =
     if builtins.pathExists "${breeze-wallpaper-base}.png"
     then "${breeze-wallpaper-base}.png"
