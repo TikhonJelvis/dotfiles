@@ -297,6 +297,14 @@ size. Designed to work with `window-size-change-functions'."
 ;; Icons that I can use in dired, buffer mode lines... etc
 (use-package nerd-icons
   :ensure t
+  :custom
+  ;; the Nerd Font package was refactored in NixOS 25.05, and the
+  ;; default "Symbols Nerd Font Mono" stopped being installed (not
+  ;; sure if this is intentional or a bug)
+  ;;
+  ;; As a fix, we can swap to "Symbols Nerd Font" which is provided in
+  ;; Nixpkgs by pkgs.nerd-fonts.symbols-only
+  (nerd-icons-font-family "Symbols Nerd Font")
   :config
   (let ((file-type-overrides
          '(("hs" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
