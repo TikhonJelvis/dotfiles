@@ -313,7 +313,7 @@ size. Designed to work with `window-size-change-functions'."
            ("hsc" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
 
            ("http" nerd-icons-octicon "nf-oct-globe" :face nerd-icons-lblue)
-           
+
            ("json" nerd-icons-sucicon "nf-seti-json" :face nerd-icons-dyellow)
            ("cfg" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
            ("toml" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
@@ -473,8 +473,8 @@ overriding defaults. For example, to use a different
      ;; opened frames, and this alternate calculation seems to solve
      ;; the problem.
      ;;
-     ;; The -1 adjusts for some inconsistencies in the calculation—the
-     ;; frame is too wide otherwise.
+     ;; The - 2 adjusts for some inconsistencies in the
+     ;; calculation—the frame is too wide otherwise.
      :width (- (/ (frame-pixel-width) (window-font-width)) 2)))
 
   (defun display-posframe-center (buffer _alist)
@@ -974,6 +974,9 @@ faces each time before company-complete is called."
   (magit-bury-buffer-function 'magit-mode-quit-window)
 
   :config
+  ;; file type icons inside Magit buffers
+  (setopt magit-format-file-function #'magit-format-file-nerd-icons)
+
   ;; Improve ergonomics of Git commit message buffers
   (defun my-git-commit-setup-hook ()
     (visual-line-mode 1)
@@ -1210,7 +1213,7 @@ days (regardless of TODO status):
   (org-agenda-files
    (list (concat org-directory "/Tasks.org")
          (concat org-directory "/Projects.org")))
-  
+
   (org-agenda-format-date 'org-agenda-custom-date-format)
 
   (org-agenda-scheduled-leaders '("" "%2d×"))
