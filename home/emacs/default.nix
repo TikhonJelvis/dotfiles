@@ -34,7 +34,7 @@
     };
 
     home.packages = with pkgs;
-      [ pkgs.pyright yaml-language-server taplo-lsp ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts);
+      [ pkgs.pyright yaml-language-server taplo-lsp ];
 
     home.file = {
       ".emacs" = {

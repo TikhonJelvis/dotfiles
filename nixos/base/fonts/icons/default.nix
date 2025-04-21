@@ -5,7 +5,7 @@ let
     src = ./font;
     installPhase = ''
       mkdir -p $out/share/fonts/truetype
-      cp *.ttf $out/share/fonts/truetype
+      mv tikhon-emacs-icons.ttf $out/share/fonts/truetype/
     '';
   };
 in

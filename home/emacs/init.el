@@ -210,6 +210,7 @@ screens.")
 (defvar basis-font-size-override
   '((("tikhon-nixos-x1" "eDP-1") . 45)
     (("tikhon-nixos-framework" "eDP-1") . 80)
+    (("tikhon-nixos-mercury" "eDP-1") . 80)
     (("tikhon-nixos-mercury" "combined screen") . 160)
     ;; HDMI connection (for 1080p monitor in Tahoe)
     (("tikhon-nixos-framework" "DP-3") . 120))
@@ -297,6 +298,14 @@ size. Designed to work with `window-size-change-functions'."
 ;; Icons that I can use in dired, buffer mode lines... etc
 (use-package nerd-icons
   :ensure t
+  :custom
+  ;; the Nerd Font package was refactored in NixOS 25.05, and the
+  ;; default "Symbols Nerd Font Mono" stopped being installed (not
+  ;; sure if this is intentional or a bug)
+  ;;
+  ;; As a fix, we can swap to "Symbols Nerd Font" which is provided in
+  ;; Nixpkgs by pkgs.nerd-fonts.symbols-only
+  (nerd-icons-font-family "Symbols Nerd Font")
   :config
   (let ((file-type-overrides
          '(("hs" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
@@ -305,7 +314,7 @@ size. Designed to work with `window-size-change-functions'."
            ("hsc" nerd-icons-devicon "nf-dev-haskell" :face nerd-icons-blue)
 
            ("http" nerd-icons-octicon "nf-oct-globe" :face nerd-icons-lblue)
-           
+
            ("json" nerd-icons-sucicon "nf-seti-json" :face nerd-icons-dyellow)
            ("cfg" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
            ("toml" nerd-icons-sucicon "nf-seti-settings" :face nerd-icons-dyellow)
@@ -465,8 +474,8 @@ overriding defaults. For example, to use a different
      ;; opened frames, and this alternate calculation seems to solve
      ;; the problem.
      ;;
-     ;; The -1 adjusts for some inconsistencies in the calculation—the
-     ;; frame is too wide otherwise.
+     ;; The - 2 adjusts for some inconsistencies in the
+     ;; calculation—the frame is too wide otherwise.
      :width (- (/ (frame-pixel-width) (window-font-width)) 2)))
 
   (defun display-posframe-center (buffer _alist)
@@ -966,6 +975,9 @@ faces each time before company-complete is called."
   (magit-bury-buffer-function 'magit-mode-quit-window)
 
   :config
+  ;; file type icons inside Magit buffers
+  (setopt magit-format-file-function #'magit-format-file-nerd-icons)
+
   ;; Improve ergonomics of Git commit message buffers
   (defun my-git-commit-setup-hook ()
     (visual-line-mode 1)
@@ -1202,7 +1214,7 @@ days (regardless of TODO status):
   (org-agenda-files
    (list (concat org-directory "/Tasks.org")
          (concat org-directory "/Projects.org")))
-  
+
   (org-agenda-format-date 'org-agenda-custom-date-format)
 
   (org-agenda-scheduled-leaders '("" "%2d×"))

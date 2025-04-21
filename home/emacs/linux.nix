@@ -11,7 +11,7 @@ let
 in {
   imports = [ ./default.nix ];
 
-  emacs = pkgs.emacs;
+  emacs = pkgs.emacs30-gtk3;
 
   services.emacs = {
     enable = true;
