@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  breeze = pkgs.kdePackages.breeze-gtk;
+  breeze = pkgs.kdePackages.breeze;
   breeze-wallpaper-base =
     "${breeze}/share/wallpapers/Next/contents/images/2560x1440";
   breeze-wallpaper =
