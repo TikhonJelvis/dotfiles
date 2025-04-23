@@ -1099,19 +1099,42 @@ silently does nothing."
          ("M-{" . backward-paragraph)
          ("C-c C-," . org-promote-subtree)
          ("C-c C-." . org-demote-subtree)
-         ("C-c C-;" . org-insert-structure-template))
+         ("C-c C-;" . org-insert-structure-template)
+         ("C-c C-o" . tikhon/org-open-at-point))
 
   :hook
-  ((org-insert-heading . org-insert-with-timestamp)
+  ((org-insert-heading . tikhon/org-insert-with-timestamp)
    (org-after-refile-insert . org-update-parent-todo-statistics))
 
 
   :init
-  (defun org-insert-with-timestamp ()
+  (defun tikhon/org-insert-with-timestamp ()
     (when (member "CREATED" (org-buffer-property-keys))
       (let* ((fmt (concat "[" (substring (cdr org-time-stamp-formats) 1 -1) "]"))
              (timestamp (format-time-string fmt (current-time))))
         (org-set-property "CREATED" timestamp))))
+
+  ;; Based on Navidot's code at the Emacs Stack Exhange:
+  ;; https://emacs.stackexchange.com/a/60555/17
+  (defun tikhon/org-copy-link-address-at-point ()
+    "Copy the address of the link at point. Does nothing if there is no link
+at point."
+    (interactive)
+    (let* ((link (org-element-lineage (org-element-context) '(link) t))
+           (type (org-element-property :type link))
+           (url (concat type ":" (org-element-property :path link))))
+      (when link
+        (message "Copied URL: %s" url)
+        (kill-new url))))
+  
+  (defun tikhon/org-open-at-point (arg)
+    "My version of `org-open-at-point'. Normally does same behavior as the
+normal version, but with an argument calls `my-org-copy-link-address-at-point'
+instead."
+    (interactive "P")
+    (if arg
+        (tikhon/org-copy-link-address-at-point)
+      (org-open-at-point)))
 
   ;; TODO: Run this function automatically?
   ;;
