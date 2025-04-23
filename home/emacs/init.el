@@ -1052,7 +1052,7 @@ silently does nothing."
 
 (use-package smerge-mode
   :custom
-  (smerge-command-prefix (kbd "M-C")))
+  (smerge-command-prefix (kbd "C-.")))
 
                                         ; ORG-MODE
 (use-package prog-mode
