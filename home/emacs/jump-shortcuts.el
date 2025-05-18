@@ -34,8 +34,8 @@ exists and contains a .git subdirectory."
 
 (defun shortcuts-org-notes ()
   "Return shortcuts to my main org notes files."
-  '(("notes • links" . "~/Dropbox/org/links.org")
-    ("notes • notes" . "~/Dropbox/org/notes.org")
+  '(("notes • notes" . "~/Dropbox/org/notes.org")
+    ("notes • links" . "~/Dropbox/org/links.org")
     ("notes • misc" . "~/Dropbox/org/misc.org")
     ("notes • work" . "~/Dropbox/org/work.org")))
 
