@@ -5,7 +5,9 @@
   '(("Home" . "~")
     ("Downloads" . "~/Downloads")
     ("Documents" . "~/Documents")
-    ("Programming" . "~/Programming"))
+    ("Programming" . "~/Programming")
+    ("Dropbox" . "~/Dropbox")
+    ("papers" . "~/Dropbox/papers"))
   "Shortcuts suggested from `shortcuts-core'.
 
 Entries are pairs (NAME . PATH) where PATH is the path to jump to
@@ -29,6 +31,13 @@ exists and contains a .git subdirectory."
 (defun shortcuts-org-agenda-files ()
   "Return shortcuts for every configured Org agenda file."
   (mapcar (lambda (f) (cons (file-name-nondirectory f) f)) org-agenda-files))
+
+(defun shortcuts-org-notes ()
+  "Return shortcuts to my main org notes files."
+  '(("notes • links" . "~/Dropbox/org/links.org")
+    ("notes • notes" . "~/Dropbox/org/notes.org")
+    ("notes • misc" . "~/Dropbox/org/misc.org")
+    ("notes • work" . "~/Dropbox/org/work.org")))
 
 (defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects)
   "Sources for shortcut locations to jump to.

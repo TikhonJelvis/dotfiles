@@ -494,8 +494,8 @@ overriding defaults. For example, to use a different
   (unless (eq system-type 'darwin)
     (add-to-list 'shortcuts-core-shortcuts '("Dropbox" . "~/Dropbox"))
     (add-to-list 'shortcuts-core-shortcuts `("init.el" . ,(dotfile "emacs/init.el")))
-    (add-to-list 'shortcuts-core-shortcuts `("Treatment.org" . "~/Dropbox/org/Treatment.org"))
-    (add-to-list 'shortcuts-sources #'shortcuts-org-agenda-files))
+    (add-to-list 'shortcuts-sources #'shortcuts-org-agenda-files)
+    (add-to-list 'shortcuts-sources #'shortcuts-org-notes))
   (global-set-key (kbd "C-x j") 'jump-to-shortcut)
   :init
   (vertico-mode 1))
@@ -1126,7 +1126,7 @@ at point."
       (when link
         (message "Copied URL: %s" url)
         (kill-new url))))
-  
+
   (defun tikhon/org-open-at-point (arg)
     "My version of `org-open-at-point'. Normally does same behavior as the
 normal version, but with an argument calls `my-org-copy-link-address-at-point'
