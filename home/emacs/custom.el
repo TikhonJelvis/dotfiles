@@ -6,18 +6,8 @@
  '(describe-char-unidata-list
    '(name old-name general-category decomposition uppercase lowercase
           titlecase))
- '(package-selected-packages
-   '(bazel cargo company-box consult direnv docker-compose-mode
-           dockerfile-mode el-patch ess exec-path-from-shell
-           flycheck-posframe flycheck-rust forge format-all git-modes
-           htmlize journalctl-mode js2-mode json-mode lsp-haskell
-           lsp-metals lsp-pyright lsp-ui lua-mode marginalia
-           nerd-icons-dired nix-mode orderless org-bullets ox-reveal
-           paredit pdf-tools powerline projectile python-black
-           python-docstring python-pytest rainbow-mode request
-           restclient rust-mode sbt-mode selectrum-prescient tide
-           typescript-mode unisonlang-mode use-package
-           vertico-posframe visual-fill-column xterm-color yasnippet))
+ '(eldoc-documentation-functions nil t nil "Customized with use-package lsp-mode")
+ '(package-selected-packages nil)
  '(safe-local-variable-values
    '((package-lint-main-file . "haskell-mode-pkg.el")
      (lsp-haskell-plugin-hlint-config-flags

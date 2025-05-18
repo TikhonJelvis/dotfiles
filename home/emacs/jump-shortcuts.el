@@ -34,10 +34,10 @@ exists and contains a .git subdirectory."
 
 (defun shortcuts-org-notes ()
   "Return shortcuts to my main org notes files."
-  '(("notes • notes" . "~/Dropbox/org/notes.org")
-    ("notes • links" . "~/Dropbox/org/links.org")
-    ("notes • misc" . "~/Dropbox/org/misc.org")
-    ("notes • work" . "~/Dropbox/org/work.org")))
+  '(("📓 • notes" . "~/Dropbox/org/notes.org")
+    ("📓 • links" . "~/Dropbox/org/links.org")
+    ("📓 • misc" . "~/Dropbox/org/misc.org")
+    ("📓 • work" . "~/Dropbox/org/work.org")))
 
 (defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects)
   "Sources for shortcut locations to jump to.
