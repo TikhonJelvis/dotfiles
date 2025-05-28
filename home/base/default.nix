@@ -123,6 +123,8 @@
 
       userName = "Tikhon Jelvis";
 
+      lfs.enable = true;
+
       extraConfig = {
         ui.color = "always";
         github.user = "TikhonJelvis";
