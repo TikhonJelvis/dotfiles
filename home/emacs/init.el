@@ -781,7 +781,10 @@ messages under the cursor automatically. Call
   :ensure t
   :hook (prog-mode . format-all-mode)
   :init
-  (put 'format-all-formatters 'safe-local-variable 'listp))
+  (put 'format-all-formatters 'safe-local-variable 'listp)
+  :config
+  (setq-default format-all-formatters
+                '(("OCaml" . ocamlformat))))
 
 
                                         ; NIX
@@ -1778,6 +1781,10 @@ consistently fail on them."
             ((executable-find "haskell-language-server")
              (setq-local lsp-haskell-server-path "haskell-language-server")
              (lsp t))))))
+
+                                        ; OCAML
+(use-package tuareg
+  :ensure t)
 
                                         ; LEAN
 ;;; Lean mode is not loading correctly for some reason; will debug
