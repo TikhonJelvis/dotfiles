@@ -1795,7 +1795,15 @@ consistently fail on them."
 
                                         ; OCAML
 (use-package tuareg
-  :ensure t)
+  :ensure t
+  :hook
+  ((tuareg-mode . tikhon/atd-no-format-hook))
+  :config
+  (add-to-list 'auto-mode-alist '("\\.atd\\'" . tuareg-mode))
+  :init
+  (defun tikhon/atd-no-format-hook ()
+    (when (equal (file-name-extension (buffer-file-name)) "atd")
+      (format-all-mode -1))))
 
                                         ; LEAN
 ;;; Lean mode is not loading correctly for some reason; will debug
