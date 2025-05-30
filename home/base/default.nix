@@ -83,7 +83,13 @@
   services.maestral.enable = true;
 
   programs = {
-    bash = {
+    bash = let
+      semgrep-options = ''
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+
+        source $HOME/.bin/semgrep-settings
+      '';
+    in {
       enable = true;
 
       sessionVariables = config.home.sessionVariables;
@@ -91,7 +97,7 @@
       initExtra = ''
         unset __HM_SESS_VARS_SOURCED
         source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-      '';
+      '' + lib.optionalString pkgs.stdenv.isDarwin semgrep-options;
     };
 
     fish.enable = false;
@@ -129,6 +135,7 @@
         ui.color = "always";
         github.user = "TikhonJelvis";
         core.fileMode = false;
+        submodule.recurse = true;
       };
     };
   };
