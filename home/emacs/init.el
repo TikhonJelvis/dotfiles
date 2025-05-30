@@ -538,6 +538,14 @@ overriding defaults. For example, to use a different
   :init
   (marginalia-mode))
 
+(use-package affe
+  :ensure t
+  :config
+  (defun affe-orderless-regexp-compiler (input _type _ignorecase)
+    (setq input (cdr (orderless-compile input)))
+    (cons input (apply-partially #'orderless--highlight input t)))
+  (setq affe-regexp-compiler #'affe-orderless-regexp-compiler))
+
 
                                         ; INPUT MODES
 (setq default-input-method "TeX")
