@@ -41,7 +41,10 @@
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier nil)
 
-  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen))
+  (global-set-key (kbd "C-M-c") 'toggle-frame-fullscreen)
+
+  ;; macOS defaults to zsh otherwise
+  (setq shell-file-name "bash"))
 
                                         ; UTILITY FUNCTIONS
 (defun easy-move ()
