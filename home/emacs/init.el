@@ -787,7 +787,7 @@ messages under the cursor automatically. Call
   (put 'format-all-formatters 'safe-local-variable 'listp)
   :config
   (setq-default format-all-formatters
-                '(("OCaml" . ocamlformat))))
+                '(("OCaml" ocamlformat))))
 
 
                                         ; NIX
