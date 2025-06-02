@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+/usr/bin/env emacsclient --no-wait --quiet --suppress-output --create-frame . "$@"
