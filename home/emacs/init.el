@@ -1799,7 +1799,8 @@ consistently fail on them."
 (use-package tuareg
   :ensure t
   :hook
-  ((tuareg-mode . tikhon/atd-no-format-hook))
+  ((tuareg-mode . tikhon/atd-no-format-hook)
+   (tuareg-mode . lsp))
   :config
   (add-to-list 'auto-mode-alist '("\\.atd\\'" . tuareg-mode))
   :init
