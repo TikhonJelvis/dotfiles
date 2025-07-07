@@ -13,6 +13,6 @@
   programs.git = {
     ignores = [ ".DS_Store" ];
 
-    userEmail = "tikhon@semgrep.com";
+    userEmail = "tikhon@jelv.is";
   };
 }
