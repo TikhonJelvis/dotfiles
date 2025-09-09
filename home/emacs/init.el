@@ -1804,12 +1804,17 @@ consistently fail on them."
   :config
   (add-to-list 'auto-mode-alist '("\\.atd\\'" . tuareg-mode))
   :init
+  ;; I'm having trouble with semgrep-ls in OCaml, and I don't really use
+  ;; it anyway, so let's disable it:
+  (setq lsp-semgrep-languages '())
+
   (defun tikhon/atd-no-format-hook ()
     (when (equal (file-name-extension (buffer-file-name)) "atd")
       (format-all-mode -1)))
   (defun tikhon/ocaml-lsp ()
     (unless (equal (file-name-extension (buffer-file-name)) "atd")
       (lsp))))
+
 
                                         ; LEAN
 ;;; Lean mode is not loading correctly for some reason; will debug
