@@ -1815,6 +1815,10 @@ consistently fail on them."
     (unless (equal (file-name-extension (buffer-file-name)) "atd")
       (lsp))))
 
+(use-package utop
+  :ensure t
+  :custom
+  (utop-command "dune utop . -- -emacs"))
 
                                         ; LEAN
 ;;; Lean mode is not loading correctly for some reason; will debug
