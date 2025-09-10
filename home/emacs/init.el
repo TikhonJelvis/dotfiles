@@ -1800,7 +1800,8 @@ consistently fail on them."
   :ensure t
   :hook
   ((tuareg-mode . tikhon/atd-no-format-hook)
-   (tuareg-mode . tikhon/ocaml-lsp))
+   (tuareg-mode . tikhon/ocaml-lsp)
+   (tuareg-mode . utop-minor-mode))
   :config
   (add-to-list 'auto-mode-alist '("\\.atd\\'" . tuareg-mode))
   :init
