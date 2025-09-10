@@ -1817,6 +1817,10 @@ consistently fail on them."
 
 (use-package utop
   :ensure t
+  :bind (:map utop-mode-map
+              ;; TODO: figure out how to actually clear the utop
+              ;; buffer...
+              ("C-c C-k" . comint-clear-buffer))
   :custom
   (utop-command "dune utop . -- -emacs"))
 
