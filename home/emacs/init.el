@@ -1954,12 +1954,16 @@ buffer."
 (use-package lsp-metals
   :ensure t)
 
+                                        ; KOTLIN
+(use-package kotlin-mode
+  :ensure t)
+
                                         ; SKETCH
 (use-package sketch-mode
   :mode "\\.sk\\'"
   :after mmm-mode
   :config
-  ;;; Add support for sketch files embedded in Haskell:
+  ;; Add support for sketch files embedded in Haskell:
   (mmm-add-classes
    '((haskell-sketch
       :submode java-mode
