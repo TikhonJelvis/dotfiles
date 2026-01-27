@@ -1825,6 +1825,9 @@ consistently fail on them."
   :custom
   (utop-command "dune utop . -- -emacs"))
 
+(use-package merlin
+  :ensure t)
+
                                         ; LEAN
 ;;; Lean mode is not loading correctly for some reason; will debug
 ;;; later

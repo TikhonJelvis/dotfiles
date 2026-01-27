@@ -7,7 +7,19 @@
    '(name old-name general-category decomposition uppercase lowercase
           titlecase))
  '(eldoc-documentation-functions nil t nil "Customized with use-package lsp-mode")
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(affe bazel cargo company-box direnv docker-compose-mode
+          dockerfile-mode el-patch ess exec-path-from-shell
+          flycheck-posframe flycheck-rust forge format-all git-modes
+          haskell-mode htmlize journalctl-mode js2-mode json-mode
+          kotlin-mode lsp-haskell lsp-metals lsp-pyright lsp-ui
+          lua-mode marginalia merlin nerd-icons-dired nix-mode
+          orderless org-bullets org-ql ox-reveal paredit pdf-tools
+          powerline pr-review projectile python-black python-docstring
+          python-pytest rainbow-mode request restclient rust-mode
+          sbt-mode tide typescript-mode unisonlang-mode use-package
+          utop vertico-posframe visual-fill-column xterm-color
+          yasnippet))
  '(safe-local-variable-values
    '((package-lint-main-file . "haskell-mode-pkg.el")
      (lsp-haskell-plugin-hlint-config-flags
