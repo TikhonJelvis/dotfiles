@@ -1592,6 +1592,11 @@ process regardless."
 (use-package theta-mode
   :mode "\\.theta\\'")
 
+                                        ; PROTOBUF
+(use-package protobuf-mode
+  :ensure t
+  :mode ("\\.proto\\'" . protobuf-mode))
+
                                         ; HASKELL
 (use-package haskell-mode
   :ensure t
@@ -1826,6 +1831,9 @@ consistently fail on them."
   (utop-command "dune utop . -- -emacs"))
 
 (use-package merlin
+  :ensure t)
+
+(use-package dune
   :ensure t)
 
                                         ; LEAN
