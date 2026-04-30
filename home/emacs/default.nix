@@ -34,7 +34,7 @@
     };
 
     home.packages = with pkgs;
-      [ pkgs.pyright yaml-language-server taplo-lsp ];
+      [ pkgs.pyright yaml-language-server taplo ];
 
     home.file = {
       ".emacs" = {

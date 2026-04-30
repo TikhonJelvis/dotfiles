@@ -39,7 +39,7 @@
 
   xdg.enable = true;
 
-  programs.git.userEmail = "tikhon@jelv.is";
+  programs.git.settings.user.email = "tikhon@jelv.is";
 
   services.lorri.enable = true;
 

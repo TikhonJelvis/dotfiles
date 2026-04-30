@@ -3,7 +3,7 @@
 let
   breeze = pkgs.kdePackages.breeze;
   breeze-wallpaper-base =
-    "${breeze}/share/wallpapers/Next/contents/images/2560x1440";
+    "${breeze}/share/wallpapers/Next/contents/images/5120x2880";
   breeze-wallpaper =
     if builtins.pathExists "${breeze-wallpaper-base}.png"
     then "${breeze-wallpaper-base}.png"
@@ -17,7 +17,7 @@ let
   '';
 in
 {
-  home.packages = with pkgs; [ dmenu xorg.xmessage networkmanagerapplet ];
+  home.packages = with pkgs; [ dmenu xmessage networkmanagerapplet ];
 
   xsession = {
     enable = true;
@@ -28,7 +28,7 @@ in
       config = ./xmonad.hs;
     };
 
-    initExtra = wallpaper + polybar;
+    initExtra = wallpaper;
   };
 
   programs.feh = {
@@ -41,8 +41,10 @@ in
     theme = "Indego";
   };
 
+  # TODO: reconfigure polybar if you actually want to start using
+  # it...
   services.polybar = {
-    enable = true;
+    enable = false;
     script = "polybar top &";
 
     settings = {

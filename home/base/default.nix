@@ -16,7 +16,7 @@
     packages = with pkgs;
       let
         utils =
-          [ drive pandoc unzip zip _1password-cli poppler_utils aspell ptouch-print ];
+          [ drive pandoc unzip zip _1password-cli poppler-utils aspell ptouch-print ];
         development  =
           [ ghc lorri niv python3 poetry cachix stylish-haskell python3Packages.livereload ];
         aspell = pkgs.aspellWithDicts (d: [d.en d.ru]);
@@ -127,16 +127,23 @@
       enable = true;
       ignores = [ "*~" ];
 
-      userName = "Tikhon Jelvis";
-
       lfs.enable = true;
 
-      extraConfig = {
+      settings = {
+        user.name = "Tikhon Jelvis";
         ui.color = "always";
         github.user = "TikhonJelvis";
         core.fileMode = false;
         submodule.recurse = true;
       };
+
+      # new default; needs to be set explicitly because
+      # `home.stateVersion` is less than "25.05".
+      #
+      # I don't currently sign commits, and I don't know exactly what
+      # this setting is for. I will presumably override it in the
+      # future if I have to sign commits for some reason.
+      signing.format = null;
     };
   };
 }
