@@ -21,7 +21,6 @@ in {
       cozette
       dejavu_fonts
       emacs-all-the-icons-fonts
-      emojione
       eb-garamond
       hack-font
       hasklig
@@ -34,7 +33,7 @@ in {
       source-code-pro
       symbola
       twitter-color-emoji
-      ubuntu_font_family
+      ubuntu-classic
     ];
 
     enableDefaultPackages = true;
