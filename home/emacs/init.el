@@ -328,10 +328,14 @@ size. Designed to work with `window-size-change-functions'."
 
 (use-package nerd-icons-dired
   :ensure t
-  :hook
-  (dired-mode . nerd-icons-dired-mode)
+  :after nerd-icons
   :config
-  (set-face-attribute 'nerd-icons-dired-dir-face nil :foreground "#BBBBBB"))
+  (defun my/nerd-icons-icon-for-dir (dir &rest args)
+    "Customize colors for directory icons."
+    (nerd-icons-icon-for-dir dir :face 'nerd-icons-lblue))
+  (setq nerd-icons-dired-dir-icon-function #'my/nerd-icons-icon-for-dir)
+  :hook
+  (dired-mode . nerd-icons-dired-mode))
 
 ;; Prettier mode line
 (use-package powerline
