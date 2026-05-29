@@ -86,8 +86,6 @@
     bash = let
       semgrep-options = ''
         eval "$(/opt/homebrew/bin/brew shellenv)"
-
-        source $HOME/.bin/semgrep-settings
       '';
     in {
       enable = true;

@@ -2,6 +2,7 @@
 {
   imports = [
     ./base
+    ./base/darwin.nix
     ./emacs/darwin.nix
   ];
 
@@ -12,7 +13,6 @@
 
   programs.git = {
     ignores = [ ".DS_Store" ];
-
-    userEmail = "tikhon@jelv.is";
+    settings.user.email = "tikhon@jelv.is";
   };
 }

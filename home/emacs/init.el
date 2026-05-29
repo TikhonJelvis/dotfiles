@@ -216,7 +216,8 @@ screens.")
     (("tikhon-nixos-mercury" "eDP-1") . 80)
     (("tikhon-nixos-mercury" "combined screen") . 160)
     ;; HDMI connection (for 1080p monitor in Tahoe)
-    (("tikhon-nixos-framework" "DP-3") . 120))
+    (("tikhon-nixos-framework" "DP-3") . 120)
+    (("MAC-M63V6C37JK" "MAC-M63V6C37JK") . 120)) ;; o9 macbook screen
   "Specific monitors for which I want a different font size
 configured. This is an alist mapping hostname (`system-name') +
 output name to a value to use for `basis-font-size' on that
