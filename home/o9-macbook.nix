@@ -6,8 +6,8 @@
   ];
 
   home = {
-    username = "tikhon";
-    homeDirectory = "/Users/tikhon";
+    username = "tikhon.jelvis";
+    homeDirectory = "/Users/tikhon.jelvis";
   };
 
   programs.git = {

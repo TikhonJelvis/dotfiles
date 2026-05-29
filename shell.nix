@@ -4,7 +4,7 @@
 let
   HOME_MANAGER_CONFIG =
     if pkgs.stdenv.isDarwin
-    then toString ./home/semgrep-macbook.nix
+    then toString ./home/o9-macbook.nix
     else toString ./home/linux.nix;
   NIX_PATH = "nixpkgs=${sources.nixpkgs}:nixpkgs/nixos=${sources.nixpkgs}:nixos-config=/etc/nixos/configuration.nix";
 in pkgs.mkShell rec {
