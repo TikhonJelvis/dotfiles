@@ -18,7 +18,7 @@
         utils =
           [ drive pandoc unzip zip _1password-cli poppler-utils aspell ]; # TODO: fix ptouch-print on macos?
         development  =
-          [ ghc lorri niv python3 poetry cachix stylish-haskell python3Packages.livereload ];
+          [ ghc lorri niv python3 poetry cachix stylish-haskell python3Packages.livereload uv ];
         aspell = pkgs.aspellWithDicts (d: [d.en d.ru]);
       in utils ++ development;
 
