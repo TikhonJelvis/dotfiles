@@ -29,6 +29,10 @@
           lean4-mode = pkgs.callPackage ./lean4-mode.nix {
             inherit pkgs lib epkgs;
           };
+
+          ghostel = epkgs.melpaPackages.ghostel.overrideAttrs(old: {
+            buildInputs = (old.buildInputs or []) ++ [ pkgs.libghostty-vt ];
+          });
         };
       };
     };

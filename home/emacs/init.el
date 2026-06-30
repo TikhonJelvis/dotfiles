@@ -1533,6 +1533,10 @@ process regardless."
 ;; A mode to handle buffers gotten from stdout:
 (use-package stdout-mode)
 
+                                        ; GHOSTEL
+(use-package ghostel
+  :ensure t)
+
                                         ; ELISP
 (use-package elisp-mode
   :init
