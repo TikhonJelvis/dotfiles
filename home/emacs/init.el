@@ -1805,6 +1805,15 @@ consistently fail on them."
              (setq-local lsp-haskell-server-path "haskell-language-server")
              (lsp t))))))
 
+                                        ; PURESCRIPT
+(use-package purescript-mode
+  :ensure t
+  :config
+  (defun my-purescript-mode-hook ()
+    (turn-on-purescript-indentation)
+    (add-hook 'before-save-hook #'purescript-sort-imports nil t))
+  (add-hook 'purescript-mode-hook #'my-purescript-mode-hook))
+
                                         ; OCAML
 (use-package tuareg
   :ensure t
