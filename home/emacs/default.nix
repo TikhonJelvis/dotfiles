@@ -15,6 +15,8 @@
         package = config.emacs;
         config = ./init.el;
         override = epkgs: epkgs // {
+          inherit (pkgs.emacsPackages) ghostel;
+
           # patch treemacs to fix eager macro-expand error
           #
           # see several related issues:
@@ -29,10 +31,6 @@
           lean4-mode = pkgs.callPackage ./lean4-mode.nix {
             inherit pkgs lib epkgs;
           };
-
-          ghostel = epkgs.melpaPackages.ghostel.overrideAttrs(old: {
-            buildInputs = (old.buildInputs or []) ++ [ pkgs.libghostty-vt ];
-          });
         };
       };
     };
