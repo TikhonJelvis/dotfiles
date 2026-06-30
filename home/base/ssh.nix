@@ -8,10 +8,9 @@
     # matchBlocks."*" = { ... };
     enableDefaultConfig = false;
     
-    matchBlocks.haskell = {
-      host = "haskell";
-      hostname = "www-combo-nix.haskell.org";
-      user = "www";
+    settings.haskell = {
+      HostName = "www-combo-nix.haskell.org";
+      User = "www";
     };
   };
 }
