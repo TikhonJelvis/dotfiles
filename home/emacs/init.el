@@ -1535,7 +1535,17 @@ process regardless."
 
                                         ; GHOSTEL
 (use-package ghostel
-  :ensure t)
+  :ensure t
+  :bind (:map ghostel-semi-char-mode-map
+              ("C-M-S-N" . (lambda () (interactive) (swap-with 'down)))
+              ("C-M-S-P" . (lambda () (interactive) (swap-with 'up)))
+              ("C-M-S-B" . (lambda () (interactive) (swap-with 'left)))
+              ("C-M-S-F" . (lambda () (interactive) (swap-with 'right)))
+
+              ("M-N" . windmove-down)
+              ("M-P" . windmove-up)
+              ("M-B" . windmove-left)
+              ("M-F" . windmove-right)))
 
                                         ; ELISP
 (use-package elisp-mode
