@@ -1439,7 +1439,7 @@ really common name like 'src' or 'bin'."
           (find-useful-directory-name up)
         base)))
 
-  (defun shell-prompt (name directory)
+  (defun shell-prompt (name directory &optional shell)
     "Returns a shell prompt string for the given shell name and
 directory in the format that the PS1 environment variable
 expects.
@@ -1448,19 +1448,21 @@ This function makes it easy to have different prompts in
 different context (eg explicitly mark out remote shells vs local
 ones)."
     (setq name (format-shell-name name))
-    (if (file-remote-p directory)
-        (concat "\\033[35m" "ssh"
+    (let ((directory-sequence
+           (if (eq shell 'zsh) "%1d" "\\W")))
+      (if (file-remote-p directory)
+          (concat "\\033[35m" "ssh"
+                  "\\033[37m" ":"
+                  "\\033[31m" name
+                  "\\033[37m" ":"
+                  "\\033[32m" directory-sequence
+                  "\\033[37m" ">"
+                  "\\033[0m")
+        (concat "\\033[31m" name
                 "\\033[37m" ":"
-                "\\033[31m" name
-                "\\033[37m" ":"
-                "\\033[32m" "\\W"
+                "\\033[32m" directory-sequence
                 "\\033[37m" ">"
-                "\\033[0m")
-      (concat "\\033[31m" name
-              "\\033[37m" ":"
-              "\\033[32m" "\\W"
-              "\\033[37m" ">"
-              "\\033[0m")))
+                "\\033[0m"))))
 
   (defun new-shell (prefix name)
     "Opens a new shell buffer with the given name in
@@ -1483,9 +1485,6 @@ process regardless."
 
         (require 'cl-lib)
         (cl-flet ((send (str) (comint-simple-send process str)))
-          ;; XXX Hack for BR
-          (when remote (send "source ~/.bash_profile"))
-
           (send "export TERM='xterm-256color'")
           (send "export IN_EMACS=true")
           (send (concat "export PS1=\"" (shell-prompt name default-directory) "\""))
@@ -1537,15 +1536,43 @@ process regardless."
 (use-package ghostel
   :ensure t
   :bind (:map ghostel-semi-char-mode-map
-              ("C-M-S-N" . (lambda () (interactive) (swap-with 'down)))
-              ("C-M-S-P" . (lambda () (interactive) (swap-with 'up)))
-              ("C-M-S-B" . (lambda () (interactive) (swap-with 'left)))
-              ("C-M-S-F" . (lambda () (interactive) (swap-with 'right)))
+          ("C-M-S-N" . (lambda () (interactive) (swap-with 'down)))
+          ("C-M-S-P" . (lambda () (interactive) (swap-with 'up)))
+          ("C-M-S-B" . (lambda () (interactive) (swap-with 'left)))
+          ("C-M-S-F" . (lambda () (interactive) (swap-with 'right)))
 
-              ("M-N" . windmove-down)
-              ("M-P" . windmove-up)
-              ("M-B" . windmove-left)
-              ("M-F" . windmove-right)))
+          ("M-N" . windmove-down)
+          ("M-P" . windmove-up)
+          ("M-B" . windmove-left)
+          ("M-F" . windmove-right)
+
+          ("C-c C-k" . ghostel-clear-scrollback)
+          :map project-prefix-map
+          ("m" . ghostel-project)
+          ("M" . ghostel-project-list-buffers))
+  :config
+  (defun ghostel-run (commands)
+    (ghostel-send-string (mapconcat 'identity commands "; "))
+    (ghostel-send-key "return")
+    (ghostel-clear-scrollback))
+  (defun new-ghostel (prefix name &optional arg)
+    "A variant of `new-shell' that creates a ghostel buffer rather than a
+shell buffer."
+    (interactive "P\nsName: ")
+    (when (equal name "")
+      (setq name (find-useful-directory-name default-directory)))
+    (let ((ghostel-buffer-name (concat "<·" name "·>")))
+     (pop-to-buffer ghostel-buffer-name)
+     (ghostel))
+
+    ;; TODO: this only works on ZSH (ie on Darwin), I'll need to add
+    ;; different logic for bash/etc
+    (ghostel-run (list (concat "export PS1=$'" (shell-prompt name default-directory 'zsh) "'")))
+    (let ((remote (file-remote-p default-directory)))
+      (unless remote
+        (ghostel-run
+         (list (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))
+               "direnv allow 2> /dev/null"))))))
 
                                         ; ELISP
 (use-package elisp-mode
