@@ -1535,7 +1535,8 @@ process regardless."
                                         ; GHOSTEL
 (use-package ghostel
   :ensure t
-  :bind (:map ghostel-semi-char-mode-map
+  :bind (("C-c d" . new-ghostel)
+         :map ghostel-semi-char-mode-map
           ("C-M-S-N" . (lambda () (interactive) (swap-with 'down)))
           ("C-M-S-P" . (lambda () (interactive) (swap-with 'up)))
           ("C-M-S-B" . (lambda () (interactive) (swap-with 'left)))
@@ -1551,28 +1552,37 @@ process regardless."
           ("m" . ghostel-project)
           ("M" . ghostel-project-list-buffers))
   :config
-  (defun ghostel-run (commands)
+  (defun ghostel-run (commands &optional clear)
     (ghostel-send-string (mapconcat 'identity commands "; "))
-    (ghostel-send-key "return")
-    (ghostel-clear-scrollback))
+    (ghostel-send-key "return"))
   (defun new-ghostel (prefix name &optional arg)
     "A variant of `new-shell' that creates a ghostel buffer rather than a
 shell buffer."
     (interactive "P\nsName: ")
     (when (equal name "")
       (setq name (find-useful-directory-name default-directory)))
-    (let ((ghostel-buffer-name (concat "<·" name "·>")))
-     (pop-to-buffer ghostel-buffer-name)
-     (ghostel))
+    (let ((ghostel-buffer-name (concat "<·" name "·>"))
+          (ghostel-buffer-already-existed (eq (get-buffer ghostel-buffer-name) 'nil)))
+      ;; XXX: create/switch to an empty buffer as a way to get
+      ;; `pop-to-buffer' behavior for ghostel—there has to be a cleaner
+      ;; way to do this!
+      (pop-to-buffer "*ghostel-placeholder*")
+      (ghostel)
 
-    ;; TODO: this only works on ZSH (ie on Darwin), I'll need to add
-    ;; different logic for bash/etc
-    (ghostel-run (list (concat "export PS1=$'" (shell-prompt name default-directory 'zsh) "'")))
-    (let ((remote (file-remote-p default-directory)))
-      (unless remote
-        (ghostel-run
-         (list (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))
-               "direnv allow 2> /dev/null"))))))
+      (unless ghostel-buffer-already-existed
+        ;; TODO: this only works on ZSH (ie on Darwin), I'll need to add
+        ;; different logic for bash/etc
+        (ghostel-run (list (concat "export PS1=$'" (shell-prompt name default-directory 'zsh) "'")))
+        (ghostel-clear-scrollback)
+        (let ((remote (file-remote-p default-directory)))
+          (unless remote
+            (ghostel-run
+             (list (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))
+                   "direnv allow 2> /dev/null"))
+            (ghostel-clear-scrollback)))))))
+
+(use-package ghostel-ime
+  :hook (ghostel-mode . ghostel-ime-mode))
 
                                         ; ELISP
 (use-package elisp-mode
