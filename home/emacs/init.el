@@ -1552,6 +1552,24 @@ process regardless."
           ("m" . ghostel-project)
           ("M" . ghostel-project-list-buffers))
   :config
+  (defvar-local ghostel-base-name nil
+    "Base name given to a ghostel buffer at creation (see `new-ghostel').
+Used by `ghostel-buffer-name-with-base' to build a title-suffixed name
+while keeping this base fixed.")
+
+  (defun ghostel-buffer-name-with-base (title)
+    "A `ghostel-buffer-name-function' that keeps `ghostel-base-name' fixed
+and appends the terminal TITLE, producing \"<·BASE·TITLE·>\" (or
+\"<·BASE·>\" when TITLE is nil or empty).  Falls back to
+`ghostel-buffer-name-by-title' when `ghostel-base-name' is unset, ie for
+buffers not created via `new-ghostel'."
+    (if ghostel-base-name
+        (if (and title (not (string= "" title)))
+            (format "<·%s·%s·>" ghostel-base-name title)
+          (format "<·%s·>" ghostel-base-name))
+      (ghostel-buffer-name-by-title title)))
+  (setq ghostel-buffer-name-function #'ghostel-buffer-name-with-base)
+
   (defun ghostel-run (commands &optional clear)
     (ghostel-send-string (mapconcat 'identity commands "; "))
     (ghostel-send-key "return"))
@@ -1568,6 +1586,7 @@ shell buffer."
       ;; way to do this!
       (pop-to-buffer "*ghostel-placeholder*")
       (ghostel)
+      (setq-local ghostel-base-name name)
 
       (unless ghostel-buffer-already-existed
         ;; TODO: this only works on ZSH (ie on Darwin), I'll need to add
