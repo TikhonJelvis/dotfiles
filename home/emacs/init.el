@@ -1562,7 +1562,7 @@ shell buffer."
     (when (equal name "")
       (setq name (find-useful-directory-name default-directory)))
     (let ((ghostel-buffer-name (concat "<·" name "·>"))
-          (ghostel-buffer-already-existed (eq (get-buffer ghostel-buffer-name) 'nil)))
+          (ghostel-buffer-already-existed (not (eq (get-buffer ghostel-buffer-name) 'nil))))
       ;; XXX: create/switch to an empty buffer as a way to get
       ;; `pop-to-buffer' behavior for ghostel—there has to be a cleaner
       ;; way to do this!
