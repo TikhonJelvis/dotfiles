@@ -1580,20 +1580,22 @@ shell buffer."
     (when (equal name "")
       (setq name (find-useful-directory-name default-directory)))
     (let ((ghostel-buffer-name (concat "<·" name "·>"))
-          (ghostel-buffer-already-existed (not (eq (get-buffer ghostel-buffer-name) 'nil))))
+          (ghostel-buffer-already-existed (not (eq (get-buffer ghostel-buffer-name) 'nil)))
+          (target-directory default-directory))
       ;; XXX: create/switch to an empty buffer as a way to get
       ;; `pop-to-buffer' behavior for ghostel—there has to be a cleaner
       ;; way to do this!
       (pop-to-buffer "*ghostel-placeholder*")
-      (ghostel)
+
+      (let ((default-directory target-directory)) (ghostel))
       (setq-local ghostel-base-name name)
 
       (unless ghostel-buffer-already-existed
         ;; TODO: this only works on ZSH (ie on Darwin), I'll need to add
         ;; different logic for bash/etc
-        (ghostel-run (list (concat "export PS1=$'" (shell-prompt name default-directory 'zsh) "'")))
+        (ghostel-run (list (concat "export PS1=$'" (shell-prompt name target-directory 'zsh) "'")))
         (ghostel-clear-scrollback)
-        (let ((remote (file-remote-p default-directory)))
+        (let ((remote (file-remote-p target-directory)))
           (unless remote
             (ghostel-run
              (list (format "export PAGER=%s" (expand-file-name "~/local/bin/epage"))
