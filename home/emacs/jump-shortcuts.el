@@ -18,10 +18,21 @@ and NAME is a display name to show in the menu.")
 `shortcuts-core-shortcuts'."
   shortcuts-core-shortcuts)
 
+(defun shortcuts-from-dir (directory)
+  "Return a list of directories in the given directory.
+
+Example: (shortcuts-from-dir \"~/Programming\") exposes all the
+subdirectories of my Programming directory."
+  (let ((files (cddr (directory-files directory))))
+    (mapcar (lambda (f) (cons f (format "%s/%s" directory f))) files)))
+
 (defun shortcuts-programming-projects ()
-  "Return a list of directories in ~/Programming."
-  (let ((files (cddr (directory-files "~/Programming"))))
-    (mapcar (lambda (f) (cons f (format "~/Programming/%s" f))) files)))
+  "Subdirectories under ~/Programming"
+  (shortcuts-from-dir "~/Programming"))
+
+(defun shortcuts-programming-projects-work ()
+  "Subdirectories under ~/Programming/work"
+  (shortcuts-from-dir "~/Programming/work"))
 
 (defun is-git-directory (dir)
   "Is the given path a git repository? Checks that the directory
@@ -39,7 +50,7 @@ exists and contains a .git subdirectory."
     ("📓 • misc" . "~/Dropbox/org/misc.org")
     ("📓 • work" . "~/Dropbox/org/work.org")))
 
-(defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects)
+(defcustom shortcuts-sources '(shortcuts-core shortcuts-programming-projects shortcuts-programming-projects-work)
   "Sources for shortcut locations to jump to.
 
 This should be a list where each entry is a function that takes
