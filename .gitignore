@@ -17,3 +17,6 @@ work-shortcuts.el
 # Haskell
 dist
 dist-newstyle
+
+# Claude
+.claude
