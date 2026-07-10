@@ -82,27 +82,38 @@
 
   services.maestral.enable = true;
 
-  programs = {
-    bash = let
-      semgrep-options = ''
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-      '';
-    in {
+  programs = let
+    semgrep-options = ''
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    '';
+
+    shellInit = ''
+      unset __HM_SESS_VARS_SOURCED
+      source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+    '' + lib.optionalString pkgs.stdenv.isDarwin semgrep-options;
+  in {
+    bash = {
       enable = true;
 
       sessionVariables = config.home.sessionVariables;
 
-      initExtra = ''
-        unset __HM_SESS_VARS_SOURCED
-        source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-      '' + lib.optionalString pkgs.stdenv.isDarwin semgrep-options;
+      initExtra = shellInit;
     };
 
     fish.enable = false;
 
+    zsh = {
+      enable = true;
+
+      sessionVariables = config.home.sessionVariables;
+
+      initContent = shellInit;
+    };
+
     direnv = {
       enable = true;
       enableBashIntegration = true;
+      enableZshIntegration = true;
       enableFishIntegration = false;
 
       nix-direnv.enable = true;
