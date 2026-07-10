@@ -8,4 +8,15 @@ in
     pkgs.nerd-fonts.symbols-only
     input-font
   ];
+
+  programs = {
+    bash.initExtra = ''
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    '';
+
+    zsh.initContent = ''
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+      source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+    '';
+  };
 }

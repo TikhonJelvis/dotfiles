@@ -83,14 +83,10 @@
   services.maestral.enable = true;
 
   programs = let
-    semgrep-options = ''
-      eval "$(/opt/homebrew/bin/brew shellenv)"
-    '';
-
     shellInit = ''
       unset __HM_SESS_VARS_SOURCED
       source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-    '' + lib.optionalString pkgs.stdenv.isDarwin semgrep-options;
+    '';
   in {
     bash = {
       enable = true;
