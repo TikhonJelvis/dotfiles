@@ -25,6 +25,7 @@
     sessionPath = [
       "$HOME/.nix-profile/bin"
       "$HOME/local/bin"
+      "$HOME/.local/bin"
 
       "/nix/var/nix/profiles/default/bin"
       "/run/wrappers/bin"
@@ -98,12 +99,9 @@
 
     fish.enable = false;
 
+    # TODO: have zsh-specific session variables?
     zsh = {
       enable = true;
-
-      sessionVariables = config.home.sessionVariables;
-
-      initContent = shellInit;
     };
 
     direnv = {
