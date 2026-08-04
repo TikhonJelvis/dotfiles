@@ -1,6 +1,6 @@
 { config, pkgs, lib, ...}:
 {
-  imports = [ ./sources.nix ./ssh.nix ./maestral.nix ../utils ];
+  imports = [ ./sources.nix ./ssh.nix ../utils ];
 
   nixpkgs = {
     config   = import ./config.nix;
@@ -80,8 +80,6 @@
   fonts.fontconfig.enable = true;
 
   news.display = "silent";
-
-  services.maestral.enable = true;
 
   programs = let
     shellInit = ''

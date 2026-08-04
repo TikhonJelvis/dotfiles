@@ -3,6 +3,9 @@
   imports = [
     ./base
 
+    # Linux-only: implemented with systemd.user.services, which macOS lacks.
+    ./base/maestral.nix
+
     ./emacs/linux.nix
 
     ./firefox
@@ -42,6 +45,8 @@
   programs.git.settings.user.email = "tikhon@jelv.is";
 
   services.lorri.enable = true;
+
+  services.maestral.enable = true;
 
   # 2023-08-15: Not working in 23.05 (or 23.11)
   #
