@@ -4,6 +4,7 @@
     ./base
     ./base/darwin.nix
     ./emacs/darwin.nix
+    ./o9-liveserver.nix
   ];
 
   home = {
@@ -36,6 +37,12 @@
 
   programs.git = {
     ignores = [ ".DS_Store" ];
-    settings.user.email = "tikhon@jelv.is";
+    settings = {
+      user = {
+        name = "Tikhon Jelvis";
+        email = "tikhon@jelv.is";
+      };
+      rerere.enabled = true;
+    };
   };
 }
