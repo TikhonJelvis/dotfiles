@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; Defines a menu of common locations for me to quickly jump to: home
 ;;; directory, downloads, key org files, programming projects... etc.
 

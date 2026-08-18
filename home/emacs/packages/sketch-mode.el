@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; derived-mode-ex.el --- example of a CC Mode derived mode for a new language
 
 ;; Author:     Tikhon Jelvis <tikhon@jelv.is>

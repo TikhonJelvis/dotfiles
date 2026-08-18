@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'man)
 
 (define-derived-mode stdout-mode fundamental-mode "STDOUT"

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Modified Blackboard Color Theme for Emacs.
 ;;
 ;; MIT License Copyright (c) 2008 JD Huntington <jdhuntington at gmail dot com>

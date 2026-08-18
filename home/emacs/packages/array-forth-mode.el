@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; array-forth-mode.el
 
 ;; Copyright (C) 2012 Tikhon Jelvis

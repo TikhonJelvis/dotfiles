@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; cfdg-mode.el --- major mode for Context-Free Art files
 
 ;; Copyright (C) Brent Sanders 2008

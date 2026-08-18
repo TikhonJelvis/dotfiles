@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
                                         ; POWERLINE
 (powerline-default-theme)
 

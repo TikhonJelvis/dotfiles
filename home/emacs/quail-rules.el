@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (let ((quail-current-package (assoc "TeX" quail-package-alist)))
   ;; A few extra symbols I find useful.
   (quail-define-rules ((append . t))

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Had to pull this out into a file because the Nix Elisp parser
 ;; didn't like literals like #x2300 :/
 

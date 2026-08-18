@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; A mode for interacting with gosu programs.
 ;;
 ;; This is not a mode for interacting with _inferior gosu processes_; rather, it
