@@ -32,7 +32,9 @@ subdirectories of my Programming directory."
 
 (defun shortcuts-programming-projects-work ()
   "Subdirectories under ~/Programming/work"
-  (shortcuts-from-dir "~/Programming/work"))
+  (append
+   (shortcuts-from-dir "~/Programming/work")
+   (shortcuts-from-dir "~/Programming/work/esm")))
 
 (defun is-git-directory (dir)
   "Is the given path a git repository? Checks that the directory
