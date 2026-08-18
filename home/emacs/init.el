@@ -496,9 +496,6 @@ overriding defaults. For example, to use a different
   (completion-ignore-case t)
   :config
   (load-file (dotfile "emacs/jump-shortcuts.el"))
-  (when (is-work)
-    (load-file (dotfile "emacs/work-shortcuts.el"))
-    (add-to-list 'shortcuts-sources #'shortcuts-mercury))
   (add-to-list 'shortcuts-core-shortcuts `("init.el" . ,(dotfile "emacs/init.el")))
   (unless (eq system-type 'darwin)
     (add-to-list 'shortcuts-core-shortcuts '("Dropbox" . "~/Dropbox"))
