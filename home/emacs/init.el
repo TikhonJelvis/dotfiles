@@ -2098,6 +2098,8 @@ buffer."
     (setq sentence-end-double-space nil))
   (add-hook 'markdown-mode-hook #'my-markdown-hook))
 
+(use-package markdown-ts-mode)
+
 (defun copy-markdown-formatted ()
   "Copy a region or buffer in Markdown as RTF—convenient way to
 get Markdown-formatted text into email/Word/etc."
