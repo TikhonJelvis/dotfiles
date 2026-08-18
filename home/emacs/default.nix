@@ -2,7 +2,7 @@
 {
   options.emacs = lib.mkOption {
     type = lib.types.package;
-    default = pkgs.emacs;
+    default = pkgs.emacs31;
     description = "Base Emacs packages to start from.";
   };
 

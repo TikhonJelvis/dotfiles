@@ -2,5 +2,5 @@
 {
   imports = [ ./default.nix ];
 
-  emacs = pkgs.emacs-pgtk.override {withNativeCompilation = false;};
+  emacs = pkgs.emacs31-pgtk.override {withNativeCompilation = false;};
 }
