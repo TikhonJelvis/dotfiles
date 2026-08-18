@@ -1,3 +1,4 @@
+;;  -*- lexical-binding: t; -*-
 ;; A simple mode for editing the TPL language.
 ;;
 ;; Author: Tikhon Jelvis

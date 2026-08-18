@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;; The easiest way to make an Emacs mode is to use the generic-mode macro.
 ;; Since I am inherently lazy, this is what I have done here.
 ;; This was loosely based off of gosu-mode at http://gosu-lang.org/downloads/gosu-mode.el
