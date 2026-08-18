@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defvar tikhon-emacs-symbols-font-alist
   '(("sticky-notes" . "\xe900")
     ("settings" . "\xe901")
