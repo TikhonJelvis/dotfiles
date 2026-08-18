@@ -261,25 +261,29 @@ size. Designed to work with `window-size-change-functions'."
 ;; For enabling color themes:
 (setq custom-theme-directory (dotfile "emacs/themes"))
 (setq custom-safe-themes t)
-(load-theme 'blackboard t)
 
 ;;; the theme definition for my version of blackboard uses color
 ;;; functions like `color-lighten-name' which depend on the selected
-;;; frame
+;;; frame (eg for faces like `vertico-posframe')
 ;;;
-;;; this was causing incorrect behavior when Emacs is started up
-;;; /without/ a frame (ie starting a server before launching a
-;;; client), so color calculations would be performed incorrectly (!)
+;;; when Emacs is started up as a daemon, there's no frame yet, so
+;;; `display-graphic-p' is nil and these color functions fall back to
+;;; a broken TTY approximation—eg treating our navy background
+;;; #0C1021 as pure blue—baking wrong colors (a stray light blue)
+;;; into faces that use them
 ;;;
-;;; as a hacky workaround, we can just (re)load the theme the first
-;;; time that we create a new frame
+;;; to avoid ever computing colors incorrectly, don't load the theme
+;;; at all until the first real frame exists
 (defvar frame-created nil "Has a frame been created before?")
 (defun load-theme-after-frame-hook ()
-  "Load my default theme when a frame is created for the first time by a server."
+  "Load my default theme once, when a frame is created for the first time by a server."
   (unless frame-created
     (load-theme 'blackboard t))
   (setq frame-created t))
-(add-hook 'server-after-make-frame-hook #'load-theme-after-frame-hook)
+
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'load-theme-after-frame-hook)
+  (load-theme 'blackboard t))
 
 ;;Make the window simpler:
 (tool-bar-mode -1)
