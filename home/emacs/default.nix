@@ -1,5 +1,15 @@
 { pkgs, config, lib, ... }:
-{
+let
+  # Tree-sitter grammars built via Nix instead of downloaded at
+  # runtime by `treesit-install-language-grammar'.
+  #
+  # Saved to ~/.emacs.d/tree-sitter
+  treesitGrammars = pkgs.runCommand "emacs-treesit-grammars" { } ''
+    mkdir -p $out
+    ln -s ${pkgs.tree-sitter-grammars.tree-sitter-markdown}/parser $out/libtree-sitter-markdown.so
+    ln -s ${pkgs.tree-sitter-grammars.tree-sitter-markdown-inline}/parser $out/libtree-sitter-markdown-inline.so
+  '';
+in {
   options.emacs = lib.mkOption {
     type = lib.types.package;
     default = pkgs.emacs31;
@@ -50,6 +60,8 @@
           (load "${toString ./init.el}")
         '';
       };
+
+      ".emacs.d/tree-sitter".source = treesitGrammars;
     };
   };
 }

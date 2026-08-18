@@ -2106,7 +2106,7 @@ get Markdown-formatted text into email/Word/etc."
                (if (use-region-p)
                    (list (region-beginning) (region-end))
                  '(nil 0))))
-      (call-process-region start end "formatted-copy")))
+    (call-process-region start end "formatted-copy")))
 
                                         ; LATEX
 
