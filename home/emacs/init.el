@@ -435,6 +435,17 @@ returns the same value as the function."
 (advice-add 'split-window :filter-return #'my-balance-windows-advice)
 (advice-add 'delete-window :filter-return #'my-balance-windows-advice)
 
+                                        ; GENERAL TEXT UTILITIES
+;; From Sacha Chua's blog post:
+;;
+;; https://sachachua.com/blog/2025/09/emacs-cycle-through-different-paragraph-formats-all-on-one-line-wrapped-max-one-sentence-per-line-one-sentence-per-line/
+(defun unfill-paragraph ()
+  "Replace newline chars in current paragraph by single spaces.
+This command does the inverse of `fill-paragraph'."
+  (interactive)
+  (let ((fill-column most-positive-fixnum))
+    (fill-paragraph)))
+
                                         ; COMPLETION AND NAVIGATION
 (use-package consult
   :ensure t)
