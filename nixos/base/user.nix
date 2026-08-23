@@ -11,7 +11,7 @@
 with lib;
 
 let
-  user-cfg = config.default-user;
+  user = config.default-user;
 in
 {
   options.default-user = {
@@ -50,12 +50,14 @@ in
     };
   };
 
-  # Don't forget to set up a password file on each machine
-  config.users.users.${user-cfg.name} = {
-    isNormalUser = true;
-    inherit (user-cfg) description extraGroups;
-  };
+  config = {
+    # Don't forget to set up a password file on each machine
+    users.users.${user.name} = {
+      isNormalUser = true;
+      inherit (user) description extraGroups;
+    };
 
-  # Expose the GitHub username to scripts (ie nixos/bin/post-install).
-  environment.etc."nixos-configs/github-user".text = cfg.github;
+    # Expose the GitHub username to scripts (ie nixos/bin/post-install).
+    environment.etc."nixos-configs/github-user".text = user.github;
+  };
 }
