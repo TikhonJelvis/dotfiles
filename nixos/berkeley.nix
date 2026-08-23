@@ -42,16 +42,22 @@
   services.openssh = {
     enable = true;
 
-    banner = "tikhon-berkeley-nixos";
-
     allowSFTP = false;
     listenAddresses = [ { addr = "192.168.0.37"; port = 22; } ];
 
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
+      Banner = "/etc/ssh/banner.txt";
     };
   };
+
+  # banner file for SSH
+  environment.etc."ssh/banner.txt".text = ''
+  ──────────────────────┐
+│ Tikhon NixOS Berkeley │
+└──────────────────────
+'';
 
   boot = {
     loader = {
