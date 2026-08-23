@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# username is set when the install ISO was created, based on the
+# config in nixos/base/user.git
+#
+# if you aren't Tikhon Jelvis, you should probably change the setting
+# in that file!
+NEW_USER="$(cat /etc/nixos-configs/new-user)"
+MACHINE_NAME="${1:?Usage: install-helper.sh <machine-name>}"
+
+TARGET=/mnt
+DOTFILES=/etc/nixos-configs/dotfiles
+DOTFILES_DEST="$TARGET/home/$NEW_USER/Programming/dotfiles"
+MACHINE_CONFIG="Programming/dotfiles/nixos/${MACHINE_NAME}.nix"
+
+# if we're using a hashed password file baked in during ISO creation:
+if [ -f /etc/nixos-configs/password-hash ]; then
+  install -m 0600 /etc/nixos-configs/password-hash "$TARGET/home/$NEW_USER/pass"
+fi
+
+mkdir -p "$(dirname "$DOTFILES_DEST")"
+cp -r "$DOTFILES" "$DOTFILES_DEST"
+chmod -R u+w "$DOTFILES_DEST"
+
+# check for mistakes in the machine name (typos or forgetting to
+# create/git add the new <machine-name>.nix file)
+if [ ! -f "$DOTFILES_DEST/nixos/${MACHINE_NAME}.nix" ]; then
+  echo "ERROR: $DOTFILES_DEST/nixos/${MACHINE_NAME}.nix not found" >&2
+  echo "Available machine configs:" >&2
+  ls "$DOTFILES_DEST/nixos/"*.nix >&2
+  exit 1
+fi
+
+nixos-generate-config --root "$TARGET"
+
+mkdir -p "$DOTFILES_DEST/nixos/hardware-configuration"
+cp "$TARGET/etc/nixos/hardware-configuration.nix" \
+   "$DOTFILES_DEST/nixos/hardware-configuration/${MACHINE_NAME}.nix"
+
+mkdir -p "$TARGET/etc/nixos"
+ln -sf "../../home/$NEW_USER/$MACHINE_CONFIG" "$TARGET/etc/nixos/configuration.nix"
+
+nixos-install --root "$TARGET"
+
+NEW_UID=$(nixos-enter --root "$TARGET" -c "id -u $NEW_USER")
+NEW_GID=$(nixos-enter --root "$TARGET" -c "id -g $NEW_USER")
+chown -R "$NEW_UID:$NEW_GID" "$DOTFILES_DEST"

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Run this script on the machine *after* nixos-install runs
+# successfully and you can boot into the newly installed NixOS system
+
+DOTFILES="$HOME/Programming/dotfiles"
+GITHUB_USER="$(cat /etc/nixos-configs/github-user)"
+REMOTE_URL="git@github.com:you/dotfiles.git"
+BRANCH="main"
+
+# make sure I didn't forget to generate new keys for the new machine!
+if [ ! -f "$HOME/.ssh/id_ed25519" ] && [ ! -f "$HOME/.ssh/id_rsa" ]; then
+  echo "No SSH key found in ~/.ssh." >&2
+  echo "Generate one and add it to GitHub, then re-run this script:" >&2
+  echo "  ssh-keygen -t ed25519 -C \"$(hostname)\"" >&2
+  echo "  cat ~/.ssh/id_ed25519.pub   # paste into https://github.com/settings/keys" >&2
+  exit 1
+fi
+
+cd $DOTFILES
+
+# The install script copies over the dotfiles from when the iso was
+# generated, but does not copy over the .git file, so we need to
+# explicitly init a git repo once the install is done.
+if [ ! -d .git ]; then
+  git init
+  git remote add origin "$REMOTE_URL"
+fi
+
+git fetch origin
+git reset --mixed "origin/$BRANCH"
+
+git add nixos/hardware-configuration
+if ! git diff --cached --quiet; then
+  git commit -m "Add machine-generated files from install"
+fi
+
+echo "Review 'git status' / 'git diff --cached' before pushing."
+echo "When ready: git push -u origin $BRANCH"

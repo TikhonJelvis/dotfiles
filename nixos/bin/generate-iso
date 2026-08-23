@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# build-iso.sh <new-machine-configuration.nix>
+set -euo pipefail
+git add "$(realpath "$1")"
+NEW_MACHINE_CONFIG="$(realpath "$1")" nixos-generate -f install-iso -c iso-config.nix -o result
