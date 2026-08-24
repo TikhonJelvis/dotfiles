@@ -31,11 +31,6 @@
 (add-to-list 'load-path "~/.emacs.d/packages")
 (add-to-list 'load-path (dotfile "emacs/packages"))
 
-                                        ; WORK
-(defun is-work ()
-  "Am I on a work computer?"
-  (string= (system-name) "tikhon-nixos-mercury"))
-
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
