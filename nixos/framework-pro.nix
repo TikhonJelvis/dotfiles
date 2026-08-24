@@ -8,7 +8,7 @@ in
 {
   imports = [
     ./base/laptop.nix
-    ./hardware-configuration/framework-pronix
+    ./hardware-configuration/framework-pro.nix
     (sources.nixos-hardware + "/framework/13-inch/amd-ai-300-series")
   ];
 

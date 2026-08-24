@@ -10,17 +10,12 @@ NEW_USER="$(cat /etc/nixos-configs/new-user)"
 MACHINE_NAME="${1:?Usage: install-helper.sh <machine-name>}"
 
 TARGET=/mnt
-DOTFILES=/etc/nixos-configs/dotfiles
+DOTFILES=/etc/dotfiles
 DOTFILES_DEST="$TARGET/home/$NEW_USER/Programming/dotfiles"
 MACHINE_CONFIG="Programming/dotfiles/nixos/${MACHINE_NAME}.nix"
 
-# if we're using a hashed password file baked in during ISO creation:
-if [ -f /etc/nixos-configs/password-hash ]; then
-  install -m 0600 /etc/nixos-configs/password-hash "$TARGET/home/$NEW_USER/pass"
-fi
-
 mkdir -p "$(dirname "$DOTFILES_DEST")"
-cp -r "$DOTFILES" "$DOTFILES_DEST"
+cp -rL "$DOTFILES" "$DOTFILES_DEST"
 chmod -R u+w "$DOTFILES_DEST"
 
 # check for mistakes in the machine name (typos or forgetting to
@@ -30,6 +25,11 @@ if [ ! -f "$DOTFILES_DEST/nixos/${MACHINE_NAME}.nix" ]; then
   echo "Available machine configs:" >&2
   ls "$DOTFILES_DEST/nixos/"*.nix >&2
   exit 1
+fi
+
+# if we're using a hashed password file baked in during ISO creation:
+if [ -f /etc/nixos-configs/password-hash ]; then
+  install -m 0600 /etc/nixos-configs/password-hash "$TARGET/home/$NEW_USER/pass"
 fi
 
 nixos-generate-config --root "$TARGET"

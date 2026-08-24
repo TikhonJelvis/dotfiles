@@ -36,7 +36,12 @@ As long as the generation process worked, you should be able to SSH into the Liv
 
   1. Log in. The nixos user should login with an empty password.
   2. Connect to WiFi if needed
-  3. Partition the new system by running `gparted`
+  3. Partition the new system by running `sudo gparted` (see "partitioning" section for notes)
+    1. Create a new partition table of the `gpt` type
+    2. Create boot partition
+    3. Create other partitions
+    4. Apply
+    5. Right click "manage flags" on boot partition, check `esp` (which should also check `boot` automatically)
   4. Mount the new partitions at `/mnt`:
   
     ``` bash
@@ -49,3 +54,14 @@ As long as the generation process worked, you should be able to SSH into the Liv
   7. Create SSH keys + upload to GitHub
   8. `cd ~/Programming/dotfiles` then run `nixos/bin/post-install`
   9. If everything works, review and push the dotfile changes to GitHub
+
+### Partitioning
+
+The way you want to partition the system depends on the context (how many drives you have, how you want to use them, whether you are going to be dual-booting...)
+
+For the simplest case we just need two partitions:
+
+  - FAT32 `boot` EFI system partition (512 MiB)
+  - ext4 for everything else
+  
+There is no need for a swap partition any more, but you can consider setting `zramSwap.enable = true` in your configuration.nix.
