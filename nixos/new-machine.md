@@ -2,7 +2,7 @@
 
 We can set up a new machine by `nixos-generators` to make a NixOS ISO that bakes in a configuration file for that machine. (`nixos-generators` is installed in `nixos/base/default.nix`)
 
-## Generating ISO File
+## Generating ISO file
 
   1. `cd nixos`
   2. Set up a new `<machine>.nix` file.
@@ -19,13 +19,24 @@ sudo dd if=result/iso/nixos-*.iso of=/dev/sdf bs=4M status=progress conv=fsync
     ```
   4. Eject: `sudo eject /dev/sdf`
 
-## Installing
+## On the new machine
 
-On the new machine:
+Boot into the live USB on the new machine.
 
-  1. `startx` to start the X server
-  2. Connect to WiFi from the NM applet
-  3. Partition the new system:  `alt+d` to run `gparted`
+### SSH
+
+To help debugging, the generated .iso enables SSH and enables the public key of the machine that generated the .iso
+
+As long as the generation process worked, you should be able to SSH into the Live USB machine if it's connected to a local network (ie via ethernet):
+
+  1. Run `ip addr` on the new machine to get its IP
+  2. `ssh root@<ip-addr>` from the old machine
+
+### Installing
+
+  1. Log in. The nixos user should login with an empty password.
+  2. Connect to WiFi if needed
+  3. Partition the new system by running `gparted`
   4. Mount the new partitions at `/mnt`:
   
     ``` bash

@@ -1,10 +1,18 @@
 { config, pkgs, lib, ... }:
 let
+  home = builtins.getEnv "HOME";
+  pub-key-path = home + "/.ssh/id_rsa.pub"; # change this if you have a different key
+  pub-key =
+    if builtins.pathExists pub-key-path
+    then lib.strings.trim (builtins.readFile pub-key-path)
+    else throw "No public key found at ${pub-key-path}; generate one or edit iso-config.nix";
+
   password-file = /home + "/${config.default-user.name}/pass";
 in
 {
   imports = [
     ./base/user.nix
+    ./base/laptop.nix
   ];
 
   environment.systemPackages = with pkgs;
@@ -23,37 +31,5 @@ in
 
   # SSH
   services.openssh.enable = true;
-
-  # enough of an X setup to run gparted and nm applet (via i3):
-  services.xserver = {
-    enable = true;
-    displayManager.startx.enable = true;
-    desktopManager.xterm.enable = false;
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [ networkmanagerapplet dmenu i3status ];
-      extraSessionCommands = ''
-        ${pkgs.networkmanagerapplet}/bin/nm-applet &
-      '';
-      configFile = pkgs.writeText "i3-live-config" ''
-        set $mod Mod1
-        font pango:monospace 10
-
-        bindsym $mod+Return exec i3-sensible-terminal
-        bindsym $mod+d exec dmenu_run
-        bindsym $mod+Shift+e exit
-
-        bar {
-            status_command ${pkgs.i3status}/bin/i3status
-        }
-      '';
-    };
-  };
-  services.displayManager.defaultSession = "none+i3";
-
-  # to let me choose a WiFi network from a GUI widget:
-  environment.etc."icewm/startup".text = ''
-    #!/bin/sh
-    nm-applet &
-  '';
+  users.users.root.openssh.authorizedKeys.keys = [ pub-key ];
 }
