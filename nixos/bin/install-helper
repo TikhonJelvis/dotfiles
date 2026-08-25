@@ -45,4 +45,4 @@ nixos-install --root "$TARGET"
 
 NEW_UID=$(nixos-enter --root "$TARGET" -c "id -u $NEW_USER")
 NEW_GID=$(nixos-enter --root "$TARGET" -c "id -g $NEW_USER")
-chown -R "$NEW_UID:$NEW_GID" "$DOTFILES_DEST"
+chown -R "$NEW_UID:$NEW_GID" "$TARGET/home/$NEW_USER"
