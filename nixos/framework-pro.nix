@@ -19,6 +19,16 @@ in
     hostName = "tikhon-nixos-framework-pro";
   };
 
+  # Mullvad VPN just on this machine for now, but might expand this to
+  # other machines later
+  services.mullvad-vpn = {
+    enable = true;
+    gui.enable = true;
+
+    enableExcludeWrapper = true; # lets you exclude specific apps from the tunnel
+    enableEarlyBootBlocking = false; # I don't care about leak-proofing
+  };
+
   # firmware updates: see nixos-hardware docs[1][2] for details
   #
   # fwupdmgr refresh
