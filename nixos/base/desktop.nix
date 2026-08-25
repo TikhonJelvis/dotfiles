@@ -13,10 +13,6 @@
   # set to "" to get an error with all available session names
   services.displayManager.defaultSession = "home-manager";
 
-  # Wacom tablet
-  environment.systemPackages = with pkgs; [ wacomtablet ];
-  services.xserver.wacom.enable = true;
-
   # software monitor control (DDC)
   services.ddccontrol.enable = true;
 

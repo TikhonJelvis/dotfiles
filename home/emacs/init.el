@@ -31,11 +31,6 @@
 (add-to-list 'load-path "~/.emacs.d/packages")
 (add-to-list 'load-path (dotfile "emacs/packages"))
 
-                                        ; WORK
-(defun is-work ()
-  "Am I on a work computer?"
-  (string= (system-name) "tikhon-nixos-mercury"))
-
                                         ; MAC-SPECIFIC SETTINGS
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta)
@@ -213,6 +208,7 @@ screens.")
 (defvar basis-font-size-override
   '((("tikhon-nixos-x1" "eDP-1") . 45)
     (("tikhon-nixos-framework" "eDP-1") . 80)
+    (("tikhon-nixos-framework-pro" "eDP-1") . 45)
     (("tikhon-nixos-mercury" "eDP-1") . 80)
     (("tikhon-nixos-mercury" "combined screen") . 160)
     ;; HDMI connection (for 1080p monitor in Tahoe)

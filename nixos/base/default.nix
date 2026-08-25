@@ -12,15 +12,20 @@
   imports =
     [
       ./fonts
+      ./user.nix
     ];
 
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "America/Los_Angeles";
-
-  programs.steam.enable = true;
+  console.keyMap = "us";
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.systemPackages = with pkgs; [
+    nixos-generators # for setting up new machines; see nixos/new-machines.md
+  ];
+
+  programs.steam.enable = true;
   nixpkgs.overlays = [
     (self: super: {
       steam = super.steam.override {
@@ -221,20 +226,5 @@
         waitPID=$!
       '';
     }];
-  };
-
-  # Don't forget to set up a password file on each machine
-  users.users = {
-    tikhon = {
-      isNormalUser = true;
-      description = "Tikhon Jelvis";
-      extraGroups = [
-        "wheel" # enable ‘sudo’
-        "docker"
-        "scanner" # sane
-        "lp" # sane
-        "networkmanager"
-      ];
-    };
   };
 }

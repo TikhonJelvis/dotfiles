@@ -23,10 +23,16 @@ and NAME is a display name to show in the menu.")
 (defun shortcuts-from-dir (directory)
   "Return a list of directories in the given directory.
 
+Returns '() if the directory does not exist. This lets us fail
+gracefully for stuff like `shortcuts-programming-projects-work' when not
+on a work machine.
+
 Example: (shortcuts-from-dir \"~/Programming\") exposes all the
 subdirectories of my Programming directory."
-  (let ((files (cddr (directory-files directory))))
-    (mapcar (lambda (f) (cons f (format "%s/%s" directory f))) files)))
+  (if (file-exists-p directory)
+      (let ((files (cddr (directory-files directory))))
+        (mapcar (lambda (f) (cons f (format "%s/%s" directory f))) files))
+    '()))
 
 (defun shortcuts-programming-projects ()
   "Subdirectories under ~/Programming"
