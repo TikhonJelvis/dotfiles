@@ -18,6 +18,14 @@ in
     hostName = "tikhon-nixos-framework";
   };
 
+  services.mullvad-vpn = {
+    enable = true;
+    gui.enable = true;
+
+    enableExcludeWrapper = true; # lets you exclude specific apps from the tunnel
+    enableEarlyBootBlocking = false; # I don't care about leak-proofing
+  };
+
   # the systemd-boot EFI boot loader (rather than GRUB/etc)
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
