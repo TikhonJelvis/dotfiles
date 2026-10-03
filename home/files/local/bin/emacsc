@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-/Users/tikhon/.nix-profile/bin/emacsclient --no-wait --quiet --suppress-output --create-frame . "$@"
+emacsclient --no-wait --quiet --suppress-output --create-frame . "$@"
