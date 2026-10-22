@@ -2111,6 +2111,13 @@ buffer."
 
 (use-package markdown-ts-mode)
 
+;; fetch the ESL mode and grammar from the esmcompiler repo (work
+;; only)
+;;
+;; re-evaluate this (or M-x esl-reload) to pick up changes
+(when (bound-and-true-p is-work)
+  (load-file (dotfile "emacs/esl.el")))
+
 (defun copy-markdown-formatted ()
   "Copy a region or buffer in Markdown as RTF—convenient way to
 get Markdown-formatted text into email/Word/etc."

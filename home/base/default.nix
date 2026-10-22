@@ -1,6 +1,6 @@
 { config, pkgs, lib, ...}:
 {
-  imports = [ ./sources.nix ./ssh.nix ../utils ];
+  imports = [ ./sources.nix ./ssh.nix ../utils ../work.nix ];
 
   nixpkgs = {
     config   = import ./config.nix;

@@ -7,6 +7,8 @@
     ./o9-liveserver.nix
   ];
 
+  work.enable = true;
+
   home = {
     username = "tikhon.jelvis";
     homeDirectory = "/Users/tikhon.jelvis";

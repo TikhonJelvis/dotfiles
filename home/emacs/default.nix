@@ -57,6 +57,9 @@ in {
           config."
             (expand-file-name file "${toString ./..}"))
 
+          (defconst is-work ${if config.work.enable then "t" else "nil"}
+            "Non-nil on work machines (the `work.enable' Nix option).")
+
           (load "${toString ./init.el}")
         '';
       };
