@@ -2191,15 +2191,18 @@ get Markdown-formatted text into email/Word/etc."
 (defun typescript-mode-formatting-hook ()
   (message "prettier: %s" (executable-find "prettier"))
   (when (executable-find "prettier")
-    (setq-local format-all-formatters '(("TypeScript" prettier)))
+    (setq-local format-all-formatters '(("TypeScript" prettier)
+                                        ("TSX" prettier)))
     (format-all-mode t)))
 
-(use-package typescript-mode
-  :ensure t
-  :hook ((typescript-mode . typescript-mode-formatting-hook))
+;; built-in; grammars are provided by Nix (see emacs/default.nix)
+(use-package typescript-ts-mode
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+         ("\\.tsx\\'" . tsx-ts-mode))
+  :hook (((typescript-ts-mode tsx-ts-mode) . typescript-mode-formatting-hook))
 
   :custom
-  (typescript-indent-level 2))
+  (typescript-ts-mode-indent-offset 2))
 
 (defun typescript-tide-setup-hook ()
   (direnv-update-environment)
@@ -2208,8 +2211,8 @@ get Markdown-formatted text into email/Word/etc."
 
 (use-package tide
   :ensure t
-  :after (typescript-mode company flycheck)
-  :hook ((typescript-mode . typescript-tide-setup-hook)))
+  :after (typescript-ts-mode company flycheck)
+  :hook (((typescript-ts-mode tsx-ts-mode) . typescript-tide-setup-hook)))
 
                                         ; COMMANDS
 (put 'downcase-region 'disabled nil)

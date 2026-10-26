@@ -4,10 +4,20 @@ let
   # runtime by `treesit-install-language-grammar'.
   #
   # Saved to ~/.emacs.d/tree-sitter
+  #
+  # Keys are language names as treesit knows them.
+  grammars = with pkgs.tree-sitter-grammars; {
+    markdown = tree-sitter-markdown;
+    markdown-inline = tree-sitter-markdown-inline;
+    typescript = tree-sitter-typescript;
+    tsx = tree-sitter-tsx;
+  };
+
   treesitGrammars = pkgs.runCommand "emacs-treesit-grammars" { } ''
     mkdir -p $out
-    ln -s ${pkgs.tree-sitter-grammars.tree-sitter-markdown}/parser $out/libtree-sitter-markdown.so
-    ln -s ${pkgs.tree-sitter-grammars.tree-sitter-markdown-inline}/parser $out/libtree-sitter-markdown-inline.so
+    ${lib.concatStrings (lib.mapAttrsToList (lang: grammar: ''
+      ln -s ${grammar}/parser $out/libtree-sitter-${lang}.so
+    '') grammars)}
   '';
 in {
   options.emacs = lib.mkOption {
