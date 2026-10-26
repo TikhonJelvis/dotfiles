@@ -16,6 +16,14 @@
   :type 'directory
   :group 'esl-ts)
 
+;; TEMPORARY: while I'm actively changing the ESL language and grammar,
+;; load from the working branch's worktree instead of the master
+;; checkout, whose grammar lags behind (no dimensions, views or
+;; annotations).  Remove once that work has merged into master.
+(setq esl-checkout-directory
+      (expand-file-name
+       "~/Programming/work/esm/o9.apex.esmcompiler_tikhon.jelvis-esl2-to-config-dsl/esl"))
+
 (defvar esl-grammar-cache-directory
   (expand-file-name "esl-ts" (or (getenv "XDG_CACHE_HOME") "~/.cache"))
   "Where compiled ESL grammar libraries are kept.")
@@ -67,6 +75,22 @@ Buffers already in `esl-ts-mode' are re-initialized."
       (add-to-list 'treesit-extra-load-path esl-grammar-cache-directory)
       (setf (alist-get 'esl treesit-load-name-override-list)
             (list (esl--grammar-library) "tree_sitter_esl"))
+      ;; Emacs caches compiled queries by (language . source), which
+      ;; outlives a grammar change: a query compiled against the old
+      ;; grammar captures the wrong nodes, and one the old grammar
+      ;; rejected stays disabled.
+      (when (boundp 'treesit--query-cache)
+        (maphash (lambda (key _)
+                   (when (eq (car key) 'esl)
+                     (remhash key treesit--query-cache)))
+                 treesit--query-cache))
+      ;; `defvar' doesn't reset a bound variable, so a reload would keep
+      ;; the old checkout's keyword lists, rules and so on.  Unbind the
+      ;; mode's internal variables first; options (one dash) are kept.
+      (mapatoms (lambda (symbol)
+                  (when (and (boundp symbol)
+                             (string-prefix-p "esl-ts-mode--" (symbol-name symbol)))
+                    (makunbound symbol))))
       (load mode-file nil t)
       ;; The mode registers this itself when loaded, but don't depend on
       ;; it: only map .esl once the mode is actually defined.
