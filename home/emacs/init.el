@@ -450,6 +450,21 @@ This command does the inverse of `fill-paragraph'."
   :ensure t
   :demand t
 
+  :config
+  ;; 2026-08-25: Fix Emacs 31 bug that shifts me to a different Emacs frame in
+  ;; macOS when opening a posframe-based menu.
+  ;;
+  ;; Hopefully this gets fixed in a near-future version of Emacs.
+  (define-advice posframe-show (:before (buffer-or-name &rest args) fresh-frame-per-parent)
+    (let* ((buffer (get-buffer buffer-or-name))
+           (posframe (and buffer (posframe--find-existing-posframe buffer)))
+           (parent (window-frame (or (plist-get args :parent-window)
+                                         (selected-window)))))
+      (when (and posframe
+                 (eq (framep parent) 'ns)
+                 (not (eq (frame-parent posframe) parent)))
+        (posframe-delete-frame buffer))))
+
   :init
   (defun posframe-background-color ()
     (let ((bg (face-attribute 'default :background)))
