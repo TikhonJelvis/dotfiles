@@ -68,6 +68,9 @@ Buffers already in `esl-ts-mode' are re-initialized."
       (setf (alist-get 'esl treesit-load-name-override-list)
             (list (esl--grammar-library) "tree_sitter_esl"))
       (load mode-file nil t)
+      ;; The mode registers this itself when loaded, but don't depend on
+      ;; it: only map .esl once the mode is actually defined.
+      (add-to-list 'auto-mode-alist '("\\.esl\\'" . esl-ts-mode))
       (dolist (buffer (buffer-list))
         (with-current-buffer buffer
           (when (derived-mode-p 'esl-ts-mode)
