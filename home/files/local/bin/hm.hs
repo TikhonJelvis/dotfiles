@@ -33,9 +33,9 @@ build passthrough = do
   homeConfig ← need "HOME_MANAGER_CONFIG" >>= \case
     Just value → pure value
     Nothing    → die "HOME_MANAGER_CONFIG unset, stopping."
-  let homePath = fromText homeConfig
+  let homePath = Text.unpack homeConfig
 
-  when (relative homePath) $
+  when (isRelative homePath) $
     die $ "HOME_MANAGER_CONFIG is relative, should be absolute.\n\
           \HOME_MANAGER_CONFIG=" <> homeConfig
 
@@ -89,8 +89,8 @@ nixBuild target NixOptions {..} = do
 -- * Shell Helpers
 
 ensureDir var = do
-  dir    ← maybe "" fromText <$> need var
+  dir    ← maybe "" Text.unpack <$> need var
   exists ← testdir dir
   if exists then pure dir else mktempdir "." "home-manager-build"
 
-toText' = either id id . toText
+toText' = Text.pack
