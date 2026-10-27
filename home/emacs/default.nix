@@ -7,10 +7,21 @@ let
   #
   # Keys are language names as treesit knows them.
   grammars = with pkgs.tree-sitter-grammars; {
+    bash = tree-sitter-bash;
+    css = tree-sitter-css;
+    dockerfile = tree-sitter-dockerfile;
+    html = tree-sitter-html;
+    javascript = tree-sitter-javascript;
+    json = tree-sitter-json;
+    lua = tree-sitter-lua;
     markdown = tree-sitter-markdown;
     markdown-inline = tree-sitter-markdown-inline;
-    typescript = tree-sitter-typescript;
+    python = tree-sitter-python;
+    rust = tree-sitter-rust;
+    toml = tree-sitter-toml;
     tsx = tree-sitter-tsx;
+    typescript = tree-sitter-typescript;
+    yaml = tree-sitter-yaml;
   };
 
   treesitGrammars = pkgs.runCommand "emacs-treesit-grammars" { } ''

@@ -431,17 +431,6 @@ returns the same value as the function."
 (advice-add 'split-window :filter-return #'my-balance-windows-advice)
 (advice-add 'delete-window :filter-return #'my-balance-windows-advice)
 
-                                        ; GENERAL TEXT UTILITIES
-;; From Sacha Chua's blog post:
-;;
-;; https://sachachua.com/blog/2025/09/emacs-cycle-through-different-paragraph-formats-all-on-one-line-wrapped-max-one-sentence-per-line-one-sentence-per-line/
-(defun unfill-paragraph ()
-  "Replace newline chars in current paragraph by single spaces.
-This command does the inverse of `fill-paragraph'."
-  (interactive)
-  (let ((fill-column most-positive-fixnum))
-    (fill-paragraph)))
-
                                         ; COMPLETION AND NAVIGATION
 (use-package consult
   :ensure t)
@@ -2100,19 +2089,38 @@ buffer."
 (use-package visual-fill-column
   :ensure t)
 
+;; Markdown files open in `markdown-ts-mode', but other code still
+;; uses markdown-mode functions (eg
+;; `emacs-lisp-link-docstring-identifier')
 (use-package markdown-mode
-  :ensure t
-  :after visual-fill-column
-  :mode "\\.md\\'"
+  :ensure t)
 
+;; I install tree-sitter grammars through Nix, so don't prompt to
+;; download missing ones
+(use-package treesit
   :custom
-  (markdown-enable-math t)
+  (treesit-auto-install-grammar 'never))
 
-  :bind
-  ("C-c C-;" . markdown-insert-gfm-code-block)
-  ("C-M-;" . markdown-insert-code)
+(use-package markdown-ts-mode
+  :init
+  (add-to-list 'major-mode-remap-alist '(markdown-mode . markdown-ts-mode))
 
   :config
+  (defun my-markdown-insert-code-block ()
+    "Insert a fenced code block, prompting for the language."
+    (interactive nil markdown-ts-mode)
+    (markdown-ts-insert-structure ?`))
+
+  (defun my-markdown-insert-code ()
+    "Wrap the region or word at point in backticks."
+    (interactive nil markdown-ts-mode)
+    (markdown-ts-emphasize ?c))
+
+  (keymap-set markdown-ts-mode-map "C-c C-;" #'my-markdown-insert-code-block)
+  (keymap-set markdown-ts-mode-map "C-M-;" #'my-markdown-insert-code)
+  (keymap-set markdown-ts-mode-map "<remap> <unfill-paragraph>"
+              #'unfill-markdown-paragraph)
+
   (defun my-markdown-hook ()
     (prose-mode 1)
     (flyspell-mode)
@@ -2122,9 +2130,7 @@ buffer."
     (local-unset-key (kbd "C-M-b"))
     (local-unset-key (kbd "C-M-f"))
     (setq sentence-end-double-space nil))
-  (add-hook 'markdown-mode-hook #'my-markdown-hook))
-
-(use-package markdown-ts-mode)
+  (add-hook 'markdown-ts-mode-hook #'my-markdown-hook))
 
 ;; fetch the ESL mode and grammar from the esmcompiler repo (work
 ;; only)
@@ -2142,6 +2148,69 @@ get Markdown-formatted text into email/Word/etc."
                    (list (region-beginning) (region-end))
                  '(nil 0))))
     (call-process-region start end "formatted-copy")))
+
+(defun unfill-markdown--inlines (start end)
+  "Return the inline nodes of Markdown paragraphs overlapping START to END."
+  ;; tree-sitter's range filter can also return nodes that end just
+  ;; before START, so check the bounds explicitly
+  (seq-filter (lambda (inline)
+                (and (< (treesit-node-start inline) end)
+                     (> (treesit-node-end inline) start)))
+              (treesit-query-capture
+               'markdown '((paragraph (inline) @inline)) start end t)))
+
+(defun unfill-markdown-paragraph ()
+  "Join the Markdown paragraph at point onto one line. Uses
+markdown-ts-mode parsers."
+  (interactive nil markdown-ts-mode)
+  (let ((inline (car (unfill-markdown--inlines (line-beginning-position)
+                                               (line-end-position))))
+        joins)
+    (unless inline
+      (user-error "Not in a paragraph"))
+    ;; markdown-ts-mode creates inline parsers lazily (as text is
+    ;; fontified), so make sure this paragraph has been parsed
+    (treesit-update-ranges (treesit-node-start inline)
+                           (treesit-node-end inline))
+    (save-excursion
+      (goto-char (treesit-node-start inline))
+      (while (search-forward "\n" (treesit-node-end inline) t)
+        (let ((newline (1- (point)))
+              (prefix (treesit-node-at (point) 'markdown)))
+          (unless (treesit-parent-until
+                   (treesit-node-at newline 'markdown-inline)
+                   "\\`\\(hard_line_break\\|latex_block\\)\\'" t)
+            (push (cons newline
+                        (if (and (equal (treesit-node-type prefix)
+                                        "block_continuation")
+                                 (= (treesit-node-start prefix) (point)))
+                            (treesit-node-end prefix)
+                          (point)))
+                  joins)))))
+    ;; JOINS is back to front, so earlier positions stay valid
+    (save-excursion
+      (pcase-dolist (`(,newline . ,next-line) joins)
+        (goto-char newline)
+        (skip-chars-backward " \t")
+        (delete-region (point) (progn (goto-char next-line)
+                                      (skip-chars-forward " \t")
+                                      (point)))
+        (insert " ")))))
+
+(defun unfill-markdown-paragraphs (&optional start end)
+  "Join each Markdown paragraph in the buffer (or region) onto one line."
+  (interactive (when (use-region-p)
+                 (list (region-beginning) (region-end)))
+               markdown-ts-mode)
+  (let ((starts (mapcar #'treesit-node-start
+                        (unfill-markdown--inlines (or start (point-min))
+                                                  (or end (point-max))))))
+    ;; go back to front so that unfilling one paragraph doesn't move
+    ;; the ones we haven't reached yet
+    (save-excursion
+      (dolist (start (nreverse starts))
+        (goto-char start)
+        (unfill-markdown-paragraph)))))
 
                                         ; LATEX
 
