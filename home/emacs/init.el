@@ -1617,6 +1617,29 @@ shell buffer."
 (use-package ghostel-ime
   :hook (ghostel-mode . ghostel-ime-mode))
 
+                                        ; AI
+(use-package agent-shell
+  :ensure t
+  :custom
+  ;; set explicitly because it differs from the org-managed default
+  (agent-shell-anthropic-default-model-id "claude-opus-5-5")
+  (agent-shell-anthropic-default-session-mode-id "bypassPermissions")
+  ;; agent edits are saved right away, so keep formatters from
+  ;; rewriting files out from under the agent
+  (agent-shell-write-inhibit-minor-modes
+   '(aggressive-indent-mode format-all-mode python-black-on-save-mode))
+
+  :config
+  (setq agent-shell-preferred-agent-config
+        (agent-shell-anthropic-make-claude-code-config))
+  ;; use the same Claude Code install as the command line rather than
+  ;; the copy bundled with claude-agent-acp
+  (setq agent-shell-anthropic-claude-environment
+        (apply #'agent-shell-make-environment-variables
+               :inherit-env t
+               (when-let* ((claude (executable-find "claude")))
+                 (list "CLAUDE_CODE_EXECUTABLE" claude)))))
+
                                         ; ELISP
 (use-package elisp-mode
   :init

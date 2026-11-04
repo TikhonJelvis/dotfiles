@@ -67,7 +67,7 @@ in {
     };
 
     home.packages = with pkgs;
-      [ pkgs.pyright yaml-language-server taplo ];
+      [ pkgs.pyright yaml-language-server taplo claude-agent-acp ];
 
     home.file = {
       ".emacs" = {
