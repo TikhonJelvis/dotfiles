@@ -123,7 +123,7 @@
         5963
         5964
 
-        # Synergy
+        # Deskflow (Synergy-compatible)
         24800
       ];
       allowedUDPPorts = [

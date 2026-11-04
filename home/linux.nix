@@ -29,7 +29,7 @@
       krita
       slack
       kdePackages.spectacle
-      synergy
+      deskflow
       unison-ucm
       vlc
       zoom-us
