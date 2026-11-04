@@ -45,62 +45,72 @@
 
 ;; The default setup for powerline, customized with symbols in a few
 ;; locations.
-(setq-default mode-line-format
-      '("%e"
-        (:eval
-         (let*
-             ((active
-               (powerline-selected-window-active))
-              (face0
-               (if active 'powerline-active0 'powerline-inactive0))
-              (face1
-               (if active 'powerline-active1 'powerline-inactive1))
-              (face2
-               (if active 'powerline-active2 'powerline-inactive2))
-              (separator-left
-               (intern
-                (format "powerline-%s-%s"
-                        (powerline-current-separator)
-                        (car powerline-default-separator-dir))))
-              (separator-right
-               (intern
-                (format "powerline-%s-%s"
-                        (powerline-current-separator)
-                        (cdr powerline-default-separator-dir))))
-              (lhs
-               (list
-                (powerline-raw " " face0)
-                (mode-line/modified face0)
-                (powerline-raw mode-line-mule-info face0 'l)
-                (powerline-buffer-id
-                 `(mode-line-buffer-id ,face0)
-                 'r)
-                (funcall separator-left face0 face1)
-                (when
-                    (and
-                     (boundp 'erc-track-minor-mode)
-                     erc-track-minor-mode)
-                  (powerline-raw erc-modified-channels-object face1 'l))
-                (powerline-raw " " face1)
-                (powerline-major-mode face1)
-                (powerline-process face1)
-                (powerline-narrow face1 'l)
-                (powerline-raw " " face1)
-                (funcall separator-left face1 face2)))
-              (rhs
-               (list
-                (funcall separator-right face2 face1)
-                (mode-line/git face1 'r)
-                (powerline-raw global-mode-string face1 'r)
-                (funcall separator-right face1 face0)
-                (powerline-raw "%4l" face0 'l)
-                (powerline-raw ":" face0)
-                (powerline-raw "%2c" face0 'r)
-                (when powerline-display-hud
-                  (powerline-hud face0 face1))
-                (powerline-fill face0 0))))
-           (concat
-            (powerline-render lhs)
-            (powerline-fill face2
-                            (powerline-width rhs))
-            (powerline-render rhs))))))
+(defvar erc-modified-channels-object)
+
+(defun mode-line/render ()
+  "Render the powerline mode line for the current window.
+
+This gets called on every redisplay, so it needs to be pulled out and
+byte-compiled for efficiency."
+  (let*
+      ((active
+        (powerline-selected-window-active))
+       (face0
+        (if active 'powerline-active0 'powerline-inactive0))
+       (face1
+        (if active 'powerline-active1 'powerline-inactive1))
+       (face2
+        (if active 'powerline-active2 'powerline-inactive2))
+       (separator-left
+        (intern
+         (format "powerline-%s-%s"
+                 (powerline-current-separator)
+                 (car powerline-default-separator-dir))))
+       (separator-right
+        (intern
+         (format "powerline-%s-%s"
+                 (powerline-current-separator)
+                 (cdr powerline-default-separator-dir))))
+       (lhs
+        (list
+         (powerline-raw " " face0)
+         (mode-line/modified face0)
+         (powerline-raw mode-line-mule-info face0 'l)
+         (powerline-buffer-id
+          `(mode-line-buffer-id ,face0)
+          'r)
+         (funcall separator-left face0 face1)
+         (when
+             (and
+              (boundp 'erc-track-minor-mode)
+              erc-track-minor-mode)
+           (powerline-raw erc-modified-channels-object face1 'l))
+         (powerline-raw " " face1)
+         (powerline-major-mode face1)
+         (powerline-process face1)
+         (powerline-narrow face1 'l)
+         (powerline-raw " " face1)
+         (funcall separator-left face1 face2)))
+       (rhs
+        (list
+         (funcall separator-right face2 face1)
+         (mode-line/git face1 'r)
+         (powerline-raw global-mode-string face1 'r)
+         (funcall separator-right face1 face0)
+         (powerline-raw "%4l" face0 'l)
+         (powerline-raw ":" face0)
+         (powerline-raw "%2c" face0 'r)
+         (when powerline-display-hud
+           (powerline-hud face0 face1))
+         (powerline-fill face0 0))))
+    (concat
+     (powerline-render lhs)
+     (powerline-fill face2
+                     (powerline-width rhs))
+     (powerline-render rhs))))
+
+;; This file is loaded as source, so compile the functions that run on
+;; every redisplay.
+(mapc #'byte-compile '(mode-line/modified mode-line/major-mode mode-line/git mode-line/render))
+
+(setq-default mode-line-format '("%e" (:eval (mode-line/render))))
